@@ -1,13 +1,26 @@
-import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { createAppContainer } from 'react-navigation';
+import { createStackNavigator } from 'react-navigation-stack';
 
-export default function App() {
+import TestScreen from './src/screens/TestScreen';
+const navigator = createStackNavigator(
+  {
+    Test: TestScreen,
+  },
+  {
+    initialRouteName: 'Test',
+    defaultNavigationOptions: {
+      title: 'Test',
+    },
+  }
+);
+
+/* const App = () => {
   return (
-    <View style={styles.container}>
-      <Text>Open up App.js to start working on your app!</Text>
+    <View testID='component-app' style={styles.container}>
+      <Text testID='text'>Open up App.js to start working on your app!</Text>
     </View>
   );
-}
+};
 
 const styles = StyleSheet.create({
   container: {
@@ -16,4 +29,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
-});
+}); */
+
+export default createAppContainer(navigator);
