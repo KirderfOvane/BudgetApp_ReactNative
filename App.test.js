@@ -1,16 +1,26 @@
-import React from 'react';
-//import Enzyme, { shallow } from 'enzyme';
-//import EnzymeAdapter from 'enzyme-adapter-react-16';
-//import { StyleSheet, Text, View } from 'react-native';
+/* @jest-environment jsdom */
 
-import App from './App';
+import React from "react";
+import Enzyme, { shallow } from "enzyme";
+import EnzymeAdapter from "enzyme-adapter-react-16";
+import App from "./App";
 
-//Enzyme.configure({ adapter: new EnzymeAdapter() });
+Enzyme.configure({ adapter: new EnzymeAdapter() });
 
-test('renders without crashing', () => {
-  // const wrapper = shallow(<App />);
-  // console.log(wrapper.debug());
-  // const appComponent = wrapper.find("[testID='component-app']");
-  // expect(appComponent.length).toBe(1);
-  expect(true).toBeTruthy();
+describe("Testing React Navigation", () => {
+  test("renders LandingScreen when not authenticated", () => {
+    const MocksetIsAuthenticated = jest.fn();
+    React.useState = jest.fn(() => [false, MocksetIsAuthenticated]);
+    const wrapper = shallow(<App />);
+    const appComponent = wrapper.find("[testID='Landing']");
+    expect(appComponent.length).toBe(1);
+  });
+
+  test("renders UserScreen when authenticated", () => {
+    const MocksetIsAuthenticated = jest.fn();
+    React.useState = jest.fn(() => [true, MocksetIsAuthenticated]);
+    const wrapper = shallow(<App />);
+    const appComponent = wrapper.find("[testID='YearBalanceScreen']");
+    expect(appComponent.length).toBe(1);
+  });
 });
