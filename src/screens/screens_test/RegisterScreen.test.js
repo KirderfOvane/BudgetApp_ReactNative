@@ -1,6 +1,6 @@
-import React from "react";
 import Enzyme, { shallow } from "enzyme";
 import EnzymeAdapter from "enzyme-adapter-react-16";
+import React from "react";
 import RegisterScreen from "../RegisterScreen";
 import App from "../../../App";
 import renderer from "react-test-renderer";
@@ -25,7 +25,6 @@ let findElement = function (tree, element) {
 describe("Rendering", () => {
   test("find Element", () => {
     let tree = renderer.create(<RegisterScreen />).toJSON();
-
     expect(findElement(tree, "test")).toBe(1);
   });
   test("component renders without error", () => {
@@ -33,7 +32,6 @@ describe("Rendering", () => {
     const component = wrapper.find("[testID='register-component']");
     expect(component.length).toBe(1);
   });
-
   test("renders input name", () => {
     const wrapper = shallow(<RegisterScreen />);
     const nameinput = wrapper.find("[testID='register-input-name']");
@@ -73,9 +71,47 @@ describe("Rendering", () => {
     const securetext = passwordelement.find("[secureTextEntry=true]");
     expect(securetext.length).toBe(1);
   });
+  test("renders password2 input with hidden characters", () => {
+    const wrapper = shallow(<RegisterScreen />);
+    const passwordelement = wrapper.find("[testID='register-input-confirm']");
+    const securetext = passwordelement.find("[secureTextEntry=true]");
+    expect(securetext.length).toBe(1);
+  });
   test("renders submit button", () => {
     const wrapper = shallow(<RegisterScreen />);
     const button = wrapper.find("[testID='register-submit-button']");
     expect(button.length).toBe(1);
   });
+});
+describe("interaction", () => {
+  test("should change state if name is entered", () => {
+    const { getByTestId } = render(<RegisterScreen />);
+    fireEvent.changeText(getByTestId("register-input-name"), "Hello world");
+    expect(getByTestId("register-input-name").props.value).toEqual("Hello world");
+  });
+  test("should change state if email is entered", () => {
+    const { getByTestId } = render(<RegisterScreen />);
+    fireEvent.changeText(getByTestId("register-input-email"), "Hello@world.com");
+    expect(getByTestId("register-input-email").props.value).toEqual("Hello@world.com");
+  });
+  test("should change state if password is entered", () => {
+    const { getByTestId } = render(<RegisterScreen />);
+    fireEvent.changeText(getByTestId("register-input-password"), "password");
+    expect(getByTestId("register-input-password").props.value).toEqual("password");
+  });
+  test("should change state if password2 is entered", () => {
+    const { getByTestId } = render(<RegisterScreen />);
+    fireEvent.changeText(getByTestId("register-input-confirm"), "password");
+    expect(getByTestId("register-input-confirm").props.value).toEqual("password");
+  });
+  /*   test("should submit if registerbutton is pressed", () => {
+    const wrapper = shallow(<RegisterScreen />);
+    const button = wrapper.find("[testID='register-submit-button']");
+    button.simulate('click')
+  });
+  test("should clear input fields on submit", () => {
+    const wrapper = shallow(<RegisterScreen />);
+    const button = wrapper.find("[testID='register-submit-button']");
+    button.simulate('click')
+  }); */
 });
