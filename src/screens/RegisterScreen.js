@@ -1,26 +1,76 @@
-import React from "react";
-import { View, Text, TextInput, TouchableOpacity } from "react-native";
+import React from 'react';
+import { View, Text, TextInput, Button } from 'react-native';
+import AuthContext from '../../context/auth/authContext';
+
+import hookActions from '../actions/hookActions';
 
 const RegisterScreen = () => {
-  const [user, setUser] = React.useState({ name: "", email: "", password: "", password2: "" });
-  const { name, email, password, password2 } = user;
+  const authContext = React.useContext(AuthContext);
+  const { loadUser, user } = authContext;
+  // const [myUser, setMyUser] = React.useState(null);
+  React.useEffect(() => {
+    // hookActions.getUser(setMyUser);
+    loadUser();
+  }, []);
 
+  //const { register, error, clearErrors, isAuthenticated } = authContext;
+
+  //state
+  const [localUser, setlocalUser] = React.useState({ name: '', email: '', password: '', password2: '' });
+  const { name, email, password, password2 } = localUser;
+
+  //state set functions
   const changeName = (newName) => {
-    setUser({ ...user, name: newName });
+    setlocalUser({ ...localUser, name: newName });
   };
   const changeEmail = (newEmail) => {
-    setUser({ ...user, email: newEmail });
+    setlocalUser({ ...localUser, email: newEmail });
   };
   const changePassword = (newPassword) => {
-    setUser({ ...user, password: newPassword });
+    setlocalUser({ ...localUser, password: newPassword });
   };
   const changePassword2 = (newPassword) => {
-    setUser({ ...user, password2: newPassword });
+    setlocalUser({ ...localUser, password2: newPassword });
   };
+
+  const onSubmit = (e) => {
+    //if (name === '' || email === '' || password === '') {
+    //   setAlert('Please enter all fields', 'danger');
+    // } else if (password !== password2) {
+    //   setAlert('Passwords do not match', 'danger');
+    // } else {
+
+    /*
+    e.preventDefault();
+    authContext.register({
+      name,
+      email,
+      password,
+    });
+    */
+
+    //}
+    // reset fields
+    setlocalUser({ name: '', email: '', password: '', password2: '' });
+  };
+
+  /*   React.useEffect(() => {
+    if (authContext.isAuthenticated) {
+      console.log('time to navigate');
+    }
+
+    if (authContext.error === 'user already exists') {
+      //console.log(authContext.error);
+      console.log('error');
+    }
+  }, [authContext.error, authContext.isAuthenticated]); */
 
   return (
     <View testID='register-component'>
-      <Text testID='test'>RegisterScreen</Text>
+      <Text testID='test'>
+        RegisterScreen {/* authContext.user && authContext.user.name.toString() */}
+        {/* {mylocalUser && mylocalUser.name.toString()} */}
+      </Text>
       <TextInput testID='register-input-name' onChangeText={changeName} name='name' value={name} />
       <TextInput testID='register-input-email' onChangeText={changeEmail} name='email' value={email} />
       <TextInput
@@ -43,7 +93,7 @@ const RegisterScreen = () => {
         autoCorrect={false}
         secureTextEntry={true}
       />
-      <TouchableOpacity testID='register-submit-button' />
+      <Button testID='register-submit-button' placeholder='watwat' onPress={onSubmit} title='Register' />
     </View>
   );
 };

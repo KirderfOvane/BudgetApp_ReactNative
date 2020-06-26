@@ -1,12 +1,21 @@
-import React from "react";
-import { NavigationContainer } from "@react-navigation/native";
-import { createStackNavigator } from "@react-navigation/stack";
+import React from 'react';
+import { NavigationContainer } from '@react-navigation/native';
+import { createStackNavigator } from '@react-navigation/stack';
 
-import LandingScreen from "./src/screens/LandingScreen";
-import LoginScreen from "./src/screens/LoginScreen";
-import RegisterScreen from "./src/screens/RegisterScreen";
-import YearBalanceScreen from "./src/screens/YearBalanceScreen";
+//Providers
+import AuthState from './context/auth/AuthState';
 
+//Auth
+import { AsyncStorage } from 'react-native';
+import setAuthToken from './setAuthToken';
+
+//Screens
+import LandingScreen from './src/screens/LandingScreen';
+import LoginScreen from './src/screens/LoginScreen';
+import RegisterScreen from './src/screens/RegisterScreen';
+import YearBalanceScreen from './src/screens/YearBalanceScreen';
+
+//stacks
 const Guest = createStackNavigator();
 const User = createStackNavigator();
 
@@ -29,14 +38,34 @@ const UserScreen = () => {
 };
 
 const App = () => {
-  const [isAuthenticated, setIsAuthenticated] = React.useState(false);
+  const [isLoggedin, setIsLoggedin] = React.useState(false);
+
+  // Auth check
+  /*  React.useEffect(() => {
+    const tryToAuthenticate = async () => {
+      const Asynctoken = await AsyncStorage.getItem('token');
+
+      //console.log(Asynctoken);
+      if (Asynctoken) {
+        // console.log('yes token');
+        setAuthToken(Asynctoken);
+        setIsLoggedin(true);
+      } else {
+        // console.log('no token');
+      }
+    };
+    tryToAuthenticate();
+  }, []); */
+
   return (
-    <NavigationContainer>
-      <Guest.Navigator>
-        {!isAuthenticated && <Guest.Screen testID='Landing' name='LandingScreen' component={GuestScreen} />}
-        {isAuthenticated && <User.Screen testID='YearBalanceScreen' name='YearBalanceScreen' component={UserScreen} />}
-      </Guest.Navigator>
-    </NavigationContainer>
+    <AuthState>
+      <NavigationContainer>
+        <Guest.Navigator>
+          {!isLoggedin && <Guest.Screen testID='Landing' name='LandingScreen' component={GuestScreen} />}
+          {isLoggedin && <User.Screen testID='YearBalanceScreen' name='YearBalanceScreen' component={UserScreen} />}
+        </Guest.Navigator>
+      </NavigationContainer>
+    </AuthState>
   );
 };
 export default App;
