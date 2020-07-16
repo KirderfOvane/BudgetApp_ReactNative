@@ -5,7 +5,7 @@ export default (state, action) => {
     case USER_LOADED:
       return {
         ...state,
-        isAuthenticated: 'FEST',
+        isAuthenticated: true,
         loading: false,
         user: action.payload,
       };

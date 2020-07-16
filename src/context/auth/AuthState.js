@@ -1,17 +1,19 @@
 import React, { useReducer } from 'react';
-import setAuthToken from '../../setAuthToken';
+import setAuthToken from '../../../setAuthToken';
 import AuthContext from './authContext';
 import authReducer from './authReducer';
 import { AsyncStorage } from 'react-native';
-import trackerApi from '../../src/api/tracker';
-import hookActions from '../../src/actions/hookActions';
+import trackerApi from '../../api/tracker';
+import hookActions from '../../actions/hookActions';
+import registerAction from '../../actions/registerAction';
+import { navigate } from '../../navigationRef';
 
 import { REGISTER_SUCCESS, REGISTER_FAIL, USER_LOADED, AUTH_ERROR, LOGIN_FAIL, LOGIN_SUCCESS, LOGOUT, TESTCONTEXT } from '../types';
 
 const AuthState = (props) => {
   const initialState = {
     token: null,
-    isAuthenticated: null,
+    isAuthenticated: false,
     loading: true,
     user: null,
     error: null,
@@ -26,65 +28,49 @@ const AuthState = (props) => {
 
   // Load User
   const loadUser = async () => {
-    // setAuthToken here first
-    try {
-      const response = await hookActions.getUser();
-      console.log(response);
-      dispatch({
-        type: USER_LOADED,
-        payload: response,
-      });
-    } catch (err) {
-      console.log(err);
-      //await AsyncStorage.removeItem('token');
-      dispatch({ type: AUTH_ERROR });
+    // fetch token from local storage
+    const token = await AsyncStorage.getItem('token');
+    //console.warn(token);
+    token && console.log('loadUser: valid token found in loadUser/AsyncStorage');
+    // setAuthToken header token
+    await setAuthToken(token);
+    if (token) {
+      console.log('navigate to YearBalanceScreen');
+      navigate('Balance');
+      try {
+        const response = await hookActions.getUser();
+        // console.log(response);
+        dispatch({
+          type: USER_LOADED,
+          payload: response,
+        });
+      } catch (err) {
+        console.log(err);
+        await AsyncStorage.removeItem('token');
+        console.log('deleted token from asyncstorage');
+        dispatch({ type: AUTH_ERROR });
+      }
+    } else {
+      console.log('no valid token found');
     }
-
-    // load token into global headers
-    //const AsyncStoragetoken = await AsyncStorage.getItem('token');
-    //console.log(AsyncStoragetoken);
-    // if (AsyncStoragetoken) {
-    //   setAuthToken(AsyncStoragetoken);
-    //}
-    //console.log(AsyncStoragetoken);
-    //console.log(state.token);
-    /*     try {
-      const res = await trackerApi.get('/api/auth');
-      //console.log(res.data);
-      //console.log('watwatwat');
-      dispatch({
-        type: USER_LOADED,
-        payload: res.data,
-      });
-    } catch (err) {
-      console.log(err);
-      //await AsyncStorage.removeItem('token');
-      dispatch({ type: AUTH_ERROR });
-    } */
   };
 
   // Register User
   const register = async (formData) => {
-    const config = {
-      headers: {
-        'Content-Type': 'application/json',
-        'My_User-Agent': 'native',
-      },
-    };
-
     try {
-      const res = await trackerApi.post('/api/users', formData, config); //endpoint/url
-      await AsyncStorage.setItem('token', res.data.token);
+      const responsedata = await registerAction.sendRegister(formData);
+
+      // await AsyncStorage.setItem('token', res.data.token);
       dispatch({
         type: REGISTER_SUCCESS,
-        payload: res.data,
+        payload: responsedata,
       });
       loadUser();
     } catch (err) {
-      console.log(err);
+      //console.log(err);
       dispatch({
         type: REGISTER_FAIL,
-        payload: err.res.data.msg,
+        payload: err.responsedata.msg,
       });
     }
   };
@@ -100,7 +86,8 @@ const AuthState = (props) => {
 
     try {
       const res = await trackerApi.post('/api/auth', formData, config); //endpoint/url
-
+      console.log(res.data.token);
+      await AsyncStorage.setItem('token', res.data.token);
       dispatch({
         type: LOGIN_SUCCESS,
         payload: res.data,
@@ -108,6 +95,7 @@ const AuthState = (props) => {
 
       loadUser();
     } catch (err) {
+      console.log(`login http calls says: ${err}`);
       dispatch({
         type: LOGIN_FAIL,
         payload: err.response.data.msg,
@@ -118,6 +106,8 @@ const AuthState = (props) => {
   // Logout
   const logout = async () => {
     await AsyncStorage.removeItem('token');
+    console.log('navigate to LandingScreen');
+    navigate('Landing');
     dispatch({ type: LOGOUT });
   };
 

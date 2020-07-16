@@ -2,10 +2,12 @@ import Enzyme, { shallow } from 'enzyme';
 import EnzymeAdapter from 'enzyme-adapter-react-16';
 import React from 'react';
 import RegisterScreen from '../RegisterScreen';
-import AuthContext from '../../../context/auth/authContext';
-import AuthState from '../../../context/auth/AuthState';
+import AuthContext from '../../context/auth/authContext';
+import AuthState from '../../context/auth/AuthState';
 import renderer from 'react-test-renderer';
 import { render, fireEvent } from 'react-native-testing-library';
+import { Text } from 'react-native';
+import registerAction from '../../actions/registerAction';
 
 // Silence the warning https://github.com/facebook/react-native/issues/11094#issuecomment-263240420
 jest.mock('react-native/Libraries/Animated/src/NativeAnimatedHelper');
@@ -23,8 +25,9 @@ let findElement = function (tree, element) {
   }
   return count;
 };
+
 describe('Rendering', () => {
-  test('find Element', () => {
+  test('find Element test ', () => {
     let tree = renderer
       .create(
         <AuthState>
@@ -34,6 +37,7 @@ describe('Rendering', () => {
       .toJSON();
     expect(findElement(tree, 'test')).toBe(1);
   });
+
   test('component renders without error', () => {
     /* const wrapper = shallow(<RegisterScreen />);
     const component = wrapper.find("[testID='register-component']");
@@ -48,6 +52,7 @@ describe('Rendering', () => {
     //console.warn(tree.props.testID);
     expect(tree.props.testID.toString()).toBe('register-component');
   });
+
   test('renders input name', () => {
     /*   const wrapper = shallow(<RegisterScreen />);
     const nameinput = wrapper.find("[testID='register-input-name']");
@@ -62,6 +67,7 @@ describe('Rendering', () => {
     // console.warn(tree);
     expect(findElement(tree, 'register-input-name')).toBe(1);
   });
+
   test('renders input email address', () => {
     /*   const wrapper = shallow(<RegisterScreen />);
     const emailinput = wrapper.find("[testID='register-input-email']");
@@ -76,6 +82,7 @@ describe('Rendering', () => {
     // console.warn(tree);
     expect(findElement(tree, 'register-input-email')).toBe(1);
   });
+
   test('renders input password', () => {
     /*     const wrapper = shallow(<RegisterScreen />);
     const passwordinput = wrapper.find("[testID='register-input-password']");
@@ -90,6 +97,7 @@ describe('Rendering', () => {
     // console.warn(tree);
     expect(findElement(tree, 'register-input-password')).toBe(1);
   });
+
   test('renders input password with label Password', () => {
     /*  const wrapper = shallow(<RegisterScreen />);
     const passwordinput = wrapper.find("[testID='register-input-password']");
@@ -109,6 +117,7 @@ describe('Rendering', () => {
     //console.warn(element);
     expect(typeof element).toBe('object');
   });
+
   test('renders password input with autoCapitalize off', () => {
     /*  const wrapper = shallow(<RegisterScreen />);
     const passwordelement = wrapper.find("[testID='register-input-password']");
@@ -130,6 +139,7 @@ describe('Rendering', () => {
     //console.warn(element);
     expect(typeof element).toBe('object');
   });
+
   test('renders password input with autocorrect false', () => {
     /*  const wrapper = shallow(<RegisterScreen />);
     const passwordelement = wrapper.find("[testID='register-input-password']");
@@ -149,6 +159,7 @@ describe('Rendering', () => {
     //console.warn(element);
     expect(typeof element).toBe('object');
   });
+
   test('renders password input with hidden characters', () => {
     /*   const wrapper = shallow(<RegisterScreen />);
     const passwordelement = wrapper.find("[testID='register-input-password']");
@@ -170,6 +181,7 @@ describe('Rendering', () => {
     //console.warn(element);
     expect(typeof element).toBe('object');
   });
+
   test('renders password2 input with hidden characters', () => {
     /*    const wrapper = shallow(<RegisterScreen />);
     const passwordelement = wrapper.find("[testID='register-input-confirm']");
@@ -191,6 +203,7 @@ describe('Rendering', () => {
     //console.warn(element);
     expect(typeof element).toBe('object');
   });
+
   test('renders submit button', () => {
     /*   const wrapper = shallow(<RegisterScreen />);
     const button = wrapper.find("[testID='register-submit-button']");
@@ -204,6 +217,7 @@ describe('Rendering', () => {
     expect((typeof element).toString()).toBe('object');
   });
 });
+
 describe('interaction', () => {
   test('should change state if name is entered', () => {
     const { getByTestId } = render(
@@ -214,6 +228,7 @@ describe('interaction', () => {
     fireEvent.changeText(getByTestId('register-input-name'), 'Hello world');
     expect(getByTestId('register-input-name').props.value).toEqual('Hello world');
   });
+
   test('should change state if email is entered', () => {
     const { getByTestId } = render(
       <AuthState>
@@ -223,6 +238,7 @@ describe('interaction', () => {
     fireEvent.changeText(getByTestId('register-input-email'), 'Hello@world.com');
     expect(getByTestId('register-input-email').props.value).toEqual('Hello@world.com');
   });
+
   test('should change state if password is entered', () => {
     const { getByTestId } = render(
       <AuthState>
@@ -232,6 +248,7 @@ describe('interaction', () => {
     fireEvent.changeText(getByTestId('register-input-password'), 'password');
     expect(getByTestId('register-input-password').props.value).toEqual('password');
   });
+
   test('should change state if password2 is entered', () => {
     const { getByTestId } = render(
       <AuthState>
@@ -241,38 +258,143 @@ describe('interaction', () => {
     fireEvent.changeText(getByTestId('register-input-confirm'), 'password');
     expect(getByTestId('register-input-confirm').props.value).toEqual('password');
   });
-  /* test('should submit if registerbutton is pressed', () => {
-        const { debug } = render(<RegisterScreen />);
-    const wrapper = debug();
-    //console.log(wrapper);
-    expect(wrapper).not.toBeNull(); 
-  });
-  test('RegisterScreen shows value from provider', () => {
-    const tree = (
-      <AuthContext.Provider value='C3P0'>
-        <RegisterScreen />
-      </AuthContext.Provider>
-    );
-    const { getByText, debug } = render(tree);
-    debug();
-    //expect(getByText('C3P0')).toBe('C3P0');
-  });
-  test('should clear input fields on submit', async () => {
-    const { getByTestId, findByTestId } = render(<RegisterScreen />);
 
-    fireEvent.changeText(getByTestId('register-input-name'), 'Hello world');
-    fireEvent.changeText(getByTestId('register-input-email'), 'Hello@world.com');
+  test('resets submit fields if registerbutton is pressed and inputs are valid', () => {
+    const { getByTestId } = render(
+      <AuthState>
+        <RegisterScreen />
+      </AuthState>
+    );
+
+    //create user
+    fireEvent.changeText(getByTestId('register-input-name'), 'TestPerson');
+    fireEvent.changeText(getByTestId('register-input-email'), 'TestPerson@mailbox.com');
     fireEvent.changeText(getByTestId('register-input-password'), 'password');
     fireEvent.changeText(getByTestId('register-input-confirm'), 'password');
 
-    const toClick = await findByTestId('register-submit-button');
-    fireEvent(toClick, 'press');
+    //submit user
+    const buttonelement = getByTestId('register-submit-button');
+    fireEvent(buttonelement, 'press');
 
-    const namevalue = getByTestId('register-input-name').props.value;
-    const emailvalue = getByTestId('register-input-email').props.value;
-    const confirmvalue = getByTestId('register-input-confirm').props.value;
-    const passwordvalue = getByTestId('register-input-password').props.value;
+    expect(getByTestId('register-input-name').props.value).toEqual('');
+  });
 
-    expect(passwordvalue.length + confirmvalue.length + namevalue.length + emailvalue.length).toBe(0);
-  });*/
+  test('register runs when valid user input is submitted', () => {
+    //mock
+    const mockSendRegister = jest.fn();
+    //setup
+    //mockSendRegister.mockClear();
+    registerAction.sendRegister = mockSendRegister;
+    const { getByTestId, update, debug, getByA11yState } = render(
+      <AuthState>
+        <RegisterScreen />
+      </AuthState>
+    );
+    //create user
+    fireEvent.changeText(getByTestId('register-input-name'), 'TestPerson');
+    fireEvent.changeText(getByTestId('register-input-email'), 'TestPerson@mailbox.com');
+    fireEvent.changeText(getByTestId('register-input-password'), 'password');
+    fireEvent.changeText(getByTestId('register-input-confirm'), 'password');
+    //submit user
+    //debug();
+    const buttonelement = getByTestId('register-submit-button');
+    fireEvent(buttonelement, 'press');
+    // debug();
+
+    //console.warn(test.props.children);
+    expect(mockSendRegister).toHaveBeenCalled();
+  });
+
+  test('register does NOT run when invalid name user input is submitted', () => {
+    //mock
+    const mockSendRegister = jest.fn();
+    registerAction.sendRegister = mockSendRegister;
+    //setup
+    const { getByTestId } = render(
+      <AuthState>
+        <RegisterScreen />
+      </AuthState>
+    );
+    //create user input
+    fireEvent.changeText(getByTestId('register-input-name'), '');
+    fireEvent.changeText(getByTestId('register-input-email'), 'TestPerson@mailbox.com');
+    fireEvent.changeText(getByTestId('register-input-password'), 'password');
+    fireEvent.changeText(getByTestId('register-input-confirm'), 'password');
+    //submit user
+    const buttonelement = getByTestId('register-submit-button');
+    fireEvent(buttonelement, 'press');
+
+    expect(mockSendRegister).not.toHaveBeenCalled();
+  });
+
+  test('register does NOT run when invalid email user input is submitted', () => {
+    //mock
+    const mockSendRegister = jest.fn();
+    registerAction.sendRegister = mockSendRegister;
+    //setup
+    const { getByTestId } = render(
+      <AuthState>
+        <RegisterScreen />
+      </AuthState>
+    );
+    //create user input
+    fireEvent.changeText(getByTestId('register-input-name'), 'ValidName');
+    fireEvent.changeText(getByTestId('register-input-email'), 'mailbox.com');
+    fireEvent.changeText(getByTestId('register-input-password'), 'password');
+    fireEvent.changeText(getByTestId('register-input-confirm'), 'password');
+    //submit user
+    const buttonelement = getByTestId('register-submit-button');
+    fireEvent(buttonelement, 'press');
+
+    expect(mockSendRegister).not.toHaveBeenCalled();
+  });
+
+  test('register does NOT run when invalid password user input is submitted', () => {
+    //mock
+    const mockSendRegister = jest.fn();
+    registerAction.sendRegister = mockSendRegister;
+    //setup
+    const { getByTestId } = render(
+      <AuthState>
+        <RegisterScreen />
+      </AuthState>
+    );
+    //create user input
+    fireEvent.changeText(getByTestId('register-input-name'), 'ValidName');
+    fireEvent.changeText(getByTestId('register-input-email'), 'validmail@mailbox.com');
+    fireEvent.changeText(getByTestId('register-input-password'), 'pass');
+    fireEvent.changeText(getByTestId('register-input-confirm'), 'pass');
+    //submit user
+    const buttonelement = getByTestId('register-submit-button');
+    fireEvent(buttonelement, 'press');
+
+    expect(mockSendRegister).not.toHaveBeenCalled();
+  });
+
+  test('register does NOT run when password confirm user input is not matching', () => {
+    //mock
+    const mockSendRegister = jest.fn();
+    registerAction.sendRegister = mockSendRegister;
+    //setup
+    const { getByTestId } = render(
+      <AuthState>
+        <RegisterScreen />
+      </AuthState>
+    );
+    //create user input
+    fireEvent.changeText(getByTestId('register-input-name'), 'ValidName');
+    fireEvent.changeText(getByTestId('register-input-email'), 'validmail@mailbox.com');
+    fireEvent.changeText(getByTestId('register-input-password'), 'password');
+    fireEvent.changeText(getByTestId('register-input-confirm'), 'somethingelse');
+    //submit user
+    const buttonelement = getByTestId('register-submit-button');
+    fireEvent(buttonelement, 'press');
+
+    expect(mockSendRegister).not.toHaveBeenCalled();
+  });
+
+  test('shows alert if user name input is invalid on submit', () => {});
+  test('shows alert if user email input is invalid on submit', () => {});
+  test('shows alert if user password input is invalid on submit', () => {});
+  test('shows alert if user password confirm input is not matching on submit', () => {});
 });

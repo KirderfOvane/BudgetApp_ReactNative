@@ -11,10 +11,6 @@ describe('moxios tests', () => {
   });
 
   test('getUser gets axios response', async () => {
-    /*   
-      To test this you need a valid/fresh token , fresh ngrok link pasted in the get http
-      and you need to target axios.get(...) and not apitracker.get
-    */
     const mockUserValue = {
       __v: 0,
       _id: '5e43c5488df696396831e9d3',
@@ -32,13 +28,8 @@ describe('moxios tests', () => {
       });
     });
 
-    // create mock for callback arg
-    // const mockSetMyUser = jest.fn();
-
-    //await getUser(mockSetMyUser);
     const res = await getUser();
-    //console.log(res);
-    // see whether mock was run with the correct argument
+
     expect(res).toBe(mockUserValue);
   });
 });
