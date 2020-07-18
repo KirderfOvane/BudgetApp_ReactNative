@@ -34,23 +34,26 @@ const switchNavigator = createSwitchNavigator({
     Register: RegisterScreen,
     Login: LoginScreen,
   }),
-  mainFlow: createStackNavigator({
-    yearFlow: createBottomTabNavigator({
-      Balance: YearBalanceScreen,
-      Expense: YearExpenseScreen,
-      Income: YearIncomeScreen,
-      Savings: YearSavingsScreen,
-    }),
-    monthFlow: createBottomTabNavigator({
-      Month: MonthScreen,
-      Add: AddToBudgetScreen,
-      Plus: PlusScreen,
-      Minus: MinusScreen,
-      Purchase: PurchaseScreen,
-      Piggybank: PiggybankScreen,
-      Category: CategoryScreen,
-    }),
-  }),
+  mainFlow: createStackNavigator(
+    {
+      yearFlow: createBottomTabNavigator({
+        Balance: YearBalanceScreen,
+        Expense: YearExpenseScreen,
+        Income: YearIncomeScreen,
+        Savings: YearSavingsScreen,
+      }),
+      monthFlow: createBottomTabNavigator({
+        Month: MonthScreen,
+        Add: AddToBudgetScreen,
+        Plus: PlusScreen,
+        Minus: MinusScreen,
+        Purchase: PurchaseScreen,
+        Piggybank: PiggybankScreen,
+        Category: CategoryScreen,
+      }),
+    },
+    { headerMode: 'screen' }
+  ),
 });
 
 const App = createAppContainer(switchNavigator);

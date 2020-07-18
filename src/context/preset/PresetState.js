@@ -94,10 +94,17 @@ const PresetState = (props) => {
 
   // Get Presets
   const getPresets = async () => {
+    const config = {
+      headers: {
+        'Content-Type': 'application/json',
+        'x-auth-token': axios.defaults.headers.common['x-auth-token'], //TODO: this only needs to be specified cause of trackerApi.
+      },
+    };
     try {
-      const res = await trackerApi.get('/api/userpreset');
+      const res = await trackerApi.get('/api/userpreset', config);
       dispatch({ type: GET_PRESETS, payload: res.data });
     } catch (err) {
+      console.log('getPresets failed');
       dispatch({
         type: CONTACT_ERROR,
         payload: err.response.msg,

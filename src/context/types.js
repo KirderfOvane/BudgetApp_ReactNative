@@ -11,3 +11,5 @@ export const REMOVE_ALERT = 'REMOVE_ALERT';
 export const SUM = 'SUM';
 export const GET_PRESETS = 'GET_PRESETS';
 export const FILTER_POSNUMANDMONTH = 'FILTER_POSNUMANDMONTH';
+export const ADD_MONTH = 'ADD_MONTH';
+export const YEARSUM = 'YEARSUM';
