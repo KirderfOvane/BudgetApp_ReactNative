@@ -2,14 +2,15 @@ import React from 'react';
 import { View, FlatList } from 'react-native';
 import PresetContext from '../context/preset/presetContext';
 import SwipeItem from '../components/SwipeItem';
+import BarChart from '../components/BarChart';
 
 const YearBalanceScreen = ({ navigation }) => {
   const fromMonth = navigation.getParam('fromMonth');
-  console.log(`fromMonth: ${fromMonth}`);
+  //console.log(`fromMonth: ${fromMonth}`);
   //context
   const presetContext = React.useContext(PresetContext);
   //context destruct
-  const { getPresets, year, presets, calcYearsum } = presetContext;
+  const { getPresets, year, presets, calcYearsum, calcAllMonthSum, calcCapital, calcSavings, calcSum } = presetContext;
   //state
   const [localYear, setLocalYear] = React.useState(2019);
   const [Lastoffset, setLastOffset] = React.useState(0); // used to check if offset occured to see if swipe occured
@@ -22,6 +23,24 @@ const YearBalanceScreen = ({ navigation }) => {
   React.useEffect(() => {
     presets && calcYearsum();
     console.log('calcYearsum ran');
+    presets &&
+      calcAllMonthSum([
+        'January',
+        'February',
+        'March',
+        'April',
+        'May',
+        'June',
+        'July',
+        'August',
+        'September',
+        'October',
+        'November',
+        'December',
+      ]);
+    presets && calcCapital();
+    presets && calcSavings();
+    presets && calcSum();
   }, [year, presets]);
 
   React.useEffect(() => {
@@ -30,7 +49,7 @@ const YearBalanceScreen = ({ navigation }) => {
 
   const changeMonthList = (e) => {
     const swipeoffset = e.nativeEvent.targetContentOffset.x;
-    console.log(swipeoffset);
+    //console.log(swipeoffset);
     navigation.navigate('Month');
   };
 

@@ -2,6 +2,7 @@ import React from 'react';
 import { View, Text, Button, StyleSheet } from 'react-native';
 import AuthContext from '../context/auth/authContext';
 import PresetContext from '../context/preset/presetContext';
+import BarChart from './BarChart';
 import { theme } from '../constants';
 const YearBalance = () => {
   //context
@@ -12,16 +13,17 @@ const YearBalance = () => {
   const { sum, presets, yearsum, year } = presetContext;
   //component logic
   const yearmonthavg = parseInt(parseFloat(yearsum / 12));
-  console.log(yearsum);
+  // console.log(yearsum);
   return (
-    <View style={styles.container}>
-      <Text style={styles.title}>{year}</Text>
-      <Text style={styles.text}>
-        Yearly summary and comparison analysis with last year. Here you can also see differences in income/costs over the year.{' '}
-      </Text>
-
-      <Button title='logout' onPress={logout} />
-    </View>
+    <>
+      <View style={styles.container}>
+        <Text style={styles.title}>{year}</Text>
+        <Text style={styles.text}>
+          Yearly summary and comparison analysis with last year. Here you can also see differences in income/costs over the year.{' '}
+        </Text>
+      </View>
+      <BarChart />
+    </>
   );
 };
 const styles = StyleSheet.create({
@@ -38,6 +40,7 @@ const styles = StyleSheet.create({
     fontSize: theme.sizes.h4,
     fontWeight: theme.fonts.weight.semibold,
     paddingHorizontal: 20,
+    marginBottom: 30,
   },
 });
 export default YearBalance;

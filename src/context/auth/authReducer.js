@@ -1,4 +1,17 @@
-import { REGISTER_SUCCESS, USER_LOADED, REGISTER_FAIL, AUTH_ERROR, LOGIN_SUCCESS, LOGOUT, TESTCONTEXT } from '../types';
+import {
+  REGISTER_SUCCESS,
+  USER_LOADED,
+  REGISTER_FAIL,
+  AUTH_ERROR,
+  LOGIN_SUCCESS,
+  LOGOUT,
+  TESTCONTEXT,
+  UPDATE_DETAILS_SUCCESS,
+  CLEAR_ERRORS,
+  UPDATE_PASSWORD_SUCCESS,
+  UPDATE_PASSWORD_FAIL,
+  UPDATE_DETAILS_FAIL,
+} from '../types';
 
 export default (state, action) => {
   switch (action.type) {
@@ -41,6 +54,19 @@ export default (state, action) => {
       return {
         ...state,
         testofcontext: !action.payload,
+      };
+    case UPDATE_DETAILS_SUCCESS:
+    case UPDATE_PASSWORD_SUCCESS:
+    case UPDATE_PASSWORD_FAIL:
+    case UPDATE_DETAILS_FAIL:
+      return {
+        ...state,
+        error: action.payload,
+      };
+    case CLEAR_ERRORS:
+      return {
+        ...state,
+        error: null,
       };
 
     default:

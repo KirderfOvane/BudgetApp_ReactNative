@@ -55,7 +55,7 @@ const MonthScreen = ({ navigation }) => {
         console.log('swiped left');
         setLastSwipe('left');
         const counter = _initialScrollIndex - newindex;
-        console.log(`counter: ${counter}`);
+        //console.log(`counter: ${counter}`);
         if (counter >= 4) {
           const tempMonthListCopy = [...MonthList];
           for (i = 0; i < 4; i++) {
@@ -70,12 +70,12 @@ const MonthScreen = ({ navigation }) => {
         console.log('swiped rigth');
         setLastSwipe('rigth');
         const counter = newindex - _initialScrollIndex;
-        console.log(`counter: ${counter}`);
+        //console.log(`counter: ${counter}`);
         if (counter >= 4) {
           const tempMonthListCopy = [...MonthList];
           for (i = 0; i < 9; i++) {
             tempMonthListCopy.unshift(tempMonthListCopy.pop());
-            console.log(tempMonthListCopy);
+            // console.log(tempMonthListCopy);
           }
           // console.log(tempMonthListCopy);
           setMonthList(tempMonthListCopy);
@@ -88,11 +88,11 @@ const MonthScreen = ({ navigation }) => {
 
   //updates on swipe
   React.useEffect(() => {
-    presets && console.log(MonthList[indexCounter].month);
+    // presets && console.log(MonthList[indexCounter].month);
     // when index/month change recalc income presets
     presets && addMonth(indexCounter);
     presets && filterOutPositiveNumsAndMonth(MonthList[indexCounter].month);
-    console.log(indexCounter);
+    //console.log(indexCounter);
     if (!isNaN(MonthList[indexCounter].month)) {
       console.log('year selected!');
       navigation.navigate('Balance', { fromMonth: lastSwipe });

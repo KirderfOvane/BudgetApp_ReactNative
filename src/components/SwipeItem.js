@@ -6,7 +6,7 @@ import PresetPositiveFilterScreen from '../screens/PresetPositiveFilterScreen';
 import YearBalance from '../components/YearBalance';
 
 const SwipeItem = ({ monthlist, activeindex, index }) => {
-  console.log(`imageurl: ${monthlist[index].image}`);
+  //console.log(`imageurl: ${monthlist[index].image}`);
   // const [image,setImage] = React.useState()
   // const image = require(`../../assets/iphone_725x414/antelope-canyon_iphoneslices__3.jpg`);
   return (

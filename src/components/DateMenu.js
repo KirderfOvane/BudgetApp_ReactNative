@@ -25,7 +25,7 @@ const DateMenu = ({ monthlist, activeindex }) => {
         <Text style={styles.button}>{monthlist[activeindex + 1].month}</Text>
       </TouchableOpacity>
       <TouchableOpacity title={monthlist[activeindex + 1].month}>
-        <Text style={styles.button}>></Text>
+        <Text style={styles.button}>{'>'}</Text>
       </TouchableOpacity>
     </View>
   );

@@ -12,7 +12,7 @@ export const sendRegister = async (formData) => {
 
   try {
     const res = await trackerApi.post('/api/users', formData, config); //endpoint/url
-    console.log(res);
+    //console.log(res);
     await AsyncStorage.setItem('token', res.data.token);
     return res.data;
   } catch (err) {

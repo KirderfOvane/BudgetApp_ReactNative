@@ -7,8 +7,23 @@ import trackerApi from '../../api/tracker';
 import hookActions from '../../actions/hookActions';
 import registerAction from '../../actions/registerAction';
 import { navigate } from '../../navigationRef';
+import axios from 'axios';
 
-import { REGISTER_SUCCESS, REGISTER_FAIL, USER_LOADED, AUTH_ERROR, LOGIN_FAIL, LOGIN_SUCCESS, LOGOUT, TESTCONTEXT } from '../types';
+import {
+  REGISTER_SUCCESS,
+  REGISTER_FAIL,
+  USER_LOADED,
+  AUTH_ERROR,
+  LOGIN_FAIL,
+  LOGIN_SUCCESS,
+  LOGOUT,
+  TESTCONTEXT,
+  UPDATE_DETAILS_FAIL,
+  UPDATE_DETAILS_SUCCESS,
+  CLEAR_ERRORS,
+  UPDATE_PASSWORD_SUCCESS,
+  UPDATE_PASSWORD_FAIL,
+} from '../types';
 
 const AuthState = (props) => {
   const initialState = {
@@ -18,6 +33,7 @@ const AuthState = (props) => {
     user: null,
     error: null,
     testofcontext: false,
+    successmessage: null,
   };
 
   const [state, dispatch] = useReducer(authReducer, initialState);
@@ -27,7 +43,7 @@ const AuthState = (props) => {
   };
 
   // Load User
-  const loadUser = async () => {
+  const loadUser = async (reroute = true) => {
     // fetch token from local storage
     const token = await AsyncStorage.getItem('token');
     //console.warn(token);
@@ -36,7 +52,7 @@ const AuthState = (props) => {
     await setAuthToken(token);
     if (token) {
       console.log('navigate to YearBalanceScreen');
-      navigate('Balance');
+      reroute && navigate('Balance');
       try {
         const response = await hookActions.getUser();
         // console.log(response);
@@ -86,7 +102,7 @@ const AuthState = (props) => {
 
     try {
       const res = await trackerApi.post('/api/auth', formData, config); //endpoint/url
-      console.log(res.data.token);
+      //console.log(res.data.token);
       await AsyncStorage.setItem('token', res.data.token);
       dispatch({
         type: LOGIN_SUCCESS,
@@ -111,6 +127,64 @@ const AuthState = (props) => {
     dispatch({ type: LOGOUT });
   };
 
+  //update userdetails
+  const updateDetails = async (formData) => {
+    // console.log(formData);
+    const config = {
+      headers: {
+        'Content-Type': 'application/json',
+        'x-auth-token': axios.defaults.headers.common['x-auth-token'],
+      },
+    };
+    try {
+      const res = await trackerApi.put('/api/auth/updatedetails', formData, config); //endpoint/url
+      console.log(res.data.msg);
+
+      dispatch({
+        type: UPDATE_DETAILS_SUCCESS,
+        payload: res.data.msg,
+      });
+      //console.log(res);
+      loadUser(false);
+    } catch (err) {
+      console.log(err.response.data.errors[0].msg);
+      dispatch({
+        type: UPDATE_DETAILS_FAIL,
+        payload: err.response.data.errors[0].msg,
+      });
+    }
+  };
+
+  //update password
+  const updatePassword = async (formData) => {
+    //console.log(formData);
+    const config = {
+      headers: {
+        'Content-Type': 'application/json',
+        'x-auth-token': axios.defaults.headers.common['x-auth-token'],
+      },
+    };
+    try {
+      const res = await trackerApi.put('/api/auth/updatepassword', formData, config);
+      // console.log(res.data.msg);
+      dispatch({
+        type: UPDATE_PASSWORD_SUCCESS,
+        payload: res.data.msg,
+      });
+    } catch (err) {
+      //console.log(err.response.data.errors.map((error) => error.msg));
+      // console.log(err.response.data.msg);
+      // console.log('err');
+      dispatch({
+        type: UPDATE_PASSWORD_FAIL,
+        payload: err.response.data.errors[0].msg,
+      });
+    }
+  };
+
+  // Clear Errors
+  const clearErrors = () => dispatch({ type: CLEAR_ERRORS });
+
   return (
     <AuthContext.Provider
       value={{
@@ -119,11 +193,16 @@ const AuthState = (props) => {
         loading: state.loading,
         user: state.user,
         testofcontext: state.testofcontext,
+        successmessage: state.successmessage,
+        error: state.error,
         logout,
         register,
         login,
         loadUser,
         testContext,
+        updateDetails,
+        clearErrors,
+        updatePassword,
       }}
     >
       {props.children}

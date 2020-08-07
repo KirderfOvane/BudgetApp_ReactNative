@@ -17,7 +17,7 @@ const LoginScreen = () => {
 
   //state
   const [localUser, setlocalUser] = React.useState({
-    email: 'Hola@bandola.com',
+    email: 'Holabandola@gmail.com',
     password: 'password',
   });
   const { email, password } = localUser;
