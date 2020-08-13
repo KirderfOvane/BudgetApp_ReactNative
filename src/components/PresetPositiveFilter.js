@@ -4,15 +4,15 @@ import { View, Text, FlatList } from 'react-native';
 import PresetContext from '../context/preset/presetContext';
 import AuthContext from '../context/auth/authContext';
 
-import PresetItem from '../components/PresetItem';
+import PresetItem from './PresetItem';
 
-const PresetPositiveFilterScreen = ({ monthlist, activeindex }) => {
+const PresetPositiveFilter = ({ monthlist, activeindex }) => {
   const presetContext = React.useContext(PresetContext);
-  const { filteredmonthandposnum, filterOutPositiveNumsAndMonth, presets } = presetContext;
+  const { filteredmonthandposnum, presets } = presetContext;
   const authContext = React.useContext(AuthContext);
   const { loading } = authContext;
 
-  // console.log(index);
+  //console.log(presets);
   if (presets && filteredmonthandposnum !== null && filteredmonthandposnum.length === 0 && !loading) {
     return <Text>Please add a Value</Text>;
   }
@@ -32,4 +32,4 @@ const PresetPositiveFilterScreen = ({ monthlist, activeindex }) => {
   );
 };
 
-export default PresetPositiveFilterScreen;
+export default PresetPositiveFilter;

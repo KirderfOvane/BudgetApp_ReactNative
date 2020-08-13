@@ -105,6 +105,7 @@ const PresetState = (props) => {
       dispatch({ type: GET_PRESETS, payload: res.data });
     } catch (err) {
       console.log('getPresets failed');
+      console.log(err);
       dispatch({
         type: CONTACT_ERROR,
         payload: err.response.msg,
@@ -117,20 +118,22 @@ const PresetState = (props) => {
     const config = {
       headers: {
         'Content-Type': 'application/json',
+        'x-auth-token': axios.defaults.headers.common['x-auth-token'],
       },
     };
 
     try {
-      const res = await axios.post('/api/userpreset', preset, config);
+      const res = await trackerApi.post('/api/userpreset', preset, config);
       dispatch({ type: ADD_PRESET, payload: res.data });
     } catch (err) {
+      console.log(err);
       dispatch({
         type: CONTACT_ERROR,
         payload: err.response.msg,
       });
-      console.log(err);
     }
   };
+
   // Delete preset
   const deletePreset = async (id) => {
     try {
@@ -235,19 +238,20 @@ const PresetState = (props) => {
   };
 
   // Filter presets
-  const filterPresets = (month) => {
-    dispatch({ type: FILTER_PRESETS, payload: month });
+  const filterPresets = (filter) => {
+    dispatch({ type: FILTER_PRESETS, payload: filter });
   };
 
   // Filter out all presets with positive numbers and provided month and year
   const filterOutPositiveNumsAndMonth = (month) => {
-    //  console.log(state.year);
+    console.log('state.year');
     // console.log(state.presets);
     dispatch({ type: FILTER_POSNUMANDMONTH, payload: month });
   };
 
   // Filter out all presets with negative numbers and provided month
   const filterOutNegativeNumsAndMonth = (month) => {
+    console.log('negnumran');
     dispatch({ type: FILTER_NEGNUMANDMONTH, payload: month });
   };
 

@@ -50,7 +50,14 @@ const ChangeEmailScreen = () => {
       <View style={styles.row}>
         <Text style={styles.label}>Email </Text>
 
-        <TextInput autoFocus autoCorrect={false} minLength={2} style={styles.input} onChangeText={(text) => setLocalEmail(text)}>
+        <TextInput
+          autoFocus
+          autoCapitalize='none'
+          autoCorrect={false}
+          minLength={2}
+          style={styles.input}
+          onChangeText={(text) => setLocalEmail(text)}
+        >
           {localEmail}
         </TextInput>
       </View>

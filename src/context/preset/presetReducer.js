@@ -299,7 +299,7 @@ export default (state, action) => {
     case FILTER_PRESETS:
       return {
         ...state,
-        filtered: state.presets.filter((preset) => preset.month === action.payload),
+        filtered: action.payload,
       };
     case EDIT_PRESET:
       return {

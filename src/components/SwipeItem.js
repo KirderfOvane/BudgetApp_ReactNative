@@ -1,20 +1,28 @@
 import React from 'react';
 import { View, Text, StyleSheet, ImageBackground } from 'react-native';
-
 import DateMenu from './DateMenu';
-import PresetPositiveFilterScreen from '../screens/PresetPositiveFilterScreen';
+import PresetPositiveFilter from './PresetPositiveFilter';
+import PresetNegativeFilter from './PresetNegativeFilter';
+import AddToBudget from './AddToBudget';
 import YearBalance from '../components/YearBalance';
+import PresetContext from '../context/preset/presetContext';
 
 const SwipeItem = ({ monthlist, activeindex, index }) => {
-  //console.log(`imageurl: ${monthlist[index].image}`);
-  // const [image,setImage] = React.useState()
-  // const image = require(`../../assets/iphone_725x414/antelope-canyon_iphoneslices__3.jpg`);
+  //context
+  const presetContext = React.useContext(PresetContext);
+  //context destruct
+  const { filtered } = presetContext;
+
   return (
     <View style={styles.container}>
       <DateMenu monthlist={monthlist} activeindex={activeindex} />
       <ImageBackground source={monthlist[index].image} style={styles.image}>
         {isNaN(monthlist[activeindex].month) ? (
-          <PresetPositiveFilterScreen monthlist={monthlist} activeindex={activeindex} />
+          <>
+            {filtered === null || filtered === 'positive' ? <PresetPositiveFilter monthlist={monthlist} activeindex={activeindex} /> : null}
+            {filtered === null || filtered === 'negative' ? <PresetNegativeFilter monthlist={monthlist} activeindex={activeindex} /> : null}
+            {filtered === 'add' ? <AddToBudget month={monthlist[activeindex].month} /> : null}
+          </>
         ) : (
           <YearBalance />
         )}

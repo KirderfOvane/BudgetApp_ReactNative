@@ -31,6 +31,7 @@ import ChangeNameScreen from './src/screens/ChangeNameScreen';
 import ChangePasswordScreen from './src/screens/ChangePasswordScreen';
 import ChangeEmailScreen from './src/screens/ChangeEmailScreen';
 import CustomGoBack from './src/components/CustomGoBack';
+import MonthBottomTab from './src/components/MonthBottomTab';
 
 //icons
 import { FontAwesome5 } from '@expo/vector-icons';
@@ -111,7 +112,7 @@ const switchNavigator = createSwitchNavigator({
             backgroundColor: theme.colors.dark,
             height: 120,
           },
-          headerLeft: () => <Logo />,
+          headerLeft: () => <Logo clickpath={'Balance'} />,
           headerRight: () => <User />,
           title: '',
         },
@@ -143,10 +144,16 @@ const switchNavigator = createSwitchNavigator({
             backgroundColor: theme.colors.dark,
             height: 120,
           },
-          headerLeft: () => <Logo />,
+          headerLeft: () => <Logo clickpath={'Balance'} />,
           headerRight: () => <User />,
           title: 'Month',
         },
+        tabBarOptions: {
+          style: {
+            backgroundColor: theme.colors.dark,
+          },
+        },
+        tabBarComponent: ({ navigation }) => <MonthBottomTab navigation={navigation} />,
       }
     ),
     userFlow: createStackNavigator(

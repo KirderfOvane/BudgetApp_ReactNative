@@ -9,7 +9,16 @@ import YearBalanceScreen from './YearBalanceScreen';
 const MonthScreen = ({ navigation }) => {
   //context
   const presetContext = React.useContext(PresetContext);
-  const { presets, filterOutPositiveNumsAndMonth, addMonth } = presetContext;
+  const {
+    presets,
+    filterOutPositiveNumsAndMonth,
+    addMonth,
+    filterOutNegativeNumsAndMonth,
+    getPresets,
+    filteredmonthandposnum,
+    filteredmonthandnegnum,
+  } = presetContext;
+
   //state
   const [_initialScrollIndex, set_InitialScrollIndex] = React.useState(6);
   const [indexCounter, setIndexCounter] = React.useState(_initialScrollIndex);
@@ -52,7 +61,7 @@ const MonthScreen = ({ navigation }) => {
       //check direction
       if (Lastoffset > swipeoffset) {
         //swipe left
-        console.log('swiped left');
+        // console.log('swiped left');
         setLastSwipe('left');
         const counter = _initialScrollIndex - newindex;
         //console.log(`counter: ${counter}`);
@@ -67,7 +76,7 @@ const MonthScreen = ({ navigation }) => {
         }
       } else {
         //swipe right
-        console.log('swiped rigth');
+        //  console.log('swiped rigth');
         setLastSwipe('rigth');
         const counter = newindex - _initialScrollIndex;
         //console.log(`counter: ${counter}`);
@@ -83,21 +92,25 @@ const MonthScreen = ({ navigation }) => {
         }
       }
       setLastOffset(e.nativeEvent.targetContentOffset.x);
-    } else console.log('No Swipe');
+    } else null; //console.log('No Swipe');
   };
-
+  //console.log(`negnum: ${filteredmonthandnegnum}`);
   //updates on swipe
   React.useEffect(() => {
-    // presets && console.log(MonthList[indexCounter].month);
+    // console.log('useeffect');
+    //getPresets();
+
+    presets && console.log(MonthList[indexCounter].month);
     // when index/month change recalc income presets
-    presets && addMonth(indexCounter);
+    presets && addMonth(MonthList[indexCounter].month);
     presets && filterOutPositiveNumsAndMonth(MonthList[indexCounter].month);
+    presets && filterOutNegativeNumsAndMonth(MonthList[indexCounter].month);
     //console.log(indexCounter);
     if (!isNaN(MonthList[indexCounter].month)) {
       console.log('year selected!');
       navigation.navigate('Balance', { fromMonth: lastSwipe });
     }
-  }, [indexCounter]);
+  }, [indexCounter, presets]);
 
   //jsx
   return (

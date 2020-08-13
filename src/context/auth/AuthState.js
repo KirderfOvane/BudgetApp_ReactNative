@@ -17,12 +17,13 @@ import {
   LOGIN_FAIL,
   LOGIN_SUCCESS,
   LOGOUT,
-  TESTCONTEXT,
   UPDATE_DETAILS_FAIL,
   UPDATE_DETAILS_SUCCESS,
   CLEAR_ERRORS,
   UPDATE_PASSWORD_SUCCESS,
   UPDATE_PASSWORD_FAIL,
+  FORGOT_FAIL,
+  FORGOT_SUCCESS,
 } from '../types';
 
 const AuthState = (props) => {
@@ -32,15 +33,10 @@ const AuthState = (props) => {
     loading: true,
     user: null,
     error: null,
-    testofcontext: false,
     successmessage: null,
   };
 
   const [state, dispatch] = useReducer(authReducer, initialState);
-
-  const testContext = () => {
-    dispatch({ type: TESTCONTEXT, payload: state.testofcontext });
-  };
 
   // Load User
   const loadUser = async (reroute = true) => {
@@ -68,25 +64,34 @@ const AuthState = (props) => {
       }
     } else {
       console.log('no valid token found');
+      dispatch({ type: AUTH_ERROR });
     }
   };
 
   // Register User
   const register = async (formData) => {
+    const config = {
+      headers: {
+        'Content-Type': 'application/json',
+        'My_User-Agent': 'native',
+      },
+    };
     try {
-      const responsedata = await registerAction.sendRegister(formData);
+      // const responsedata = await registerAction.sendRegister(formData); OLD OBSOLETE for testing TDD
+      const res = await trackerApi.post('/api/users', formData, config); //endpoint/url
 
-      // await AsyncStorage.setItem('token', res.data.token);
+      await AsyncStorage.setItem('token', res.data.token);
+      console.log(res);
+
       dispatch({
         type: REGISTER_SUCCESS,
-        payload: responsedata,
+        payload: res.data,
       });
       loadUser();
     } catch (err) {
-      //console.log(err);
       dispatch({
         type: REGISTER_FAIL,
-        payload: err.responsedata.msg,
+        payload: err.response.data.errors,
       });
     }
   };
@@ -111,10 +116,12 @@ const AuthState = (props) => {
 
       loadUser();
     } catch (err) {
-      console.log(`login http calls says: ${err}`);
+      //  console.log(`login http calls says: ${err}`);
+      console.log(err.response.data.msg);
+      console.log(err.response.data);
       dispatch({
         type: LOGIN_FAIL,
-        payload: err.response.data.msg,
+        payload: err.response.data.errors[0].msg,
       });
     }
   };
@@ -182,6 +189,31 @@ const AuthState = (props) => {
     }
   };
 
+  //Forgot Password
+  const forgotPassword = async (formData) => {
+    const config = {
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    };
+
+    try {
+      const res = await trackerApi.post('/api/auth/forgotpassword', formData, config); //endpoint/url
+      console.log(res);
+      dispatch({
+        type: FORGOT_SUCCESS,
+        payload: res.data.data,
+      });
+    } catch (err) {
+      console.log(err.response.data.errors[0].msg);
+      // console.log(err.response.data.errors[0].msg);
+      dispatch({
+        type: FORGOT_FAIL,
+        payload: err.response.data.errors[0].msg,
+      });
+    }
+  };
+
   // Clear Errors
   const clearErrors = () => dispatch({ type: CLEAR_ERRORS });
 
@@ -192,14 +224,14 @@ const AuthState = (props) => {
         isAuthenticated: state.isAuthenticated,
         loading: state.loading,
         user: state.user,
-        testofcontext: state.testofcontext,
+
         successmessage: state.successmessage,
         error: state.error,
         logout,
         register,
         login,
         loadUser,
-        testContext,
+        forgotPassword,
         updateDetails,
         clearErrors,
         updatePassword,

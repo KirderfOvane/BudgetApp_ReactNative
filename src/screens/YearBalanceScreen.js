@@ -10,7 +10,18 @@ const YearBalanceScreen = ({ navigation }) => {
   //context
   const presetContext = React.useContext(PresetContext);
   //context destruct
-  const { getPresets, year, presets, calcYearsum, calcAllMonthSum, calcCapital, calcSavings, calcSum } = presetContext;
+  const {
+    getPresets,
+    year,
+    presets,
+    calcYearsum,
+    calcAllMonthSum,
+    calcCapital,
+    calcSavings,
+    calcSum,
+    calcPosMonth,
+    calcNegMonth,
+  } = presetContext;
   //state
   const [localYear, setLocalYear] = React.useState(2019);
   const [Lastoffset, setLastOffset] = React.useState(0); // used to check if offset occured to see if swipe occured
@@ -41,6 +52,8 @@ const YearBalanceScreen = ({ navigation }) => {
     presets && calcCapital();
     presets && calcSavings();
     presets && calcSum();
+    // presets && calcPosMonth();
+    // presets && calcNegMonth();
   }, [year, presets]);
 
   React.useEffect(() => {

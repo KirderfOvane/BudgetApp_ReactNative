@@ -5,12 +5,14 @@ import {
   AUTH_ERROR,
   LOGIN_SUCCESS,
   LOGOUT,
-  TESTCONTEXT,
   UPDATE_DETAILS_SUCCESS,
   CLEAR_ERRORS,
   UPDATE_PASSWORD_SUCCESS,
   UPDATE_PASSWORD_FAIL,
   UPDATE_DETAILS_FAIL,
+  LOGIN_FAIL,
+  FORGOT_FAIL,
+  FORGOT_SUCCESS,
 } from '../types';
 
 export default (state, action) => {
@@ -27,7 +29,6 @@ export default (state, action) => {
       return {
         ...state,
         ...action.payload,
-        isAuthenticated: true,
         loading: false,
         token: action.payload.token,
       };
@@ -50,15 +51,14 @@ export default (state, action) => {
         user: null,
         error: action.payload,
       };
-    case TESTCONTEXT:
-      return {
-        ...state,
-        testofcontext: !action.payload,
-      };
+
     case UPDATE_DETAILS_SUCCESS:
     case UPDATE_PASSWORD_SUCCESS:
     case UPDATE_PASSWORD_FAIL:
     case UPDATE_DETAILS_FAIL:
+    case LOGIN_FAIL:
+    case FORGOT_FAIL:
+    case FORGOT_SUCCESS:
       return {
         ...state,
         error: action.payload,

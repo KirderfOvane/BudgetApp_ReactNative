@@ -15,7 +15,12 @@ const RegisterScreen = ({ navigation }) => {
   const { setAlert } = alertContext;
 
   //state
-  const [localUser, setlocalUser] = React.useState({ name: '', email: '', password: '', password2: '' });
+  const [localUser, setlocalUser] = React.useState({
+    name: 'reggy',
+    email: 'Holabandola@gmail.com',
+    password: 'password',
+    password2: 'password',
+  });
   const { name, email, password, password2 } = localUser;
 
   //state set functions
@@ -47,14 +52,14 @@ const RegisterScreen = ({ navigation }) => {
       });
 
       // reset fields
-      setlocalUser({ name: '', email: '', password: '', password2: '' });
+      //  setlocalUser({ name: '', email: '', password: '', password2: '' });
     }
   };
 
   const goBack = () => {
     navigation.navigate('Landing');
   };
-
+  //console.log(error);
   // useEffect
   React.useEffect(() => {
     if (isAuthenticated) {
@@ -63,8 +68,15 @@ const RegisterScreen = ({ navigation }) => {
     }
 
     if (error === 'user already exists') {
-      //console.log(authContext.error);
-      console.log('error');
+      setAlert(error, 'danger');
+      clearErrors();
+    }
+    if (error && error.length > 1) {
+      error.map((err) => setAlert(err.msg, 'danger'));
+      clearErrors();
+    } else {
+      error && setAlert(error[0].msg, 'danger');
+      clearErrors();
     }
   }, [error, isAuthenticated]);
 
@@ -98,6 +110,7 @@ const RegisterScreen = ({ navigation }) => {
             onChangeText={changeEmail}
             name='email'
             value={email}
+            autoCapitalize='none'
           />
           <TextInput
             testID='register-input-password'
