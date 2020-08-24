@@ -1,61 +1,31 @@
 import React from 'react';
 import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
-import PresetContext from '../context/preset/presetContext';
 import { theme } from '../constants';
 
 const DateMenu = ({ monthlist, activeindex }) => {
-  //context
-  // const presetContext = React.useContext(PresetContext);
-  //const { month } = presetContext;
-  // if (Number.isInteger(presetContext.month)) {
-  //jsx when month is not year
-  // console.log(month);
   return (
     <View style={styles.container}>
-      <TouchableOpacity title={monthlist[activeindex - 1].month}>
+      <TouchableOpacity>
         <Text style={styles.button}>{'<'}</Text>
       </TouchableOpacity>
-      <TouchableOpacity title={monthlist[activeindex - 1].month}>
-        <Text style={styles.button}>{monthlist[activeindex - 1].month}</Text>
+      <TouchableOpacity>
+        <Text style={styles.button}> {monthlist[activeindex - 1].month}</Text>
       </TouchableOpacity>
-      <TouchableOpacity title={monthlist[activeindex].month}>
+      <TouchableOpacity>
         <Text style={styles.activeindex}>{monthlist[activeindex].month}</Text>
       </TouchableOpacity>
-      <TouchableOpacity title={monthlist[activeindex + 1].month}>
-        <Text style={styles.button}>{monthlist[activeindex + 1].month}</Text>
+      <TouchableOpacity>
+        {isNaN(monthlist[activeindex + 1].month) ? (
+          <Text style={styles.button}> {monthlist[activeindex + 1].month}</Text>
+        ) : (
+          <Text style={styles.button}> {parseInt(monthlist[activeindex + 1].month) + 1}</Text>
+        )}
       </TouchableOpacity>
       <TouchableOpacity title={monthlist[activeindex + 1].month}>
         <Text style={styles.button}>{'>'}</Text>
       </TouchableOpacity>
     </View>
   );
-  //} else {
-  //jsx when month value is year
-  //  return (
-  //   <View>
-  //     <Text>test</Text>
-  //    </View>
-  //  );
-  /*   return (
-      <View style={styles.container}>
-        <TouchableOpacity title={'<'}>
-          <Text style={styles.button}>{'<'}</Text>
-        </TouchableOpacity>
-        <TouchableOpacity title='month'>
-          <Text style={styles.button}>test</Text>
-        </TouchableOpacity>
-        <TouchableOpacity title={month}>
-          <Text style={styles.activeindex}>{month}</Text>
-        </TouchableOpacity>
-        <TouchableOpacity title='someothermonth'>
-          <Text style={styles.button}>someothermonth</Text>
-        </TouchableOpacity>
-        <TouchableOpacity title='>'>
-          <Text style={styles.button}>></Text>
-        </TouchableOpacity>
-      </View>
-    ); */
-  // }
 };
 const styles = StyleSheet.create({
   container: {

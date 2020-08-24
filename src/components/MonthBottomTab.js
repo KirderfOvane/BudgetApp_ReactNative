@@ -24,7 +24,7 @@ const MonthBottomTab = ({ navigation }) => {
       </TouchableOpacity>
       <Text style={styles.dummyobject}></Text>
       <AddToBudgetButton navigation={navigation} />
-      <TouchableOpacity onPress={(e) => navigation.navigate('Category')} style={styles.rowitem}>
+      <TouchableOpacity onPress={() => presetContext.filterPresets('category')} style={styles.rowitem}>
         <Entypo style={styles.texticon} name='grid' size={24} color='black' />
       </TouchableOpacity>
       <TouchableOpacity onPress={(e) => navigation.navigate('Purchase')} style={styles.rowitem}>

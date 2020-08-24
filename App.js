@@ -12,6 +12,7 @@ import PresetState from './src/context/preset/PresetState';
 import { setNavigator } from './src/navigationRef';
 
 //Screens
+import SplashScreen from './src/screens/SplashScreen';
 import LandingScreen from './src/screens/LandingScreen';
 import LoginScreen from './src/screens/LoginScreen';
 import RegisterScreen from './src/screens/RegisterScreen';
@@ -46,6 +47,13 @@ import Logo from './src/components/Logo';
 
 //navigators
 const switchNavigator = createSwitchNavigator({
+  Splash: {
+    screen: SplashScreen,
+    navigationOptions: {
+      title: 'Splash',
+      headerShown: false,
+    },
+  },
   loginFlow: createStackNavigator({
     Landing: {
       screen: LandingScreen,
@@ -87,107 +95,140 @@ const switchNavigator = createSwitchNavigator({
       },
     },
   }),
-  mainFlow: createStackNavigator({
-    yearFlow: createBottomTabNavigator(
-      {
-        Balance: {
-          screen: YearBalanceScreen,
-          navigationOptions: { title: 'Balance', tabBarIcon: <FontAwesome5 name='balance-scale' size={24} color='white' /> },
+  mainFlow: createStackNavigator(
+    {
+      yearFlow: createBottomTabNavigator(
+        {
+          Balance: {
+            screen: YearBalanceScreen,
+            navigationOptions: {
+              title: 'Balance',
+              tabBarIcon: <FontAwesome5 name='balance-scale' size={24} color='white' />,
+            },
+          },
+          Expense: {
+            screen: YearExpenseScreen,
+            navigationOptions: { title: 'Expense', tabBarIcon: <Fontisto name='scissors' size={24} color='white' /> },
+          },
+          Income: YearIncomeScreen,
+          Savings: YearSavingsScreen,
         },
-        Expense: {
-          screen: YearExpenseScreen,
-          navigationOptions: { title: 'Expense', tabBarIcon: <Fontisto name='scissors' size={24} color='white' /> },
-        },
-        Income: YearIncomeScreen,
-        Savings: YearSavingsScreen,
-      },
 
-      {
-        navigationOptions: {
-          headerTitleStyle: {
-            color: theme.colors.light,
-            fontSize: 24,
-          },
-          headerStyle: {
-            backgroundColor: theme.colors.dark,
-            height: 120,
-          },
-          headerLeft: () => <Logo clickpath={'Balance'} />,
-          headerRight: () => <User />,
-          title: '',
-        },
-        //bottom tab navigator
-        tabBarOptions: {
-          style: {
-            backgroundColor: theme.colors.dark,
-          },
-        },
-      }
-    ),
-    monthFlow: createBottomTabNavigator(
-      {
-        Month: MonthScreen,
-        Add: AddToBudgetScreen,
-        Plus: PlusScreen,
-        Minus: MinusScreen,
-        Purchase: PurchaseScreen,
-        Piggybank: PiggybankScreen,
-        Category: CategoryScreen,
-      },
-      {
-        navigationOptions: {
-          headerTitleStyle: {
-            color: theme.colors.light,
-            fontSize: 24,
-          },
-          headerStyle: {
-            backgroundColor: theme.colors.dark,
-            height: 120,
-          },
-          headerLeft: () => <Logo clickpath={'Balance'} />,
-          headerRight: () => <User />,
-          title: 'Month',
-        },
-        tabBarOptions: {
-          style: {
-            backgroundColor: theme.colors.dark,
-          },
-        },
-        tabBarComponent: ({ navigation }) => <MonthBottomTab navigation={navigation} />,
-      }
-    ),
-    userFlow: createStackNavigator(
-      {
-        User: {
-          screen: UserScreen,
-          navigationOptions: { headerRight: () => <AntDesign name='right' size={24} color='black' /> },
-        },
-        Name: {
-          screen: ChangeNameScreen,
-        },
-        Email: {
-          screen: ChangeEmailScreen,
-        },
-        Password: {
-          screen: ChangePasswordScreen,
-        },
-      },
-      {
-        navigationOptions: {
-          headerTitleStyle: {
-            color: theme.colors.light, // Specify the height of your custom header
-          },
-          headerStyle: {
-            backgroundColor: theme.colors.dark,
-            height: 120,
-          },
+        {
+          navigationOptions: {
+            headerTitleStyle: {
+              color: theme.colors.light,
+              fontSize: 24,
+            },
+            headerStyle: {
+              backgroundColor: theme.colors.dark,
+              height: 120,
+            },
 
-          headerLeft: () => <CustomGoBack />,
-          title: 'User Profile',
+            headerLeft: () => <Logo clickpath={'Balance'} />,
+            headerRight: () => <User />,
+            title: 'Year',
+            animationEnabled: false,
+            transitionConfig: () => ({
+              transitionSpec: {
+                duration: 0,
+                timing: 0,
+              },
+            }),
+          },
+          //bottom tab navigator
+          tabBarOptions: {
+            style: {
+              backgroundColor: theme.colors.dark,
+            },
+          },
+        }
+      ),
+      monthFlow: createBottomTabNavigator(
+        {
+          Month: MonthScreen,
+          Add: AddToBudgetScreen,
+          Plus: PlusScreen,
+          Minus: MinusScreen,
+          Purchase: PurchaseScreen,
+          Piggybank: PiggybankScreen,
+          Category: CategoryScreen,
         },
-      }
-    ),
-  }),
+        {
+          navigationOptions: {
+            headerTitleStyle: {
+              color: theme.colors.light,
+              fontSize: 24,
+            },
+            cardStyle: { backgroundColor: 'transparent' },
+
+            headerStyle: {
+              backgroundColor: theme.colors.dark,
+              height: 120,
+            },
+            headerLeft: () => <Logo clickpath={'Balance'} />,
+            headerRight: () => <User />,
+            title: 'Month',
+            animationEnabled: false,
+            transitionConfig: () => ({
+              transitionSpec: {
+                duration: 0,
+                timing: 0,
+              },
+            }),
+          },
+          tabBarOptions: {
+            style: {
+              backgroundColor: theme.colors.dark,
+            },
+          },
+          tabBarComponent: ({ navigation }) => <MonthBottomTab navigation={navigation} />,
+        }
+      ),
+      userFlow: createStackNavigator(
+        {
+          User: {
+            screen: UserScreen,
+            navigationOptions: { headerRight: () => <AntDesign name='right' size={24} color='black' /> },
+          },
+          Name: {
+            screen: ChangeNameScreen,
+          },
+          Email: {
+            screen: ChangeEmailScreen,
+          },
+          Password: {
+            screen: ChangePasswordScreen,
+          },
+        },
+        {
+          navigationOptions: {
+            headerTitleStyle: {
+              color: theme.colors.light, // Specify the height of your custom header
+            },
+            headerStyle: {
+              backgroundColor: theme.colors.dark,
+              height: 120,
+            },
+
+            headerLeft: () => <CustomGoBack />,
+            title: 'User Profile',
+          },
+        }
+      ),
+    },
+    {
+      navigationOptions: {
+        animationEnabled: false,
+        transitionConfig: () => ({
+          transitionSpec: {
+            duration: 0,
+            timing: 0,
+          },
+        }),
+      },
+    }
+  ),
 });
 
 const App = createAppContainer(switchNavigator);

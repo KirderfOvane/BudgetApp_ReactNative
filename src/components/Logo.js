@@ -5,7 +5,7 @@ import { MaterialIcons } from '@expo/vector-icons';
 
 const Logo = ({ paddingSides, clickable, clickpath, navigation }) => {
   const onClick = () => {
-    clickable && navigation.navigate(clickpath);
+    clickable && clickpath && navigation.navigate(clickpath);
   };
   return (
     <TouchableOpacity onPress={onClick} style={[styles.logo, { paddingHorizontal: paddingSides }]}>

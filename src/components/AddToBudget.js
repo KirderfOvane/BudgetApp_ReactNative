@@ -1,24 +1,15 @@
 import React from 'react';
-import { View, Text, TouchableOpacity, StyleSheet, TextInput, Button, Linking } from 'react-native';
+import { View, Text, TouchableOpacity, StyleSheet, TextInput } from 'react-native';
 import { theme } from '../constants';
-import { AntDesign } from '@expo/vector-icons';
 import Alerts from '../components/Alerts';
 import AuthContext from '../context/auth/authContext';
 import AlertContext from '../context/alert/alertContext';
 import PresetContext from '../context/preset/presetContext';
 import CategoryPicker from './CategoryPicker';
 import CheckBoxField from './CheckBoxField';
-//import * as DocumentPicker from 'expo-document-picker';
-import * as Permissions from 'expo-permissions';
-//import DocumentPicker from 'react-native-document-picker';
-import * as Contacts from 'expo-contacts';
-import * as MediaLibrary from 'expo-media-library';
-//import * as ImagePicker from 'expo-image-picker';
-import { WebView } from 'react-native-webview';
 import ToggleSwitch from 'toggle-switch-react-native';
-import { ThemeColors } from 'react-navigation';
 
-const AddToBudget = ({ navigation }) => {
+const AddToBudget = ({ month, monthlist, setMonthList }) => {
   // context alert
   const alertContext = React.useContext(AlertContext);
   const { setAlert } = alertContext;
@@ -29,7 +20,7 @@ const AddToBudget = ({ navigation }) => {
 
   // context presets
   const presetContext = React.useContext(PresetContext);
-  const { presets, addPreset, edit, cancelEdit, sendEdit, calcSum, month, year, uploadCSV } = presetContext;
+  const { presets, addPreset, edit, cancelEdit, sendEdit, calcSum, year, uploadCSV } = presetContext;
 
   // states
   const [localPreset, setLocalPreset] = React.useState({
@@ -37,7 +28,6 @@ const AddToBudget = ({ navigation }) => {
     number: '',
     category: 'Select Category',
     type: 'overhead',
-    //  piggybank: [{ month, year, savedAmount: '' }],
   });
 
   const changeName = (newName) => {
@@ -46,7 +36,6 @@ const AddToBudget = ({ navigation }) => {
   const changeNumber = (newNumber) => {
     setLocalPreset({ ...localPreset, number: income ? newNumber : newNumber * -1 });
   };
-  const [permission, setPermission] = React.useState(false);
   const [pickerButtonTitle, setPickerButtonTitle] = React.useState('Select Category');
   const [checkboxfieldActive, setCheckboxfieldActive] = React.useState(true);
   const [pickerActive, setPickerActive] = React.useState(false);
@@ -62,11 +51,9 @@ const AddToBudget = ({ navigation }) => {
     }
     setPickerActive(!pickerActive);
   };
-
+  //console.log(monthlist[5].data);
   //submit
   const onSubmit = (e) => {
-    console.log(localPreset);
-
     // name and number validation
     if (localPreset.name === '' || localPreset.number.length === 0) {
       setCheckboxfieldActive(false);
@@ -89,70 +76,20 @@ const AddToBudget = ({ navigation }) => {
 
     // validation passed
     console.log(localPreset);
-    console.log(presetContext.month);
+    console.log(month);
     addPreset({
       name: localPreset.name,
       number: income ? localPreset.number : localPreset.number * -1,
-      month: presetContext.month,
+      month: month,
       year,
       category: localPreset.category,
       type: localPreset.type,
-      piggybank: [{ month: presetContext.month, year, savedAmount: '' }],
+      piggybank: [{ month: month, year, savedAmount: '' }],
     });
+    //presetContext.buildFlatListData();
+    //setMonthList(...monthlist);
+    // presetContext.clearPresets();
   };
-
-  /* const permissionFlow = async () => {
-    const { status } = await Permissions.askAsync(Permissions.CAMERA_ROLL);
-    setPermission({ status });
-    if (status !== 'granted') {
-      Linking.openURL('app-settings');
-      return;
-    }
-    //test
-    // _pickImage();
-    // const { data } = await Contacts.getContactsAsync({ pageSize: 1 });
-    //console.log(data[0]);
-  }; */
-
-  /* _pickImage = async () => {
-    try {
-      let result = await ImagePicker.launchImageLibraryAsync({
-        mediaTypes: ImagePicker.MediaTypeOptions.All,
-        allowsEditing: true,
-        aspect: [4, 3],
-        quality: 1,
-      });
-      if (!result.cancelled) {
-        this.setState({ image: result.uri });
-      }
-
-      console.log(result);
-    } catch (E) {
-      console.log(E);
-    }
-  };
-
-  const fileUpload = async () => {
-    // Pick a single file
-    try {
-      const res = await DocumentPicker.pick({
-        type: [DocumentPicker.types.allFiles],
-      });
-      console.log(
-        res.uri,
-        res.type, // mime type
-        res.name,
-        res.size
-      );
-    } catch (err) {
-      if (DocumentPicker.isCancel(err)) {
-        // User cancelled the picker, exit any dialogs or menus and move on
-      } else {
-        console.log('this happenned');
-        throw err;
-      }
-    }
-  }; */
 
   //jsx
   return (

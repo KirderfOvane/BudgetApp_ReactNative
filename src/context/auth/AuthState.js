@@ -64,6 +64,8 @@ const AuthState = (props) => {
       }
     } else {
       console.log('no valid token found');
+      console.log('navigating to LandingScreen');
+      reroute && navigate('Landing');
       dispatch({ type: AUTH_ERROR });
     }
   };

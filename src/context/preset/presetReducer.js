@@ -46,6 +46,7 @@ import {
   CLEAR_CSV,
   REMOVE_CSV,
   LOGOUT,
+  PRE_FILTER,
 } from '../types';
 
 export default (state, action) => {
@@ -59,7 +60,6 @@ export default (state, action) => {
     case LOGOUT:
     case CLEAR_PRESETS:
       return {
-        ...state,
         presets: null,
         error: null,
         edit: null,
@@ -300,6 +300,11 @@ export default (state, action) => {
       return {
         ...state,
         filtered: action.payload,
+      };
+    case PRE_FILTER:
+      return {
+        ...state,
+        prefilter: action.payload,
       };
     case EDIT_PRESET:
       return {

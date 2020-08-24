@@ -17,8 +17,8 @@ const AddToBudgetButton = ({ navigation }) => {
   //state
   const [buttonColor, setButtonColor] = React.useState({ top: '#8C8C8C', bottom: '#FFFFFF' });
   const onClick = () => {
-    navigation.navigate('Add');
-    // presetContext.filterPresets('add');
+    //navigation.navigate('Add');
+    presetContext.filterPresets('add');
   };
   //jsx
   return (

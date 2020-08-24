@@ -6,6 +6,7 @@ import presetReducer from './presetReducer';
 import {
   ADD_PRESET,
   DELETE_PRESET,
+  PRE_FILTER,
   EDIT_PRESET,
   CANCEL_EDIT,
   SEND_EDIT,
@@ -55,6 +56,7 @@ import {
 
 const PresetState = (props) => {
   const initialState = {
+    //calculating:true,
     presets: null,
     sum: null,
     edit: null,
@@ -88,6 +90,7 @@ const PresetState = (props) => {
     purchases: null, // year independent
     csvpresets: null, // used to store values from csv-file in stagingarea
     doSubmitCsv: '',
+    prefilter: [],
   };
 
   const [state, dispatch] = useReducer(presetReducer, initialState);
@@ -149,16 +152,17 @@ const PresetState = (props) => {
       });
     }
   };
-  // send edit
+  // send edit aka updatePreset
   const sendEdit = async (preset) => {
     const config = {
       headers: {
         'Content-Type': 'application/json',
+        'x-auth-token': axios.defaults.headers.common['x-auth-token'],
       },
     };
 
     try {
-      const res = await axios.put(`/api/userpreset/${preset._id}`, preset, config);
+      const res = await trackerApi.put(`/api/userpreset/${preset._id}`, preset, config);
       dispatch({ type: SEND_EDIT, payload: res.data });
     } catch (err) {
       dispatch({
@@ -167,10 +171,10 @@ const PresetState = (props) => {
       });
     }
     //Recalc ALL
-    resetSums();
+    /*  resetSums();
     preset.type !== 'purchase' && calcSum(preset._id, preset.number, 'edit');
     filterOutPositiveNumsAndMonth(state.month);
-    filterOutNegativeNumsAndMonth(state.month);
+    filterOutNegativeNumsAndMonth(state.month); */
   };
 
   // Upload CSV
@@ -214,6 +218,8 @@ const PresetState = (props) => {
 
   // set year when yearbutton is pressed in datemenucomponent
   const setYear = (year) => {
+    console.log('setYear ran');
+
     dispatch({ type: SET_YEAR, payload: year });
   };
 
@@ -229,6 +235,7 @@ const PresetState = (props) => {
 
   // edit preset
   const setEdit = (preset) => {
+    //console.log(preset);
     dispatch({ type: EDIT_PRESET, payload: preset });
   };
 
@@ -244,20 +251,117 @@ const PresetState = (props) => {
 
   // Filter out all presets with positive numbers and provided month and year
   const filterOutPositiveNumsAndMonth = (month) => {
-    console.log('state.year');
-    // console.log(state.presets);
-    dispatch({ type: FILTER_POSNUMANDMONTH, payload: month });
+    month && dispatch({ type: FILTER_POSNUMANDMONTH, payload: month });
   };
 
   // Filter out all presets with negative numbers and provided month
   const filterOutNegativeNumsAndMonth = (month) => {
-    console.log('negnumran');
     dispatch({ type: FILTER_NEGNUMANDMONTH, payload: month });
   };
 
   // clear filter
   const clearFilter = () => {
     dispatch({ type: CLEAR_FILTER });
+  };
+
+  // calc prefilter
+  const buildFlatListData = () => {
+    filterOutPositiveNumsAndMonth();
+    filterOutNegativeNumsAndMonth();
+    // console.log(state.presets);
+    // console.log(state.year);
+    const monthToFilter = [
+      'January',
+      'February',
+      'March',
+      'April',
+      'May',
+      'June',
+      'July',
+      'August',
+      'September',
+      'October',
+      'November',
+      'December',
+    ];
+    const presetsByYearAndMonthArray = [
+      [[], []],
+      [[], []],
+      [[], []],
+      [[], []],
+      [[], []],
+      [[], []],
+      [[], []],
+      [[], []],
+      [[], []],
+      [[], []],
+      [[], []],
+      [[], []],
+    ];
+    const MonthIncomeExpenseSum = [
+      [[], []],
+      [[], []],
+      [[], []],
+      [[], []],
+      [[], []],
+      [[], []],
+      [[], []],
+      [[], []],
+      [[], []],
+      [[], []],
+      [[], []],
+      [[], []],
+    ];
+
+    if (state.presets !== null) {
+      for (i = 0; i < state.presets.length; i++) {
+        // loop presets
+        for (a = 0; a < monthToFilter.length; a++) {
+          // loop months
+          MonthIncomeSumCounter = 0;
+          MonthExpenseSumCounter = 0;
+          if (
+            state.presets[i].year.toString() === state.year.toString() &&
+            state.presets[i].month.toString() === monthToFilter[a].toString()
+          ) {
+            // positive/negative number sort
+            if (state.presets[i].number > 0) {
+              presetsByYearAndMonthArray[a][0].push(state.presets[i]); // positive subarray holding presets by month
+              //  MonthIncomeExpenseSum[a][0].push(state.presets[i].number); // positive subarray holding presetsnumber total sum by month
+            } else {
+              presetsByYearAndMonthArray[a][1].push(state.presets[i]); // negative subarray holding presets by month
+              //  MonthIncomeExpenseSum[a][1].push(state.presets[i].number); // negative subarray holding presetsnumber total sum by month
+            }
+          }
+        }
+      }
+    }
+
+    // create additional subarray with month total sum income and expense
+    const createIncomeExpenseMonthSum = () => {
+      //--> presetsByYearAndMonthArray = [month],[[presetmonthPos][presetmonthNeg][totalPosSum][totalNegSum]]
+      //                                                                               ^^^^
+      for (m = 0; m < monthToFilter.length; m++) {
+        const totalPosSum =
+          MonthIncomeExpenseSum[m][0].length !== 0 && //if no presets, don't try to reduce
+          MonthIncomeExpenseSum[m][0].reduce((total, num) => {
+            return parseInt(Math.abs(total)) + parseInt(Math.abs(num));
+          });
+
+        //--> presetsByYearAndMonthArray = [month],[[presetmonthPos][presetmonthNeg][totalPosSum][totalNegSum]]
+        //                                                                                           ^^^^
+        presetsByYearAndMonthArray[m].push(totalPosSum);
+        const totalNegSum =
+          MonthIncomeExpenseSum[m][1].length !== 0 && //if no presets, don't try to reduce
+          MonthIncomeExpenseSum[m][1].reduce((total, num) => {
+            return parseInt(Math.abs(total)) + parseInt(Math.abs(num));
+          });
+        presetsByYearAndMonthArray[m].push(totalNegSum * -1);
+      }
+    };
+    // createIncomeExpenseMonthSum();
+
+    dispatch({ type: PRE_FILTER, payload: presetsByYearAndMonthArray });
   };
 
   const setPurchase = () => {
@@ -372,6 +476,7 @@ const PresetState = (props) => {
 
   // Calc Positive month sum
   const calcPosMonth = (filteredmonthandposnum) => {
+    //console.log('calcPosMonth');
     //array att iterera igenom
     let presetArray = [];
     //håller uträknade summan
@@ -409,7 +514,7 @@ const PresetState = (props) => {
   };
 
   // calculate sum of provided category and month
-  const calcCategoryByMonth = (month) => {
+  const calcCategoryByMonth = () => {
     // array som håller presets kategorier och ska itereras igenom för att hitta alla unika categorier denna månad
     let categoriesArray = [];
     state.presets.map((preset) => {
@@ -417,7 +522,7 @@ const PresetState = (props) => {
         preset.type !== 'purchase' &&
         preset.type !== 'savings' &&
         preset.type !== 'capital' &&
-        preset.month === month &&
+        preset.month === state.month &&
         categoriesArray.push(preset.category);
     });
     let UniqueCatThisMonth = categoriesArray.filter(function (item, i, ar) {
@@ -440,7 +545,7 @@ const PresetState = (props) => {
               preset.type !== 'purchase' &&
               preset.type !== 'savings' &&
               preset.type !== 'capital' &&
-              preset.month === month &&
+              preset.month === state.month &&
               preset.category === UniqueCatThisMonth[i] &&
               presetByCatArray.push(preset.number));
         }); // end inner loop
@@ -451,7 +556,7 @@ const PresetState = (props) => {
             preset.type !== 'purchase' &&
             preset.type !== 'savings' &&
             preset.type !== 'capital' &&
-            preset.month === month &&
+            preset.month === state.month &&
             preset.category === UniqueCatThisMonth[i] &&
             presetByCatArray.push(preset.number);
         }); // end inner loop
@@ -825,9 +930,9 @@ const PresetState = (props) => {
     });
   };
   ////////////////////////////////////
-  const calcYearsum = (year) => {
+  const calcYearsum = () => {
     let numberArray = [];
-    if (year === '2019' || year === 2019) {
+    if (state.year === '2019' || state.year === 2019) {
       state.presets.map((preset) => {
         preset.year === undefined ||
           (preset.year == '2019' &&
@@ -894,9 +999,9 @@ const PresetState = (props) => {
     if (presetArray.length !== 0) {
       TotalMonthSum = presetArray.reduce((a, b) => a + b, 0);
       dispatch({ type: CALC_MONTH_SAVINGS, payload: TotalMonthSum });
-      //console.log(`monthsavings: ${TotalMonthSum} in ${state.month} `);
+      console.log(`monthsavings: ${TotalMonthSum} in ${state.month} `);
     } else {
-      dispatch({ type: CALC_MONTH_SAVINGS, payload: null });
+      dispatch({ type: CALC_MONTH_SAVINGS, payload: 0 });
       //console.log(`no monthsavings to calculate in ${state.month} `);
     }
   };
@@ -1002,6 +1107,7 @@ const PresetState = (props) => {
         MonthBalance: state.MonthBalance,
         csvpresets: state.csvpresets,
         doSubmitCsv: state.doSubmitCsv,
+        prefilter: state.prefilter,
         addPreset,
         calcSum,
         deletePreset,
@@ -1048,6 +1154,7 @@ const PresetState = (props) => {
         updateCsvPresets,
         clearCsv,
         removeCSV,
+        buildFlatListData,
       }}
     >
       {props.children}

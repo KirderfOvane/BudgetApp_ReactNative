@@ -16,7 +16,9 @@ const LandingScreen = ({ navigation }) => {
 
   // useEffect
   React.useEffect(() => {
-    loadUser();
+    setTimeout(function () {
+      loadUser();
+    }, 3000);
   }, []);
 
   //jsx
@@ -28,7 +30,7 @@ const LandingScreen = ({ navigation }) => {
           <Text style={styles.logotext}>Budget App</Text>
         </View>
         <Text style={styles.paragraph}>An App that helps you organize your economy.</Text>
-        <TouchableOpacity style={styles.loginbtn} testID='loginbutton' title='Login' onPress={() => navigation.navigate('Login')}>
+        {/* <TouchableOpacity style={styles.loginbtn} testID='loginbutton' title='Login' onPress={() => navigation.navigate('Login')}>
           <Text style={styles.logintext}>LOGIN</Text>
         </TouchableOpacity>
         <TouchableOpacity
@@ -38,9 +40,16 @@ const LandingScreen = ({ navigation }) => {
           onPress={() => navigation.navigate('Register')}
         >
           <Text style={styles.registertext}>Register</Text>
-        </TouchableOpacity>
+        </TouchableOpacity> */}
       </ImageBackground>
-      <Footer />
+      <View
+        style={{
+          height: 100,
+
+          backgroundColor: theme.colors.dark,
+        }}
+      ></View>
+      {/*  <Footer style={{ visibility: 'hidden' }} /> */}
     </View>
   );
 };
@@ -50,7 +59,7 @@ const styles = StyleSheet.create({
     flex: 1,
     width: 414,
     height: 725,
-    backgroundColor: theme.colors.light,
+    backgroundColor: 'black',
   },
   containerflex: {
     flex: 1,

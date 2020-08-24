@@ -4,9 +4,9 @@ import { VictoryBar, VictoryChart, VictoryAxis, VictoryLegend, VictoryLabel } fr
 import PresetContext from '../context/preset/presetContext';
 import { theme } from '../constants';
 
-const YearSavingsScreen = () => {
+const BarChart = ({ year }) => {
   const presetContext = React.useContext(PresetContext);
-  const { AllMonthSum, presets, yearsum, capital, savings, sum } = presetContext;
+  const { AllMonthSum, presets, yearsum, capital, savings, sum, calcYearsum } = presetContext;
   const yearmonthavg = parseInt(parseFloat(yearsum / 12));
   //console.log(AllMonthSum[0]);
   const data = [
@@ -164,4 +164,4 @@ const styles = StyleSheet.create({
     color: theme.colors.danger,
   },
 });
-export default YearSavingsScreen;
+export default BarChart;
