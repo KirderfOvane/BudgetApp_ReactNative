@@ -18,7 +18,7 @@ export const getUser = async () => {
   try {
     //const response = await trackerApi.get('/api/auth', config); <-- moxios DONT LIKE THIS, no contact with axios?
     const response = await trackerApi.get('/api/auth', config);
-    //console.log(response);
+
     return response.data;
   } catch (err) {
     console.log('getUser failed');

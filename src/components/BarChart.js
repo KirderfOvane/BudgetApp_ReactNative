@@ -9,20 +9,21 @@ const BarChart = ({ year }) => {
   const { AllMonthSum, presets, yearsum, capital, savings, sum, calcYearsum } = presetContext;
   const yearmonthavg = parseInt(parseFloat(yearsum / 12));
   //console.log(AllMonthSum[0]);
-  const data = [
-    { month: 'January', value: AllMonthSum[0] },
-    { month: 'February', value: AllMonthSum[1] },
-    { month: 'March', value: AllMonthSum[2] },
-    { month: 'April', value: AllMonthSum[3] },
-    { month: 'May', value: AllMonthSum[4] },
-    { month: 'June', value: AllMonthSum[5] },
-    { month: 'July', value: AllMonthSum[6] },
-    { month: 'August', value: AllMonthSum[7] },
-    { month: 'September', value: AllMonthSum[8] },
-    { month: 'October', value: AllMonthSum[9] },
-    { month: 'November', value: AllMonthSum[10] },
-    { month: 'December', value: AllMonthSum[11] },
-  ];
+  const data = AllMonthSum &&
+    AllMonthSum.length !== 0 && [
+      { month: 'January', value: AllMonthSum[0] },
+      { month: 'February', value: AllMonthSum[1] },
+      { month: 'March', value: AllMonthSum[2] },
+      { month: 'April', value: AllMonthSum[3] },
+      { month: 'May', value: AllMonthSum[4] },
+      { month: 'June', value: AllMonthSum[5] },
+      { month: 'July', value: AllMonthSum[6] },
+      { month: 'August', value: AllMonthSum[7] },
+      { month: 'September', value: AllMonthSum[8] },
+      { month: 'October', value: AllMonthSum[9] },
+      { month: 'November', value: AllMonthSum[10] },
+      { month: 'December', value: AllMonthSum[11] },
+    ];
   const datatwo = [
     { month: 'January', value: 0 },
     { month: 'February', value: 0 },
@@ -38,7 +39,7 @@ const BarChart = ({ year }) => {
     { month: 'December', value: 0 },
   ];
 
-  if (typeof AllMonthSum[0] === 'number') {
+  if (AllMonthSum && AllMonthSum.length !== 0 && typeof AllMonthSum[0] === 'number') {
     // console.log(AllMonthSum);
     return (
       <View style={styles.container}>

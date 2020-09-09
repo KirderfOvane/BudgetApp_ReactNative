@@ -9,7 +9,7 @@ import CategoryPicker from './CategoryPicker';
 import CheckBoxField from './CheckBoxField';
 import ToggleSwitch from 'toggle-switch-react-native';
 
-const AddToBudget = ({ month, monthlist, setMonthList }) => {
+const AddToBudget = ({ month }) => {
   // context alert
   const alertContext = React.useContext(AlertContext);
   const { setAlert } = alertContext;
@@ -34,24 +34,30 @@ const AddToBudget = ({ month, monthlist, setMonthList }) => {
     setLocalPreset({ ...localPreset, name: newName });
   };
   const changeNumber = (newNumber) => {
-    setLocalPreset({ ...localPreset, number: income ? newNumber : newNumber * -1 });
+    setLocalPreset({ ...localPreset, number: newNumber });
   };
   const [pickerButtonTitle, setPickerButtonTitle] = React.useState('Select Category');
   const [checkboxfieldActive, setCheckboxfieldActive] = React.useState(true);
   const [pickerActive, setPickerActive] = React.useState(false);
   const [income, setIncome] = React.useState(true);
-
+  const [selected, setSelected] = React.useState('Select Category');
   //useRef
   const pickerRef = React.useRef(null);
 
   //logic
   const onPickerBtnPress = () => {
     if (localPreset.category !== 'Select Category') {
-      setPickerButtonTitle(localPreset.category);
+      setPickerButtonTitle(localPreset.category); //<--
     }
     setPickerActive(!pickerActive);
   };
-  //console.log(monthlist[5].data);
+
+  // change value in picker
+  const selectedCategory = (value) => {
+    setSelected(value);
+    setLocalPreset({ ...localPreset, category: value });
+  };
+
   //submit
   const onSubmit = (e) => {
     // name and number validation
@@ -75,20 +81,27 @@ const AddToBudget = ({ month, monthlist, setMonthList }) => {
     }
 
     // validation passed
-    console.log(localPreset);
-    console.log(month);
+
     addPreset({
       name: localPreset.name,
-      number: income ? localPreset.number : localPreset.number * -1,
+      number: income ? parseInt(localPreset.number) : parseInt(localPreset.number) * -1,
       month: month,
       year,
       category: localPreset.category,
       type: localPreset.type,
       piggybank: [{ month: month, year, savedAmount: '' }],
     });
-    //presetContext.buildFlatListData();
-    //setMonthList(...monthlist);
-    // presetContext.clearPresets();
+
+    // Reset Inputs
+    setLocalPreset({
+      name: '',
+      number: ''.toString(),
+      category: '',
+      type: 'overhead',
+    });
+    localPreset.category && selectedCategory('Select Category');
+    // Alert Success
+    setAlert('Successfully added to budget!', 'success');
   };
 
   //jsx
@@ -118,7 +131,7 @@ const AddToBudget = ({ month, monthlist, setMonthList }) => {
         keyboardType='numeric'
         onChangeText={changeNumber}
         name='number'
-        value={localPreset.number}
+        value={localPreset.number.toString()}
         label='number'
         autoCapitalize='none'
         autoCorrect={false}
@@ -127,7 +140,13 @@ const AddToBudget = ({ month, monthlist, setMonthList }) => {
       {/* CategoryPicker */}
       {pickerActive ? (
         <View style={styles.picker}>
-          <CategoryPicker localPreset={localPreset} setLocalPreset={setLocalPreset} pickerRef={pickerRef} />
+          <CategoryPicker
+            selected={selected}
+            selectedCategory={selectedCategory}
+            localPreset={localPreset}
+            setLocalPreset={setLocalPreset}
+            pickerRef={pickerRef}
+          />
           <TouchableOpacity onPress={onPickerBtnPress}>
             <Text style={styles.selectBtnInPicker}>Select</Text>
           </TouchableOpacity>

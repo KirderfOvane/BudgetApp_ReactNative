@@ -19,7 +19,7 @@ const LoginScreen = ({ navigation }) => {
 
   //state
   const [localUser, setlocalUser] = React.useState({
-    email: 'Holabandola@gmail.com',
+    email: 'Hola@gmail.com',
     password: 'password',
   });
   const { email, password } = localUser;
@@ -53,7 +53,7 @@ const LoginScreen = ({ navigation }) => {
       setAlert('Please fill in all fields', 'danger');
       clearErrors();
     } else {
-      console.log('loggin in');
+      //console.log('loggin in');
 
       login({
         email,

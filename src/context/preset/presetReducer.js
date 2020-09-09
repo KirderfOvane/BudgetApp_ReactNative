@@ -47,6 +47,7 @@ import {
   REMOVE_CSV,
   LOGOUT,
   PRE_FILTER,
+  SET_MONTH_PIGGYSAVINGS,
 } from '../types';
 
 export default (state, action) => {
@@ -60,12 +61,15 @@ export default (state, action) => {
     case LOGOUT:
     case CLEAR_PRESETS:
       return {
+        ...state,
         presets: null,
         error: null,
         edit: null,
         sum: null,
         year: '2019',
         month: null,
+        //  prefilter: [],
+        //  filtered: null,
       };
     case CLEAR_FILTER:
       return {
@@ -122,6 +126,11 @@ export default (state, action) => {
         PosMonthSum: null,
         NegMonthSum: null,
         categorymonthsum: null,
+        calculating: true,
+        AllMonthSum: [],
+        yearsum: null,
+        capital: null,
+        savings: null,
       };
     case SET_PURCHASE:
       return {
@@ -141,6 +150,11 @@ export default (state, action) => {
           .map((preset) =>
             preset.piggybank.filter((piggybank) => piggybank.month === action.payload && piggybank.year === parseInt(state.year))
           ),
+      };
+    case SET_MONTH_PIGGYSAVINGS:
+      return {
+        ...state,
+        MonthPiggySavingsSums: action.payload,
       };
     case SUM_PIGGYBANKS_MONTH:
       return {
@@ -281,6 +295,7 @@ export default (state, action) => {
             preset.type !== 'purchase' &&
             preset.year.toString() === state.year.toString() // multiple datatypes
         ),
+        calculating: false,
       };
     case FILTER_NEGNUMANDMONTH:
       return {

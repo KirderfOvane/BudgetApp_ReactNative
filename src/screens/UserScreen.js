@@ -1,6 +1,7 @@
 import React from 'react';
 import { View, Text, Button, StyleSheet, TouchableOpacity } from 'react-native';
 import AuthContext from '../context/auth/authContext';
+import PresetContext from '../context/preset/presetContext';
 import { AntDesign } from '@expo/vector-icons';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { theme } from '../constants';
@@ -8,14 +9,25 @@ import { withNavigation } from 'react-navigation';
 
 const UserScreen = ({ navigation }) => {
   const authContext = React.useContext(AuthContext);
-  const { user, token, logout, loadUser } = authContext;
+  const presetContext = React.useContext(PresetContext);
+  const { user, logout } = authContext;
+  const { clearPresets, resetSums, presets } = presetContext;
+  const onLogout = () => {
+    resetSums();
+    clearPresets();
+    logout();
+  };
+
+  React.useEffect(() => {
+    presets === null && user === null && navigation.navigate('Landing');
+  }, [presets, user]);
 
   return (
     <View>
       <View style={styles.row}>
         <Text style={styles.label}>Name </Text>
         <TouchableOpacity onPress={() => navigation.navigate('Name')}>
-          <Text style={styles.input}>{user.name}</Text>
+          <Text style={styles.input}>{user && user.name}</Text>
         </TouchableOpacity>
         <TouchableOpacity onPress={() => navigation.navigate('Name')}>
           <Text>
@@ -26,7 +38,7 @@ const UserScreen = ({ navigation }) => {
       <View style={styles.row}>
         <Text style={styles.label}>Email </Text>
         <TouchableOpacity onPress={() => navigation.navigate('Email')}>
-          <Text style={styles.input}>{user.email}</Text>
+          <Text style={styles.input}>{user && user.email}</Text>
         </TouchableOpacity>
         <TouchableOpacity onPress={() => navigation.navigate('Email')}>
           <Text>
@@ -45,7 +57,7 @@ const UserScreen = ({ navigation }) => {
           </Text>
         </TouchableOpacity>
       </View>
-      <TouchableOpacity onPress={logout}>
+      <TouchableOpacity onPress={onLogout}>
         <Text style={styles.logout}>
           Logout
           <MaterialCommunityIcons style={styles.logoutIcon} name='logout-variant' size={24} color={theme.colors.light} />

@@ -1,127 +1,94 @@
 import React from 'react';
-import { StyleSheet, View, Dimensions, Text, FlatList, TouchableOpacity, TextInput } from 'react-native';
-
+import { View, Text, ImageBackground, StyleSheet, Dimensions } from 'react-native';
 import PresetContext from '../context/preset/presetContext';
-
-const month = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
-
-export default function YearSavingsScreen() {
-  const [_initialScrollIndex, set_InitialScrollIndex] = React.useState(6);
-  const [indexCounter, setIndexCounter] = React.useState(_initialScrollIndex);
-  const [Lastoffset, setLastOffset] = React.useState(0); // used to check if offset occured to see if swipe occured
-  const [lastSwipe, setLastSwipe] = React.useState(''); // used to tell Balance-screen what month we swiped from
-  // refs
-  const { width, height } = Dimensions.get('window');
-  const flatlistRef = React.useRef(null);
-
-  //logic
-  const onMovement = (e) => {
-    const swipeoffset = e.nativeEvent.targetContentOffset.x;
-    const newindex = swipeoffset / width;
-    setIndexCounter(newindex);
-
-    //check if swipe happened
-    if (swipeoffset !== Lastoffset) {
-      //check direction
-      if (Lastoffset > swipeoffset) {
-        //swipe left
-
-        setLastSwipe('left');
-        const counter = _initialScrollIndex - newindex;
-        //console.log(`counter: ${counter}`);
-        if (counter >= 4) {
-          const tempMonthListCopy = [...MonthList];
-          for (i = 0; i < 4; i++) {
-            tempMonthListCopy.unshift(tempMonthListCopy.pop());
-          }
-          //console.log(tempMonthListCopy);
-          setMonthList(tempMonthListCopy);
-          // flatlistRef.current.scrollToIndex({ index: 6, animated: false });
-          setIndexCounter(6);
-        }
-      } else {
-        //swipe right
-        console.log('swipe right');
-      }
-      setLastOffset(e.nativeEvent.targetContentOffset.x);
-    } else null; //console.log('No Swipe');
-  };
-  const [test, setTest] = React.useState([]);
-
-  const contextData = [
-    { id: 1, pagedata: 1000 },
-    { id: 2, pagedata: 40 },
-    { id: 3, pagedata: 450 },
-    { id: 4, pagedata: 70 },
-    { id: 5, pagedata: 190 },
-  ];
-  React.useState(() => {
-    setTest(contextData);
-    input && txtref.current.focus();
+import DateMenu from '../components/DateMenu';
+import { theme, icons } from '../constants';
+import PiggybankSavingsItem from '../components/PiggybankSavingsItem';
+const { width, height } = Dimensions.get('window');
+const YearSavingsScreen = ({ navigation }) => {
+  const presetContext = React.useContext(PresetContext);
+  const { purchases, setPurchase, year, capital, savings } = presetContext;
+  React.useEffect(() => {
+    !purchases && setPurchase();
   }, []);
-  const [input, toggleInput] = React.useState(false);
-
-  const txtref = React.useRef();
 
   return (
-    <View style={{ flex: 1 }}>
-      <FlatList
-        data={test}
-        keyExtractor={(item) => item.id.toString()}
-        renderItem={({ item }) => {
-          //console.log('#####');
-          // console.log(item.pagedata);
-
-          return (
-            <View style={{ flex: 1 }}>
-              {input ? (
-                <NestedComponent txtref={txtref} item={item} />
-              ) : (
-                <TouchableOpacity onPress={() => toggleInput(!input)}>
-                  <Text style={{ fontSize: 54 }}>{item.pagedata}</Text>
-                </TouchableOpacity>
-              )}
-            </View>
-          );
-        }}
-      />
-      {input && (
-        <TouchableOpacity onPress={() => toggleInput(!input)}>
-          <Text style={{ fontSize: 35 }}>Save</Text>
-        </TouchableOpacity>
-      )}
+    <View>
+      <DateMenu navigation={navigation} />
+      <View style={styles.container}>
+        <Text style={styles.text}>Savings Summary</Text>
+      </View>
+      <ImageBackground source={require('../../assets/iphone_725x414/antelope-canyon_iphoneslices__3.jpg')} style={styles.image}>
+        <View style={styles.card}>
+          <View style={[styles.cardtextcontainer, { marginTop: 25 }]}>
+            <Text style={styles.cardtext}>General Savings:</Text>
+            <Text style={[{ color: theme.colors.success }, styles.cardtext]}>{savings}</Text>
+          </View>
+          <View style={styles.cardtextcontainer}>
+            <Text style={styles.cardtext}>Capital:</Text>
+            <Text style={[{ color: theme.colors.success }, styles.cardtext]}>{capital}</Text>
+          </View>
+          <View style={styles.piggybankTitleContainer}>
+            <Text style={styles.piggybankTitle}>{icons.getIcon('piggybank')}</Text>
+            <Text style={styles.piggybankTitle}>Piggybank Purchase Savings</Text>
+          </View>
+          <View style={{ width: Dimensions.get('window').width * 0.9, minHeight: 300 }}>
+            <PiggybankSavingsItem purchases={purchases} year={year} />
+          </View>
+        </View>
+      </ImageBackground>
     </View>
   );
-}
-
+};
 const styles = StyleSheet.create({
+  image: {
+    height: height,
+    width: width,
+    // resizeMode: 'cover',
+  },
+  piggybankTitleContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingVertical: 25,
+  },
+  piggybankTitle: {
+    paddingHorizontal: 5,
+    fontSize: theme.sizes.font,
+  },
   container: {
-    flex: 1,
+    backgroundColor: theme.colors.light,
+    paddingTop: 25,
+  },
+  title: {
+    fontSize: theme.sizes.xlarge,
+    fontWeight: theme.fonts.weight.regular,
+    paddingHorizontal: 20,
+    marginBottom: 25,
+  },
+  cardtextcontainer: {
+    flexDirection: 'row',
+    borderBottomWidth: 3,
+    borderColor: theme.colors.light,
+    marginHorizontal: 25,
+    marginVertical: 10,
+  },
+  cardtext: { flex: 1, fontSize: theme.sizes.font },
+  text: {
+    fontSize: theme.sizes.h4,
+    fontWeight: theme.fonts.weight.semibold,
+    paddingHorizontal: 20,
+    marginBottom: 30,
+  },
+  card: {
+    borderWidth: 1,
+    borderColor: theme.colors.gray,
+    borderRadius: 1,
     justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: '#f5fcff',
     width: Dimensions.get('window').width * 0.9,
     alignSelf: 'center',
+    marginVertical: 50,
   },
 });
-
-function NestedComponent({ item, txtref }) {
-  console.log(item);
-  const [localPagedata, setLocalPagedata] = React.useState({ id: item.id, page: item.pagedata });
-  const onChangeText = (newTxt) => {
-    setLocalPagedata({ ...localPagedata, page: newTxt });
-  };
-  const onBlur = () => {
-    console.log('shit got blurry');
-  };
-  return (
-    <TextInput
-      style={{ borderWidth: 3, padding: 15, margin: 5, color: 'black', flex: 1 }}
-      name={'whatever'}
-      value={localPagedata.id}
-      onChangeText={onChangeText}
-      ref={txtref}
-      onBlur={onBlur}
-    />
-  );
-}
+export default YearSavingsScreen;

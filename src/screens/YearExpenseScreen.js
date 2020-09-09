@@ -1,103 +1,62 @@
-/* import React from 'react';
-import { View, Text } from 'react-native';
+import React from 'react';
+import { View, Text, ImageBackground, StyleSheet, Dimensions } from 'react-native';
+import DonutChart from '../components/DonutChart';
+import DateMenu from '../components/DateMenu';
+import { theme } from '../constants';
+const { width, height } = Dimensions.get('window');
 
 const YearExpenseScreen = () => {
   return (
     <View>
-      <Text>YearExpenseScreen</Text>
+      <DateMenu />
+      <View style={styles.container}>
+        <Text style={styles.text}>Expense Summary: Presented in donut-chart representing spending by category</Text>
+      </View>
+      <ImageBackground source={require('../../assets/iphone_725x414/antelope-canyon_iphoneslices__3.jpg')} style={styles.image}>
+        <View style={styles.card}>
+          <DonutChart />
+          <Text>Year Expenses:</Text>
+          <Text style={{ color: theme.colors.danger }}>52352</Text>
+          <Text>Monthly Average:</Text>
+          <Text style={{ color: theme.colors.danger }}>4245</Text>
+        </View>
+      </ImageBackground>
     </View>
   );
 };
-
-export default YearExpenseScreen;
- */
-import React, { Component } from 'react';
-import { Animated, Dimensions, StyleSheet, Text, View } from 'react-native';
-import { FlingGestureHandler, Directions, State } from 'react-native-gesture-handler';
-
-//import { USE_NATIVE_DRIVER } from '../../config';
-
-const windowWidth = Dimensions.get('window').width;
-const circleRadius = 30;
-
-class Fling extends Component {
-  constructor(props) {
-    super(props);
-    this._touchX = new Animated.Value(windowWidth / 2 - circleRadius);
-    this._translateX = Animated.add(this._touchX, new Animated.Value(-circleRadius));
-    this._translateY = new Animated.Value(0);
-  }
-
-  _onHorizontalFlingHandlerStateChange = ({ nativeEvent }, offset) => {
-    if (nativeEvent.oldState === State.ACTIVE) {
-      Animated.spring(this._touchX, {
-        toValue: this._touchX._value + offset,
-        //useNativeDriver: USE_NATIVE_DRIVER,
-      }).start();
-    }
-  };
-
-  _onVerticalFlingHandlerStateChange = ({ nativeEvent }) => {
-    if (nativeEvent.oldState === State.ACTIVE) {
-      Animated.spring(this._translateY, {
-        toValue: this._translateY._value + 10,
-        //useNativeDriver: USE_NATIVE_DRIVER,
-      }).start();
-    }
-  };
-
-  render() {
-    return (
-      <FlingGestureHandler direction={Directions.UP} numberOfPointers={2} onHandlerStateChange={this._onVerticalFlingHandlerStateChange}>
-        <FlingGestureHandler
-          direction={Directions.RIGHT | Directions.LEFT}
-          onHandlerStateChange={(ev) => this._onHorizontalFlingHandlerStateChange(ev, -10)}
-        >
-          <View style={styles.horizontalPan}>
-            <Animated.View
-              style={[
-                styles.circle,
-                {
-                  transform: [
-                    {
-                      translateX: this._translateX,
-                    },
-                    {
-                      translateY: this._translateY,
-                    },
-                  ],
-                },
-              ]}
-            />
-          </View>
-        </FlingGestureHandler>
-      </FlingGestureHandler>
-    );
-  }
-}
-
-export default class YearExpenseScreen extends Component {
-  render() {
-    return (
-      <View>
-        <Fling />
-        <Text>Move up (with two fingers) or right/left (with one finger) and watch magic happens</Text>
-      </View>
-    );
-  }
-}
-
 const styles = StyleSheet.create({
-  horizontalPan: {
-    backgroundColor: '#f76f41',
-    height: 300,
-    justifyContent: 'center',
-    marginVertical: 10,
+  image: {
+    height: height,
+    width: width,
+    // resizeMode: 'cover',
   },
-  circle: {
-    backgroundColor: '#42a5f5',
-    borderRadius: circleRadius,
-    height: circleRadius * 2,
-    width: circleRadius * 2,
+  container: {
+    backgroundColor: theme.colors.light,
+    paddingTop: 25,
+  },
+  title: {
+    fontSize: theme.sizes.xlarge,
+    fontWeight: theme.fonts.weight.regular,
+    paddingHorizontal: 20,
+    marginBottom: 25,
+  },
+  text: {
+    fontSize: theme.sizes.h4,
+    fontWeight: theme.fonts.weight.semibold,
+    paddingHorizontal: 20,
+    marginBottom: 30,
+  },
+  card: {
+    // flex: 1,
+    borderWidth: 1,
+    borderColor: theme.colors.gray,
+    borderRadius: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: '#f5fcff',
+    //width: Dimensions.get('window').width * 0.9,
+    alignSelf: 'center',
+    marginVertical: 25,
   },
 });
+export default YearExpenseScreen;

@@ -42,12 +42,13 @@ const AuthState = (props) => {
   const loadUser = async (reroute = true) => {
     // fetch token from local storage
     const token = await AsyncStorage.getItem('token');
-    //console.warn(token);
-    token && console.log('loadUser: valid token found in loadUser/AsyncStorage');
+
+    //token && console.log('loadUser: valid token found in loadUser/AsyncStorage');
+
     // setAuthToken header token
     await setAuthToken(token);
     if (token) {
-      console.log('navigate to YearBalanceScreen');
+      //console.log('navigate to YearBalanceScreen');
       reroute && navigate('Balance');
       try {
         const response = await hookActions.getUser();
@@ -58,13 +59,12 @@ const AuthState = (props) => {
         });
       } catch (err) {
         console.log(err);
+        setAuthToken();
         await AsyncStorage.removeItem('token');
         console.log('deleted token from asyncstorage');
         dispatch({ type: AUTH_ERROR });
       }
     } else {
-      console.log('no valid token found');
-      console.log('navigating to LandingScreen');
       reroute && navigate('Landing');
       dispatch({ type: AUTH_ERROR });
     }
@@ -83,7 +83,6 @@ const AuthState = (props) => {
       const res = await trackerApi.post('/api/users', formData, config); //endpoint/url
 
       await AsyncStorage.setItem('token', res.data.token);
-      console.log(res);
 
       dispatch({
         type: REGISTER_SUCCESS,
@@ -131,8 +130,10 @@ const AuthState = (props) => {
   // Logout
   const logout = async () => {
     await AsyncStorage.removeItem('token');
-    console.log('navigate to LandingScreen');
-    navigate('Landing');
+    await setAuthToken();
+
+    // console.log('navigate to LandingScreen');
+    //navigate('Landing');
     dispatch({ type: LOGOUT });
   };
 

@@ -4,6 +4,7 @@ import PresetContext from '../context/preset/presetContext';
 import AuthContext from '../context/auth/authContext';
 import SwipeItem from '../components/SwipeItem';
 import FH_ActivityIndicator from '../components/FH_ActivityIndicator';
+import axios from 'axios';
 
 const YearBalanceScreen = ({ navigation }) => {
   //context
@@ -25,8 +26,10 @@ const YearBalanceScreen = ({ navigation }) => {
     addMonth,
     month,
     setYear,
+    calcCategorySumOnlyNegNumByYear,
+    setCategoryNameOnlyNegNumByYear,
   } = presetContext;
-  const { loading } = authContext;
+  const { loading, isAuthenticated, user } = authContext;
   //state
   const [LocalLoading, setLocalLoading] = React.useState(false);
   const [localYear, setLocalYear] = React.useState(2019);
@@ -57,47 +60,45 @@ const YearBalanceScreen = ({ navigation }) => {
     //console.log(`year: ${year}`);
   }, [year, fromMonth]);
   React.useEffect(() => {
-    presets === null && getPresets();
-    //presets === null && console.log('getPresets ran');
-    presets && buildFlatListData();
-    //presets && console.log('buildFlatListData ran');
-  }, [presets, year]);
+    getPresets();
+    presets === null && isAuthenticated === true && user && console.log('getPresets ran');
+  }, []);
   React.useEffect(() => {
-    presets && calcYearsum(year);
-    //presets && console.log('calcYearsum ran with yearvalue: ' + year);
-    presets &&
-      calcAllMonthSum([
-        'January',
-        'February',
-        'March',
-        'April',
-        'May',
-        'June',
-        'July',
-        'August',
-        'September',
-        'October',
-        'November',
-        'December',
-      ]);
-    presets && calcCapital();
-    presets && calcSavings();
-    presets && calcSum();
-    //console.log('ffffffff');
-    //setLocalLoading(false);
-    // console.log(loading);
-    //console.log('ffffffff');
-    // presets && calcPosMonth();
-    // presets && calcNegMonth();
-  }, [year, presets, fromMonth, month, localYear]);
+    if (isAuthenticated) {
+      presets && month === null && calcYearsum(year);
+
+      presets &&
+        month === null &&
+        calcAllMonthSum([
+          'January',
+          'February',
+          'March',
+          'April',
+          'May',
+          'June',
+          'July',
+          'August',
+          'September',
+          'October',
+          'November',
+          'December',
+        ]);
+      presets && month === null && calcCapital();
+      presets && month === null && calcSavings();
+      presets && month === null && calcSum();
+      presets && calcCategorySumOnlyNegNumByYear();
+      presets && setCategoryNameOnlyNegNumByYear();
+    }
+  }, [year, localYear, presets, month]);
 
   const changeMonthList = (e) => {
     const swipeoffset = e.nativeEvent.targetContentOffset.x;
     const newindex = swipeoffset / width;
     if (newindex > 6) {
       //swipe right
-      // console.log('swipreright');
+      //console.log('swipreright');
       setLocalLoading(true);
+      addMonth('January');
       navigation.navigate('Month');
     } else {
       // console.log('swipeleft go back');
@@ -139,6 +140,7 @@ const YearBalanceScreen = ({ navigation }) => {
             return (
               <View>
                 <SwipeItem
+                  navigation={navigation}
                   month={object.item.month}
                   key={object.item.month}
                   index={object.index}
@@ -158,8 +160,6 @@ const YearBalanceScreen = ({ navigation }) => {
                     { month: 'June', image: require('../../assets/iphone_725x414/antelope-canyon_iphoneslices__12.jpg') },
                     { month: 'July', image: require('../../assets/iphone_725x414/antelope-canyon_iphoneslices__13.jpg') },
                   ]}
-                  setLocalLoading={setLocalLoading}
-                  LocalLoading={LocalLoading}
                 />
               </View>
             );

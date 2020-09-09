@@ -4,8 +4,9 @@ import { icons, theme } from '../constants';
 import PresetContext from '../context/preset/presetContext';
 import PresetItemName from './PresetItemName';
 import PresetItemNumber from './PresetItemNumber';
+import CategoryPicker from './CategoryPicker';
 
-const PresetItem = ({ preset }) => {
+const PresetItem = ({ preset, setMonthList }) => {
   const presetContext = React.useContext(PresetContext);
   const { setEdit, sendEdit, edit, buildFlatListData, cancelEdit, filterPresets, clearFilter } = presetContext;
   // State
@@ -19,15 +20,21 @@ const PresetItem = ({ preset }) => {
     piggybank: preset.item.piggybank,
   });
   const [income, setIncome] = React.useState(true);
-
+  const [pickerActive, setPickerActive] = React.useState(false);
+  const [pickerButtonTitle, setPickerButtonTitle] = React.useState('Select Category');
+  const [selected, setSelected] = React.useState('Select Category');
   // Logic
 
   // Activate editmode
   const onDeletePress = (e) => {
     console.log('delete');
+    console.log(localPreset._id);
   };
   const onCategoryPress = (e) => {
-    console.log('category');
+    if (localPreset.category !== 'Select Category') {
+      setPickerButtonTitle(localPreset.category); //<--
+    }
+    setPickerActive(!pickerActive);
   };
   const onNumberPress = (e) => {
     toggleInputMode('number');
@@ -35,6 +42,12 @@ const PresetItem = ({ preset }) => {
   };
   const onNamePress = (e) => {
     toggleInputMode('name');
+  };
+
+  // change value in picker
+  const selectedCategory = (value) => {
+    setSelected(value);
+    setLocalPreset({ ...localPreset, category: value });
   };
 
   // Deactivate editmode
@@ -69,32 +82,52 @@ const PresetItem = ({ preset }) => {
 
   // jsx
   return (
-    <View style={styles.container}>
-      <PresetItemName
-        onNamePress={onNamePress}
-        InputMode={InputMode}
-        inputNameRef={inputNameRef}
-        changeName={changeName}
-        localPreset={localPreset}
-        onBlur={onBlur}
-      />
-      <PresetItemNumber
-        onNumberPress={onNumberPress}
-        InputMode={InputMode}
-        inputNumRef={inputNumRef}
-        changeNumber={changeNumber}
-        localPreset={localPreset}
-        onBlur={onBlur}
-        income={income}
-      />
+    <>
+      {pickerActive ? (
+        <View style={styles.containerwhenpickeractive}>
+          <View style={styles.picker}>
+            <CategoryPicker
+              selected={selected}
+              selectedCategory={selectedCategory}
+              localPreset={localPreset}
+              setLocalPreset={setLocalPreset}
+              //pickerRef={pickerRef}
+            />
+            <TouchableOpacity onPress={onCategoryPress}>
+              <Text style={styles.selectBtnInPicker}>Select</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+      ) : (
+        <View style={pickerActive ? styles.hide : styles.container}>
+          <PresetItemName
+            onNamePress={onNamePress}
+            InputMode={InputMode}
+            inputNameRef={inputNameRef}
+            changeName={changeName}
+            localPreset={localPreset}
+            onBlur={onBlur}
+          />
 
-      <TouchableOpacity style={{ paddingTop: 10 }} onPress={onCategoryPress}>
-        <Text style={styles.categoryIcon}>{icons.getIcon(localPreset.category.toLowerCase())}</Text>
-      </TouchableOpacity>
-      <TouchableOpacity style={styles.deleteButton} onPress={onDeletePress}>
-        <Text>{icons.getIcon('delete')}</Text>
-      </TouchableOpacity>
-    </View>
+          <PresetItemNumber
+            onNumberPress={onNumberPress}
+            InputMode={InputMode}
+            inputNumRef={inputNumRef}
+            changeNumber={changeNumber}
+            localPreset={localPreset}
+            onBlur={onBlur}
+            income={income}
+          />
+
+          <TouchableOpacity style={{ paddingTop: 10 }} onPress={onCategoryPress}>
+            <Text style={styles.categoryIcon}>{icons.getIcon(localPreset.category.toLowerCase())}</Text>
+          </TouchableOpacity>
+          <TouchableOpacity style={styles.deleteButton} onPress={onDeletePress}>
+            <Text>{icons.getIcon('delete')}</Text>
+          </TouchableOpacity>
+        </View>
+      )}
+    </>
   );
 };
 
@@ -110,6 +143,14 @@ const styles = StyleSheet.create({
     borderBottomColor: theme.colors.light,
     borderBottomWidth: 3,
     paddingHorizontal: 10,
+  },
+  containerwhenpickeractive: {
+    marginHorizontal: 25,
+    marginTop: 0,
+    marginBottom: 180,
+  },
+  hide: {
+    display: 'none',
   },
 
   positivenumber: {
@@ -139,6 +180,26 @@ const styles = StyleSheet.create({
     // minWidth: 25,
     fontSize: theme.sizes.font,
     color: theme.colors.dark,
+  },
+  picker: {
+    //  flex: 1,
+    minHeight: 75,
+    maxHeight: 100,
+    // paddingLeft: 15,
+    paddingTop: 15,
+    //borderWidth: 1,
+    //  borderColor: 'green',
+  },
+  selectBtnInPicker: {
+    textAlign: 'center',
+    fontSize: 22,
+    color: theme.colors.dark,
+    paddingHorizontal: 5,
+    paddingVertical: 5,
+    width: 150,
+    borderWidth: 1,
+    borderColor: theme.colors.dark,
+    alignSelf: 'center',
   },
 });
 

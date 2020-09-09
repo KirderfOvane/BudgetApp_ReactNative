@@ -5,6 +5,7 @@ import { AntDesign } from '@expo/vector-icons';
 import { Entypo } from '@expo/vector-icons';
 import { Fontisto } from '@expo/vector-icons';
 import { FontAwesome5 } from '@expo/vector-icons';
+import { Feather } from '@expo/vector-icons';
 import AddToBudgetButton from './AddToBudgetButton';
 import PresetContext from '../context/preset/presetContext';
 
@@ -27,11 +28,11 @@ const MonthBottomTab = ({ navigation }) => {
       <TouchableOpacity onPress={() => presetContext.filterPresets('category')} style={styles.rowitem}>
         <Entypo style={styles.texticon} name='grid' size={24} color='black' />
       </TouchableOpacity>
-      <TouchableOpacity onPress={(e) => navigation.navigate('Purchase')} style={styles.rowitem}>
-        <Fontisto style={styles.texticon} name='shopping-package' size={24} color='black' />
+      <TouchableOpacity onPress={() => presetContext.filterPresets('purchases')} style={styles.rowitem}>
+        <Feather style={styles.texticon} name='gift' size={24} color='black' />
       </TouchableOpacity>
-      <TouchableOpacity onPress={(e) => navigation.navigate('Piggybank')} style={styles.rowitem}>
-        <FontAwesome5 style={styles.texticon} name='piggy-bank' size={24} color='black' />
+      <TouchableOpacity onPress={() => presetContext.filterPresets('savings')} style={styles.rowitem}>
+        <FontAwesome5 style={styles.texticon} name='piggy-bank' size={20} color='black' />
       </TouchableOpacity>
     </View>
   );

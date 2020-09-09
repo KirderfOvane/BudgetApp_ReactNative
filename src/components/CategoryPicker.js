@@ -1,13 +1,10 @@
 import React from 'react';
 import { Picker } from 'react-native';
 
-const CategoryPicker = ({ localPreset, setLocalPreset }) => {
-  const [selected, setSelected] = React.useState('Select Category');
-  const selectedCategory = (value) => {
-    setSelected(value);
-    setLocalPreset({ ...localPreset, category: value });
-  };
-
+const CategoryPicker = ({ selected, selectedCategory, localPreset, setLocalPreset }) => {
+  // const [selected, setSelected] = React.useState('Select Category');
+  //console.log(selected);
+  //React.useEffect(()=>{}[])
   return (
     <Picker onValueChange={selectedCategory} selectedValue={selected}>
       <Picker.Item label='Select Category' value='Select Category'></Picker.Item>

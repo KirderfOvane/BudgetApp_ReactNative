@@ -45,6 +45,11 @@ const styles = StyleSheet.create({
     maxWidth: 40,
     paddingVertical: 8,
   },
+  checkboxlabelcontainer: {
+    flex: 1,
+    alignSelf: 'center',
+    paddingVertical: 8,
+  },
   flexrow: {
     flexDirection: 'row',
     //  borderWidth: 1,

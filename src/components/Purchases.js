@@ -3,12 +3,14 @@ import { View, Text, FlatList, StyleSheet, ActivityIndicator } from 'react-nativ
 import PresetContext from '../context/preset/presetContext';
 import { theme } from '../constants';
 import FH_ActivityIndicator from './FH_ActivityIndicator';
+import PurchaseItem from '../components/PurchaseItem';
 
 const CategoryBalance = ({ localmonth }) => {
   //context
   const presetContext = React.useContext(PresetContext);
   //context destruct
-  const { calcCategoryByMonth, month, categorymonthsum, presets, year, addMonth, filtered } = presetContext;
+  const { calcCategoryByMonth, month, categorymonthsum, MonthSum, year, purchases, filtered, PosMonthSum, NegMonthSum } = presetContext;
+  console.log(PosMonthSum, NegMonthSum, MonthSum);
   // useEffect
   /*  React.useEffect(() => {
     localmonth !== month && addMonth(localmonth);
@@ -20,10 +22,11 @@ const CategoryBalance = ({ localmonth }) => {
   /* if (localmonth === month) { */
   //console.log(localmonth);
   // console.log(month);
+  //console.log(purchases.length);
   return (
     <View style={styles.card}>
-      <Text style={styles.title}>Balance By Category</Text>
-      {filtered === 'category' ? (
+      <Text style={styles.title}>Purchases</Text>
+      {filtered === 'purchases' ? (
         <>
           {categorymonthsum.length === 0 ? (
             <Text style={{ flex: 1, fontSize: theme.sizes.font, textAlign: 'center', color: theme.colors.orange }}>
@@ -31,26 +34,12 @@ const CategoryBalance = ({ localmonth }) => {
             </Text>
           ) : (
             <FlatList
-              data={categorymonthsum}
+              data={purchases}
               showsVerticalScrollIndicator={false}
-              keyExtractor={(item) => item.id.toString()}
+              keyExtractor={(item) => item._id.toString()}
               renderItem={(object) => {
-                return (
-                  <View style={styles.itemcard}>
-                    <Text style={[styles.text, { flex: 3 }]}>{object.item.cat}</Text>
-                    <Text
-                      type='number'
-                      style={[
-                        styles.text,
-                        { textAlign: 'right' },
-                        object.item.SumOfCat > 0 ? { color: theme.colors.success } : { color: theme.colors.danger },
-                        { flex: 1 },
-                      ]}
-                    >
-                      {object.item.SumOfCat}
-                    </Text>
-                  </View>
-                );
+                // console.log(object);
+                return <PurchaseItem Item={object.item} />;
               }}
             />
           )}

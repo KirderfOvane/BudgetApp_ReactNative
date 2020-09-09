@@ -52,11 +52,12 @@ import {
   SUBMIT_CSV,
   CLEAR_CSV,
   REMOVE_CSV,
+  SET_MONTH_PIGGYSAVINGS,
 } from '../types';
 
 const PresetState = (props) => {
   const initialState = {
-    //calculating:true,
+    calculating: true,
     presets: null,
     sum: null,
     edit: null,
@@ -91,6 +92,7 @@ const PresetState = (props) => {
     csvpresets: null, // used to store values from csv-file in stagingarea
     doSubmitCsv: '',
     prefilter: [],
+    MonthPiggySavingsSums: null,
   };
 
   const [state, dispatch] = useReducer(presetReducer, initialState);
@@ -140,7 +142,7 @@ const PresetState = (props) => {
   // Delete preset
   const deletePreset = async (id) => {
     try {
-      await axios.delete(`/api/userpreset/${id}`);
+      await trackerApi.delete(`/api/userpreset/${id}`);
       dispatch({
         type: DELETE_PRESET,
         payload: id,
@@ -218,8 +220,6 @@ const PresetState = (props) => {
 
   // set year when yearbutton is pressed in datemenucomponent
   const setYear = (year) => {
-    console.log('setYear ran');
-
     dispatch({ type: SET_YEAR, payload: year });
   };
 
@@ -230,7 +230,7 @@ const PresetState = (props) => {
 
   // Reset Sums before recalc
   const resetSums = () => {
-    dispatch({ RESET_SUMS });
+    dispatch({ type: RESET_SUMS });
   };
 
   // edit preset
@@ -436,6 +436,9 @@ const PresetState = (props) => {
 
   // Calc month sum
   const calcMonthSum = (month) => {
+    // console.log('month');
+    //console.log(month);
+    //console.log(state.month);
     //array att iterera igenom
     let presetArray = [];
     //håller uträknade summan
@@ -445,7 +448,7 @@ const PresetState = (props) => {
         if (
           preset.year === undefined ||
           (preset.year == '2019' &&
-            preset.month === month &&
+            preset.month === state.month &&
             preset.type !== 'savings' &&
             preset.type !== 'capital' &&
             preset.type !== 'purchase')
@@ -456,7 +459,7 @@ const PresetState = (props) => {
       state.presets.map((preset) => {
         if (
           preset.year == state.year &&
-          preset.month === month &&
+          preset.month === state.month &&
           preset.type !== 'savings' &&
           preset.type !== 'capital' &&
           preset.type !== 'purchase'
@@ -936,18 +939,18 @@ const PresetState = (props) => {
       state.presets.map((preset) => {
         preset.year === undefined ||
           (preset.year == '2019' &&
-          preset.type !== null &&
-          preset.type !== 'purchase' && // måste ha NOT eftersom det finns vissa värden i databasen som saknar preset.type helt
-          preset.type !== 'savings' && // då de las in före .type las till i backend.
+            preset.type !== null &&
+            preset.type !== 'purchase' && // måste ha NOT eftersom det finns vissa värden i databasen som saknar preset.type helt
+            preset.type !== 'savings' && // då de las in före .type las till i backend.
             preset.type !== 'capital' &&
             numberArray.push(parseFloat(preset.number)));
       });
     } else {
       state.presets.map((preset) => {
         preset.year == state.year &&
-        preset.type !== null &&
-        preset.type !== 'purchase' && // måste ha NOT eftersom det finns vissa värden i databasen som saknar preset.type helt
-        preset.type !== 'savings' && // då de las in före .type las till i backend.
+          preset.type !== null &&
+          preset.type !== 'purchase' && // måste ha NOT eftersom det finns vissa värden i databasen som saknar preset.type helt
+          preset.type !== 'savings' && // då de las in före .type las till i backend.
           preset.type !== 'capital' &&
           numberArray.push(parseFloat(preset.number));
       });
@@ -1009,6 +1012,9 @@ const PresetState = (props) => {
   // calc month balance
   const calcMonthBalance = () => {
     const totalsum = state.MonthSum - state.monthsavings - state.SumPiggybanksMonth;
+    console.log(state.MonthSum);
+    console.log(state.monthsavings);
+    console.log(state.SumPiggybanksMonth);
     dispatch({ type: CALC_MONTH_BALANCE, payload: totalsum });
   };
 
@@ -1016,11 +1022,13 @@ const PresetState = (props) => {
   const getMonthSavings = (month) => {
     if (state.year === '2019' || state.year === 2019) {
       const filter = state.presets.filter(
-        (preset) => preset.year === undefined || (preset.year == '2019' && preset.type === 'savings' && preset.month === month)
+        (preset) => preset.year === undefined || (preset.year == '2019' && preset.type === 'savings' && preset.month === state.month)
       );
       dispatch({ type: GET_MONTHSAVINGS, payload: filter });
     } else {
-      const filter = state.presets.filter((preset) => preset.year == state.year && preset.type === 'savings' && preset.month === month);
+      const filter = state.presets.filter(
+        (preset) => preset.year == state.year && preset.type === 'savings' && preset.month === state.month
+      );
       dispatch({ type: GET_MONTHSAVINGS, payload: filter });
     }
   };
@@ -1066,7 +1074,11 @@ const PresetState = (props) => {
 
   const setTotalOfAllPiggybanksThisMonth = (Sum) => {
     dispatch({ type: SUM_PIGGYBANKS_MONTH, payload: Sum });
-    //console.log('ran');
+    console.log('ran');
+  };
+
+  const setMonthPiggySavingsSums = (array) => {
+    dispatch({ type: SET_MONTH_PIGGYSAVINGS, payload: array });
   };
 
   const submitCsvItems = (string) => {
@@ -1108,6 +1120,8 @@ const PresetState = (props) => {
         csvpresets: state.csvpresets,
         doSubmitCsv: state.doSubmitCsv,
         prefilter: state.prefilter,
+        calculating: state.calculating,
+        MonthPiggySavingsSums: state.MonthPiggySavingsSums,
         addPreset,
         calcSum,
         deletePreset,
@@ -1146,6 +1160,7 @@ const PresetState = (props) => {
         calcMonthSavings,
         getMonthSavings,
         getMonthPiggySavings,
+        setMonthPiggySavingsSums,
         deletePiggybank,
         setTotalOfAllPiggybanksThisMonth,
         calcMonthBalance,

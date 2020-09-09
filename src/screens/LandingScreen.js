@@ -8,7 +8,7 @@ import { theme } from '../constants';
 const LandingScreen = ({ navigation }) => {
   // Context
   const authContext = React.useContext(AuthContext);
-  const { loadUser, isAuthenticated } = authContext;
+  const { loadUser } = authContext;
 
   // State
 

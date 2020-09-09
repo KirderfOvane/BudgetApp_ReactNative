@@ -31,11 +31,12 @@ const PresetFilter = ({ monthlist, activeindex, presetthismonth }) => {
     );
     setLocalMonthFilter(calcLocalMonthFilter);
   }, []); */
+  console.log(filteredmonthandposnum);
   return (
     <>
-      {presetthismonth && (
+      {filteredmonthandposnum && (
         <FlatList
-          data={presetthismonth}
+          data={filteredmonthandposnum}
           keyExtractor={(preset) => preset._id}
           renderItem={(preset) => {
             return <PresetItem preset={preset} key={preset._id} />;
