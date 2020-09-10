@@ -31,7 +31,7 @@ const PresetFilter = ({ monthlist, activeindex, presetthismonth }) => {
     );
     setLocalMonthFilter(calcLocalMonthFilter);
   }, []); */
-  console.log(filteredmonthandposnum);
+  //console.log(filteredmonthandposnum);
   return (
     <>
       {filteredmonthandposnum && (

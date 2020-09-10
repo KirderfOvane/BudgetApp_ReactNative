@@ -3,34 +3,33 @@ import { View, Text, Dimensions, TouchableOpacity } from 'react-native';
 import { VictoryPie, VictoryChart, VictoryAxis, VictoryLegend, VictoryLabel } from 'victory-native';
 import { theme, icons } from '../constants';
 import PresetContext from '../context/preset/presetContext';
-import { MaterialIcons } from '@expo/vector-icons';
-//import svg, { G, Svg, Circle } from 'react-native-svg';
-import { MaterialCommunityIcons } from '@expo/vector-icons';
+
 const CustomLabel = (props) => {
-  /*   const [sliceSizeAngle, setSliceSizeAngle] = React.useState(0);
+  const [sliceSizeAngle, setSliceSizeAngle] = React.useState(0);
   const [angleTolerance, setAngleTolerance] = React.useState(0.3); // Angle-tolerance that decides when icon is shown
+
   React.useEffect(() => {
     // get/calc angleSize of pie-slice
     setSliceSizeAngle(props.slice.endAngle - props.slice.startAngle);
-  }, [props]); */
-  //x={props.x - 12} y={props.y - 12}
+  }, [props]);
+
   return (
     <>
       {/*  {props.x !== null && props.x !== 0 && ( */}
 
       <View style={[{ position: 'absolute', top: props.y - 12, left: props.x - 12, fill: 'green' }]}>
-        {/*   {sliceSizeAngle > angleTolerance && icons.getIcon(props.categorynameonlynegnumbyyear[props.index].toString().toLowerCase())} */}
-
         <Text>
-          <MaterialCommunityIcons name='train-car' size={24} color='black' />
+          {sliceSizeAngle > angleTolerance && icons.getIcon(props.categorynameonlynegnumbyyear[props.index].toString().toLowerCase())}
         </Text>
+        {props.text === 'clicked' && <Text>{Math.ceil(sliceSizeAngle * 10)}%</Text>}
+        {props.text === 'clicked' && <Text>{props.categorynameonlynegnumbyyear[props.index].toString()}</Text>}
       </View>
 
       {/*  )} */}
     </>
   );
 };
-//transform={`translate(${34 / -2}, ${34 / -2})`}
+// css Alternative if absolute has issues: transform={`translate(${34 / -2}, ${34 / -2})`}
 
 const DonutChart = () => {
   //context
@@ -40,14 +39,9 @@ const DonutChart = () => {
 
   // state
   const [categories, setCategories] = React.useState(null);
-  /* React.useEffect(() => {
-    setTimeout(() => setCategories(categorysumonlynegnumbyyear), 3000);
-  }, [categorysumonlynegnumbyyear, categorynameonlynegnumbyyear]); */
-  // const test = icons.getIcon('delete');
-  //const [test2, setTest2] = React.useState(<MaterialIcons name='delete-forever' size={30} color={theme.colors.gray} />);
-  // console.log(test);
-  //const w = Dimensions.get('screen').width * 0.8;
-  //console.log(categorynameonlynegnumbyyear);
+
+  const w = Dimensions.get('screen').width * 0.8;
+
   return (
     <View>
       {/*  <Svg width={414} height={414}>
@@ -103,13 +97,13 @@ const DonutChart = () => {
             target: 'data',
             eventHandlers: {
               onPressOut: (e) => {
-                console.log(e);
+                // console.log(e);
                 return [
                   {
                     target: 'data',
                     mutation: ({ style }) => {
                       return style.fill === '#c43a31' ? null : { style: { fill: '#c43a31' } };
-                    }, //position: 'absolute', top: props.y - 12, left: props.x - 12
+                    },
                   },
                   {
                     target: 'labels',

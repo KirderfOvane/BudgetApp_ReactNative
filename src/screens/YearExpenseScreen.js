@@ -4,8 +4,16 @@ import DonutChart from '../components/DonutChart';
 import DateMenu from '../components/DateMenu';
 import { theme } from '../constants';
 const { width, height } = Dimensions.get('window');
-
+import PresetContext from '../context/preset/presetContext';
 const YearExpenseScreen = () => {
+  const presetContext = React.useContext(PresetContext);
+  const { presets, calcCategorySumOnlyNegNumByYear, categorysumonlynegnumbyyear } = presetContext;
+  const [YearExpenseTotal, setYearExpenseTotal] = React.useState(0);
+  React.useEffect(() => {
+    presets && !categorysumonlynegnumbyyear && calcCategorySumOnlyNegNumByYear();
+    categorysumonlynegnumbyyear && setYearExpenseTotal(categorysumonlynegnumbyyear.reduce((a, b) => a + b));
+  }, [categorysumonlynegnumbyyear]);
+
   return (
     <View>
       <DateMenu />
@@ -15,10 +23,16 @@ const YearExpenseScreen = () => {
       <ImageBackground source={require('../../assets/iphone_725x414/antelope-canyon_iphoneslices__3.jpg')} style={styles.image}>
         <View style={styles.card}>
           <DonutChart />
-          <Text>Year Expenses:</Text>
-          <Text style={{ color: theme.colors.danger }}>52352</Text>
-          <Text>Monthly Average:</Text>
-          <Text style={{ color: theme.colors.danger }}>4245</Text>
+          <View style={{ alignItems: 'flex-start', alignSelf: 'flex-start', paddingLeft: 15, justifyContent: 'flex-end' }}>
+            <View style={{ flexDirection: 'row', borderBottomWidth: 3, borderBottomColor: theme.colors.light }}>
+              <Text style={styles.cardtext}>Year Expenses:</Text>
+              <Text style={[{ color: theme.colors.danger, paddingLeft: 25 }, styles.cardtext]}>{YearExpenseTotal}</Text>
+            </View>
+            <View style={{ flexDirection: 'row', borderBottomWidth: 3, borderBottomColor: theme.colors.light, marginVertical: 10 }}>
+              <Text style={styles.cardtext}>Monthly Average:</Text>
+              <Text style={[{ color: theme.colors.danger, paddingLeft: 25 }, styles.cardtext]}>{Math.ceil(YearExpenseTotal / 12)}</Text>
+            </View>
+          </View>
         </View>
       </ImageBackground>
     </View>
@@ -54,9 +68,14 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: '#f5fcff',
-    //width: Dimensions.get('window').width * 0.9,
+    width: Dimensions.get('window').width * 0.9,
     alignSelf: 'center',
     marginVertical: 25,
+  },
+  cardtext: {
+    fontSize: theme.sizes.h4,
+    fontWeight: theme.fonts.weight.semibold,
+    marginBottom: 15,
   },
 });
 export default YearExpenseScreen;

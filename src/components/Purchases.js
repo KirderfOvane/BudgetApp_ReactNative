@@ -10,7 +10,7 @@ const CategoryBalance = ({ localmonth }) => {
   const presetContext = React.useContext(PresetContext);
   //context destruct
   const { calcCategoryByMonth, month, categorymonthsum, MonthSum, year, purchases, filtered, PosMonthSum, NegMonthSum } = presetContext;
-  console.log(PosMonthSum, NegMonthSum, MonthSum);
+  //console.log(PosMonthSum, NegMonthSum, MonthSum);
   // useEffect
   /*  React.useEffect(() => {
     localmonth !== month && addMonth(localmonth);

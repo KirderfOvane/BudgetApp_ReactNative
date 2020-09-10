@@ -1002,7 +1002,7 @@ const PresetState = (props) => {
     if (presetArray.length !== 0) {
       TotalMonthSum = presetArray.reduce((a, b) => a + b, 0);
       dispatch({ type: CALC_MONTH_SAVINGS, payload: TotalMonthSum });
-      console.log(`monthsavings: ${TotalMonthSum} in ${state.month} `);
+      //console.log(`monthsavings: ${TotalMonthSum} in ${state.month} `);
     } else {
       dispatch({ type: CALC_MONTH_SAVINGS, payload: 0 });
       //console.log(`no monthsavings to calculate in ${state.month} `);
@@ -1012,9 +1012,9 @@ const PresetState = (props) => {
   // calc month balance
   const calcMonthBalance = () => {
     const totalsum = state.MonthSum - state.monthsavings - state.SumPiggybanksMonth;
-    console.log(state.MonthSum);
-    console.log(state.monthsavings);
-    console.log(state.SumPiggybanksMonth);
+    //console.log(state.MonthSum);
+    //console.log(state.monthsavings);
+    //console.log(state.SumPiggybanksMonth);
     dispatch({ type: CALC_MONTH_BALANCE, payload: totalsum });
   };
 
@@ -1074,7 +1074,7 @@ const PresetState = (props) => {
 
   const setTotalOfAllPiggybanksThisMonth = (Sum) => {
     dispatch({ type: SUM_PIGGYBANKS_MONTH, payload: Sum });
-    console.log('ran');
+    //console.log('ran');
   };
 
   const setMonthPiggySavingsSums = (array) => {

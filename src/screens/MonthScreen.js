@@ -293,20 +293,18 @@ const MonthScreen = ({ navigation }) => {
     filteredmonthandnegnum && calcNegMonth(filteredmonthandnegnum);
   }, [filteredmonthandnegnum, filteredmonthandposnum]);
 
-  // calculates month savings
-  const [localPiggy, setLocalPiggy] = React.useState(null);
   React.useEffect(() => {
     let monthpurchasewithpiggybank;
     let filteroutbymonth;
     let savedAmounts;
     let SumOfAllPiggyBanksByMonthByPreset;
     let TotalOfAllPiggybanksThisMonth;
-
     const calcPiggySavings = () => {
+      // part one of getting the value for SumPiggybanksMonth used in monthstats
       // filters out presets that is type purchase and has piggybank savings
       monthpurchasewithpiggybank = presets.filter((preset) => preset.type === 'purchase' && preset.piggybank.length !== 0);
-
-      // filters out piggybankvalues made in active month
+      //console.log(monthpurchasewithpiggybank);
+      // filters out piggybankvalues made in active month and active year
       filteroutbymonth = monthpurchasewithpiggybank.map((purchase) =>
         purchase.piggybank.filter(
           (piggybank) =>
@@ -319,7 +317,7 @@ const MonthScreen = ({ navigation }) => {
       // store only savedAmounts in an array
       savedAmounts = filteroutbymonth.map((first) => first.map((second) => second.savedAmount));
       // sift through savedAmounts and count totalsum
-      SumOfAllPiggyBanksByMonthByPreset = savedAmounts.map((inner) => inner.reduce((a, b) => parseFloat(a) + parseFloat(b), 0));
+      SumOfAllPiggyBanksByMonthByPreset = savedAmounts.map((inner) => inner.reduce((a, b) => parseFloat(a) + parseFloat(b), 0)); //BUG crash in reduce from yearscreen to monthscreen
       TotalOfAllPiggybanksThisMonth = SumOfAllPiggyBanksByMonthByPreset.reduce((a, b) => parseFloat(a) + parseFloat(b), 0);
     };
     if (presets) {
@@ -346,7 +344,7 @@ const MonthScreen = ({ navigation }) => {
     };
 
     if (presets) {
-      //setLocalPiggy();
+      //calculates MonthPiggySavingsSums
       setMonthPiggySavingsSums(createSavingsItem());
     }
     TotalOfAllPiggybanksThisMonth && TotalOfAllPiggybanksThisMonth !== 0 && setTotalOfAllPiggybanksThisMonth(TotalOfAllPiggybanksThisMonth);
