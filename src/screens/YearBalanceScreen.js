@@ -60,17 +60,17 @@ const YearBalanceScreen = ({ navigation }) => {
     //console.log(`year: ${year}`);
   }, [year, fromMonth]);
   React.useEffect(() => {
-    console.log('getPresets tried to run');
-    console.log('presets:');
-    console.log(presets === null);
-    console.log('isAuth');
-    console.log(isAuthenticated === true);
-    user && console.log('user exist');
-    !user && console.log('user does NOT exist');
-    console.log(user);
-    presets === null && isAuthenticated === true && user && getPresets();
-    presets === null && isAuthenticated === true && user && console.log('getPresets ran');
-  }, [presets, year, month]);
+    // console.log('getPresets tried to run');
+    // console.log('presets:');
+    //  console.log(presets === null);
+    // console.log('isAuth');
+    // console.log(isAuthenticated);
+    //user && console.log('user exist');
+    //!user && console.log('user does NOT exist');
+    //console.log(user);
+    presets === null && isAuthenticated && user && getPresets();
+    presets === null && isAuthenticated && user && console.log('getPresets ran');
+  }, [presets, year, month, isAuthenticated, user]);
   React.useEffect(() => {
     if (isAuthenticated) {
       presets && month === null && calcYearsum(year);

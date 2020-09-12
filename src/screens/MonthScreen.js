@@ -357,6 +357,8 @@ const MonthScreen = ({ navigation }) => {
         <FH_ActivityIndicator position={'absolute'} />
       ) : ( */}
       <FlatList
+        // windowSize={3}
+        //initialNumToRender={3}
         ref={flatlistRef}
         data={MonthList}
         //extraData={presetContext.month}
