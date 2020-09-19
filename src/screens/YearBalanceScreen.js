@@ -5,7 +5,7 @@ import AuthContext from '../context/auth/authContext';
 import SwipeItem from '../components/SwipeItem';
 import FH_ActivityIndicator from '../components/FH_ActivityIndicator';
 import axios from 'axios';
-
+import { NavigationEvents } from 'react-navigation';
 const YearBalanceScreen = ({ navigation }) => {
   //context
   const presetContext = React.useContext(PresetContext);
@@ -31,16 +31,16 @@ const YearBalanceScreen = ({ navigation }) => {
   } = presetContext;
   const { loading, isAuthenticated, user } = authContext;
   //state
-  const [LocalLoading, setLocalLoading] = React.useState(false);
+  //const [LocalLoading, setLocalLoading] = React.useState(false);
   const [localYear, setLocalYear] = React.useState(2019);
   const [Lastoffset, setLastOffset] = React.useState(0); // used to check if offset occured to see if swipe occured
 
   const { width, height } = Dimensions.get('window');
 
   let fromMonth = navigation.getParam('fromMonth');
-  React.useEffect(() => {
+  /*  React.useEffect(() => {
     setLocalLoading(false);
-  });
+  }); */
   //console.log('fromMonthOutside: ' + fromMonth);
   //on mount
   React.useEffect(() => {
@@ -69,12 +69,14 @@ const YearBalanceScreen = ({ navigation }) => {
     //!user && console.log('user does NOT exist');
     //console.log(user);
     presets === null && isAuthenticated && user && getPresets();
-    presets === null && isAuthenticated && user && console.log('getPresets ran');
-  }, [presets, year, month, isAuthenticated, user]);
-  React.useEffect(() => {
-    if (isAuthenticated) {
-      presets && month === null && calcYearsum(year);
-
+    // presets === null && isAuthenticated && user && console.log('getPresets ran');
+  }, [year, isAuthenticated, user]);
+  // React.useEffect(() => {
+  //console.log('why did this fkn update');
+  //  console.log(year);
+  // console.log(localYear);
+  // if (isAuthenticated) {
+  /*  presets && month === null && calcYearsum(year);  // year summary used in BarChart
       presets &&
         month === null &&
         calcAllMonthSum([
@@ -90,14 +92,14 @@ const YearBalanceScreen = ({ navigation }) => {
           'October',
           'November',
           'December',
-        ]);
-      presets && month === null && calcCapital();
+        ]); */
+  /* presets && month === null && calcCapital();
       presets && month === null && calcSavings();
-      presets && month === null && calcSum();
-      presets && calcCategorySumOnlyNegNumByYear();
-      presets && setCategoryNameOnlyNegNumByYear();
-    }
-  }, [year, localYear, presets, month]);
+      presets && month === null && calcSum(); */
+  /* presets && calcCategorySumOnlyNegNumByYear();
+      presets && setCategoryNameOnlyNegNumByYear(); */
+  //  }
+  // }, [year, localYear, presets]);
 
   const changeMonthList = (e) => {
     const swipeoffset = e.nativeEvent.targetContentOffset.x;
@@ -105,7 +107,7 @@ const YearBalanceScreen = ({ navigation }) => {
     if (newindex > 6) {
       //swipe right
       //console.log('swipreright');
-      setLocalLoading(true);
+      // setLocalLoading(true);
       addMonth('January');
       navigation.navigate('Month');
     } else {
@@ -115,13 +117,31 @@ const YearBalanceScreen = ({ navigation }) => {
     }
     //console.log(newindex);
   };
-
+  const [isFocused, setFocus] = React.useState(true);
+  const notFocus = () => {
+    setFocus(false);
+  };
+  const doFocus = () => {
+    setFocus(true);
+  };
   return (
     <>
-      {LocalLoading || loading ? (
+      <NavigationEvents
+        /* onWillFocus={(payload) => console.log('will focus', payload)} */
+        onWillFocus={doFocus}
+        /*  onDidFocus={(payload) => console.log('did focus', payload)}
+        onWillBlur={(payload) => console.log('will blur', payload)} */
+        onWillBlur={notFocus}
+        /*   onDidBlur={(payload) => console.log('did blur', payload)} */
+      />
+      {/*    {LocalLoading || loading ? (
         <FH_ActivityIndicator position={'absolute'} infiniteloop={false} />
-      ) : (
+      ) : ( */}
+      {isFocused && (
         <FlatList
+          windowSize={3}
+          initialNumToRender={1}
+          maxToRenderPerBatch={1}
           data={[
             { month: 'August', image: require('../../assets/iphone_725x414/antelope-canyon_iphoneslices__1.jpg') },
             { month: 'September', image: require('../../assets/iphone_725x414/antelope-canyon_iphoneslices__2.jpg') },
@@ -144,14 +164,15 @@ const YearBalanceScreen = ({ navigation }) => {
           initialScrollIndex={6}
           horizontal
           keyExtractor={(item) => item.month}
-          renderItem={(object) => {
+          renderItem={(data) => {
+            // console.log(data.item.image);
             return (
               <View>
                 <SwipeItem
-                  navigation={navigation}
-                  month={object.item.month}
-                  key={object.item.month}
-                  index={object.index}
+                  // navigation={navigation} // problem keeping yearbalancescreen loaded in bg on monthscreen?
+                  month={data.item.month}
+                  key={data.item.month}
+                  index={data.index}
                   activeindex={5}
                   monthlist={[
                     { month: 'August', image: require('../../assets/iphone_725x414/antelope-canyon_iphoneslices__1.jpg') },
@@ -178,6 +199,7 @@ const YearBalanceScreen = ({ navigation }) => {
           }}
         />
       )}
+      {/*   )} */}
     </>
   );
 };

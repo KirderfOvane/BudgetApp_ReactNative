@@ -18,7 +18,9 @@ const PresetFilter = ({ data }) => {
   if (data && data.length === 0 && !loading) {
     return <Text>Please add a Value</Text>;
   }
-
+  const renderItem = (preset) => {
+    return <PresetItem preset={preset} />;
+  };
   /*  const [total, setTotal] = React.useState(0);
   React.useEffect(() => {
     //console.log('############');
@@ -27,21 +29,19 @@ const PresetFilter = ({ data }) => {
     setTotal(counter);
   }, [presetContext.year]); */
 
-  return (
-    <>
-      {data === null || calculating ? (
-        <FH_ActivityIndicator position={'relative'} />
-      ) : (
-        <FlatList
-          data={data}
-          keyExtractor={(preset) => preset._id}
-          renderItem={(preset) => {
-            return <PresetItem preset={preset} key={preset._id} />;
-          }}
-        />
-      )}
-    </>
-  );
+  if (data) {
+    return (
+      <FlatList
+        removeClippedSubviews={true}
+        initialNumToRender={7}
+        data={data}
+        keyExtractor={(preset) => preset._id}
+        renderItem={renderItem}
+      />
+    );
+  } else {
+    return null;
+  }
 };
 
 export default PresetFilter;

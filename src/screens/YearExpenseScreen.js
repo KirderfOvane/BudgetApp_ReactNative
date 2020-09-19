@@ -7,10 +7,11 @@ const { width, height } = Dimensions.get('window');
 import PresetContext from '../context/preset/presetContext';
 const YearExpenseScreen = () => {
   const presetContext = React.useContext(PresetContext);
-  const { presets, calcCategorySumOnlyNegNumByYear, categorysumonlynegnumbyyear } = presetContext;
+  const { presets, calcCategorySumOnlyNegNumByYear, categorysumonlynegnumbyyear, setCategoryNameOnlyNegNumByYear } = presetContext;
   const [YearExpenseTotal, setYearExpenseTotal] = React.useState(0);
   React.useEffect(() => {
     presets && !categorysumonlynegnumbyyear && calcCategorySumOnlyNegNumByYear();
+    presets && !categorysumonlynegnumbyyear && setCategoryNameOnlyNegNumByYear();
     categorysumonlynegnumbyyear && setYearExpenseTotal(categorysumonlynegnumbyyear.reduce((a, b) => a + b));
   }, [categorysumonlynegnumbyyear]);
 

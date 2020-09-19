@@ -172,11 +172,12 @@ const MonthScreen = ({ navigation }) => {
   const changeMonthList = (e) => {
     const swipeoffset = e.nativeEvent.targetContentOffset.x;
     const newindex = swipeoffset / width;
+
     setIndexCounter(newindex);
 
     //check if swipe happened
     if (swipeoffset !== Lastoffset) {
-      //check direction
+      //check DIRECTION
       if (Lastoffset > swipeoffset) {
         //swipe left
 
@@ -187,6 +188,16 @@ const MonthScreen = ({ navigation }) => {
         } else {
           //activate recalc of _ALL_ context values
           addMonth(MonthList[newindex].month);
+          filterOutPositiveNumsAndMonth(MonthList[newindex].month);
+          filterOutNegativeNumsAndMonth(MonthList[newindex].month);
+          calcMonthSum(MonthList[newindex].month);
+          getMonthSavings(MonthList[newindex].month);
+          calcMonthSavings(MonthList[newindex].month);
+          MonthSum && calcMonthBalance();
+          calcSum();
+          setPurchase();
+          calcCategoryByMonth(MonthList[newindex].month);
+          getMonthPiggySavings(MonthList[newindex].month);
         }
 
         //year display adjustment
@@ -199,7 +210,7 @@ const MonthScreen = ({ navigation }) => {
         //console.log(`counter: ${counter}`);
         if (counter >= 4) {
           const tempMonthListCopy = [...MonthList];
-          for (i = 0; i < 4; i++) {
+          for (let i = 0; i < 4; i++) {
             tempMonthListCopy.unshift(tempMonthListCopy.pop());
           }
           //console.log(tempMonthListCopy);
@@ -209,8 +220,7 @@ const MonthScreen = ({ navigation }) => {
         }
       } else {
         //swipe right
-        // setMonthloading(true);
-        // console.log('swipe right');
+
         //year navigation
         if (!isNaN(MonthList[newindex].month)) {
           setYear(parseInt(year) + 1);
@@ -218,9 +228,18 @@ const MonthScreen = ({ navigation }) => {
         } else {
           //activate recalc of _ALL_ context values
           addMonth(MonthList[newindex].month);
+          filterOutPositiveNumsAndMonth(MonthList[newindex].month);
+          filterOutNegativeNumsAndMonth(MonthList[newindex].month);
+          calcMonthSum(MonthList[newindex].month);
+          getMonthSavings(MonthList[newindex].month);
+          calcMonthSavings(MonthList[newindex].month);
+          MonthSum && calcMonthBalance();
+          calcSum();
+          setPurchase();
+          calcCategoryByMonth(MonthList[newindex].month);
+          getMonthPiggySavings(MonthList[newindex].month);
         }
 
-        // console.log(MonthList[newindex].month);
         //year display adjustment
         if (MonthList[newindex].month === 'December') {
           setDisplayYear(parseInt(year) + 1);
@@ -228,11 +247,11 @@ const MonthScreen = ({ navigation }) => {
 
         setLastSwipe('right');
         const counter = newindex - _initialScrollIndex;
-
+        console.log(counter);
         if (counter >= 4) {
           const tempMonthListCopy = [...MonthList];
 
-          for (i = 0; i < 9; i++) {
+          for (let i = 0; i < 9; i++) {
             tempMonthListCopy.unshift(tempMonthListCopy.pop());
           }
 
@@ -274,19 +293,20 @@ const MonthScreen = ({ navigation }) => {
   }, [fromYear]);
 
   React.useEffect(() => {
+    // on first mount, thereafter it updates from changeMonthlist-function
     if (presets !== null) {
       filterOutPositiveNumsAndMonth(presetContext.month);
       filterOutNegativeNumsAndMonth(presetContext.month);
-      calcMonthSum();
+      calcMonthSum(presetContext.month);
       getMonthSavings(presetContext.month);
-      calcMonthSavings();
+      calcMonthSavings(presetContext.month);
       MonthSum && calcMonthBalance();
       calcSum();
       setPurchase();
-      calcCategoryByMonth();
-      getMonthPiggySavings();
+      calcCategoryByMonth(presetContext.month);
+      getMonthPiggySavings(presetContext.month);
     }
-  }, [presetContext.month, presets, MonthSum]);
+  }, []); // old dependencies: presetContext.month, presets, MonthSum
 
   React.useEffect(() => {
     filteredmonthandposnum && calcPosMonth(filteredmonthandposnum);
@@ -350,6 +370,22 @@ const MonthScreen = ({ navigation }) => {
     TotalOfAllPiggybanksThisMonth && TotalOfAllPiggybanksThisMonth !== 0 && setTotalOfAllPiggybanksThisMonth(TotalOfAllPiggybanksThisMonth);
     // eslint-disable-next-line
   }, [presetContext.month, presets, year]);
+  //renderItem
+  const renderItem = (object) => {
+    return (
+      <SwipeItem
+        index={object.index}
+        // key={object.item.month}
+        activeindex={indexCounter}
+        monthlist={MonthList}
+        setMonthList={setMonthList}
+
+        // presetByMonth={object.item.data}
+        // monthIncomeSum={object.item.monthIncomeSum}
+        // monthExpenseSum={object.item.monthExpenseSum}
+      />
+    );
+  };
   //jsx
   return (
     <>
@@ -357,8 +393,10 @@ const MonthScreen = ({ navigation }) => {
         <FH_ActivityIndicator position={'absolute'} />
       ) : ( */}
       <FlatList
-        // windowSize={3}
-        //initialNumToRender={3}
+        windowSize={3}
+        initialNumToRender={3}
+        maxToRenderPerBatch={3}
+        removeClippedSubviews={false}
         ref={flatlistRef}
         data={MonthList}
         //extraData={presetContext.month}
@@ -369,21 +407,7 @@ const MonthScreen = ({ navigation }) => {
         initialScrollIndex={_initialScrollIndex}
         horizontal
         keyExtractor={(item) => item.month}
-        renderItem={(object) => {
-          return (
-            <SwipeItem
-              index={object.index}
-              // key={object.item.month}
-              activeindex={indexCounter}
-              monthlist={MonthList}
-              setMonthList={setMonthList}
-
-              // presetByMonth={object.item.data}
-              // monthIncomeSum={object.item.monthIncomeSum}
-              // monthExpenseSum={object.item.monthExpenseSum}
-            />
-          );
-        }}
+        renderItem={renderItem}
         getItemLayout={(data, index) => {
           // this shows problem: getItemLayout runs every scroll. unnecessary?  console.log('get item layout ' + index);
           return { length: width, offset: width * index, index };

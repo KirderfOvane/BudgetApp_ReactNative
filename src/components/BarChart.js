@@ -2,13 +2,57 @@ import React from 'react';
 import { StyleSheet, View, Dimensions, Text } from 'react-native';
 import { VictoryBar, VictoryChart, VictoryAxis, VictoryLegend, VictoryLabel } from 'victory-native';
 import PresetContext from '../context/preset/presetContext';
+import AuthContext from '../context/auth/authContext';
 import { theme } from '../constants';
 
 const BarChart = ({ year }) => {
+  // context
   const presetContext = React.useContext(PresetContext);
-  const { AllMonthSum, presets, yearsum, capital, savings, sum, calcYearsum } = presetContext;
+  const authContext = React.useContext(AuthContext);
+  // context destruct
+  const {
+    AllMonthSum,
+    presets,
+    yearsum,
+    capital,
+    savings,
+    sum,
+    calcYearsum,
+    calcAllMonthSum,
+    month,
+    calcCapital,
+    calcSavings,
+    calcSum,
+  } = presetContext;
+  const { isAuthenticated } = authContext;
+  // logic
   const yearmonthavg = parseInt(parseFloat(yearsum / 12));
-  //console.log(AllMonthSum[0]);
+  // useEffect
+  React.useEffect(() => {
+    if (presets && month === null && isAuthenticated) {
+      calcYearsum(year); // year summary used in BarChart
+      calcAllMonthSum([
+        // months in barchart
+        'January',
+        'February',
+        'March',
+        'April',
+        'May',
+        'June',
+        'July',
+        'August',
+        'September',
+        'October',
+        'November',
+        'December',
+      ]);
+      calcCapital(); // capital in
+      calcSavings();
+      calcSum();
+    }
+  }, [presets]);
+
+  // state
   const data = AllMonthSum &&
     AllMonthSum.length !== 0 && [
       { month: 'January', value: AllMonthSum[0] },
@@ -39,8 +83,8 @@ const BarChart = ({ year }) => {
     { month: 'December', value: 0 },
   ];
 
+  // jsx
   if (AllMonthSum && AllMonthSum.length !== 0 && typeof AllMonthSum[0] === 'number') {
-    // console.log(AllMonthSum);
     return (
       <View style={styles.container}>
         <VictoryChart width={414} height={300}>

@@ -34,7 +34,7 @@ const PresetFilter = ({ monthlist, activeindex, presetthismonth }) => {
   //console.log(filteredmonthandposnum);
   return (
     <>
-      {filteredmonthandposnum && (
+      {filteredmonthandposnum ? (
         <FlatList
           data={filteredmonthandposnum}
           keyExtractor={(preset) => preset._id}
@@ -42,7 +42,7 @@ const PresetFilter = ({ monthlist, activeindex, presetthismonth }) => {
             return <PresetItem preset={preset} key={preset._id} />;
           }}
         />
-      )}
+      ) : null}
     </>
   );
 };

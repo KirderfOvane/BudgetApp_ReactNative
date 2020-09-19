@@ -4,8 +4,9 @@ import { icons, theme } from '../constants';
 import PresetContext from '../context/preset/presetContext';
 import PresetItemName from './PresetItemName';
 import PresetItemNumber from './PresetItemNumber';
-import CategoryPicker from './CategoryPicker';
 
+// Inline Requires
+let CategoryPicker = null;
 const PresetItem = ({ preset, setMonthList }) => {
   const presetContext = React.useContext(PresetContext);
   const { setEdit, sendEdit, edit, buildFlatListData, cancelEdit, filterPresets, clearFilter } = presetContext;
@@ -34,8 +35,15 @@ const PresetItem = ({ preset, setMonthList }) => {
     if (localPreset.category !== 'Select Category') {
       setPickerButtonTitle(localPreset.category); //<--
     }
+
+    if (CategoryPicker === null) {
+      CategoryPicker = require('./CategoryPicker').default;
+    }
+
     setPickerActive(!pickerActive);
   };
+
+  // console.log(pickerActive);
   const onNumberPress = (e) => {
     toggleInputMode('number');
     // localPreset.number > 0 ? filterPresets('positive') : filterPresets('negative');
@@ -84,21 +92,21 @@ const PresetItem = ({ preset, setMonthList }) => {
   return (
     <>
       {pickerActive ? (
-        <View style={styles.containerwhenpickeractive}>
-          <View style={styles.picker}>
-            <CategoryPicker
-              selected={selected}
-              selectedCategory={selectedCategory}
-              localPreset={localPreset}
-              setLocalPreset={setLocalPreset}
-              //pickerRef={pickerRef}
-            />
-            <TouchableOpacity onPress={onCategoryPress}>
+        /*  <View style={styles.containerwhenpickeractive}>
+          <View style={styles.picker}> */
+        <CategoryPicker
+          selected={selected}
+          selectedCategory={selectedCategory}
+          localPreset={localPreset}
+          setLocalPreset={setLocalPreset}
+          onCategoryPress={onCategoryPress}
+        />
+      ) : (
+        /*  <TouchableOpacity onPress={onCategoryPress}>
               <Text style={styles.selectBtnInPicker}>Select</Text>
             </TouchableOpacity>
           </View>
-        </View>
-      ) : (
+        </View> */
         <View style={pickerActive ? styles.hide : styles.container}>
           <PresetItemName
             onNamePress={onNamePress}

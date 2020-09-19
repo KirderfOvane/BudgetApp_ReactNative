@@ -13,24 +13,24 @@ const YearBalance = ({ year }) => {
   const { user, token, logout, loadUser, loading } = authContext;
   const { sum, presets, yearsum } = presetContext;
   //component logic
-  const yearmonthavg = parseInt(parseFloat(yearsum / 12));
+  //const yearmonthavg = parseInt(parseFloat(yearsum / 12));
   // console.log(yearsum);
 
   return (
     <>
-      {loading && presets === null ? (
+      {/*     {loading && presets === null ? (
         <FH_ActivityIndicator position={'absolute'} color={theme.colors.dark} />
-      ) : (
-        <>
-          <View style={styles.container}>
-            <Text style={styles.title}>{year}</Text>
-            <Text style={styles.text}>
-              Yearly summary and comparison analysis with last year. Here you can also see differences in income/costs over the year.{' '}
-            </Text>
-          </View>
-          <BarChart year={year} />
-        </>
-      )}
+      ) : ( */}
+      <>
+        <View style={styles.container}>
+          <Text style={styles.title}>{year}</Text>
+          <Text style={styles.text}>
+            Yearly summary and comparison analysis with last year. Here you can also see differences in income/costs over the year.{' '}
+          </Text>
+        </View>
+        <BarChart year={year} />
+      </>
+      {/* )} */}
     </>
   );
 };
