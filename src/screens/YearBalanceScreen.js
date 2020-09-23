@@ -42,8 +42,9 @@ const YearBalanceScreen = ({ navigation }) => {
     setLocalLoading(false);
   }); */
   //console.log('fromMonthOutside: ' + fromMonth);
+  //console.log(fromMonth);
   //on mount
-  React.useEffect(() => {
+  /*   React.useEffect(() => {
     // coming from month-tab
 
     if (fromMonth === 'right') {
@@ -56,9 +57,8 @@ const YearBalanceScreen = ({ navigation }) => {
 
       fromMonth = '';
     }
-    //console.log('fromMonth: ' + fromMonth);
-    //console.log(`year: ${year}`);
-  }, [year, fromMonth]);
+
+  }, [year, fromMonth]); */
   React.useEffect(() => {
     // console.log('getPresets tried to run');
     // console.log('presets:');
@@ -100,7 +100,7 @@ const YearBalanceScreen = ({ navigation }) => {
       presets && setCategoryNameOnlyNegNumByYear(); */
   //  }
   // }, [year, localYear, presets]);
-
+  console.log(year);
   const changeMonthList = (e) => {
     const swipeoffset = e.nativeEvent.targetContentOffset.x;
     const newindex = swipeoffset / width;

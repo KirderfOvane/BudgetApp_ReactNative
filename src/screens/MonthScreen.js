@@ -52,7 +52,7 @@ const MonthScreen = ({ navigation }) => {
   const [displayYear, setDisplayYear] = React.useState(year);
   const [_initialScrollIndex, set_InitialScrollIndex] = React.useState(6);
   const [indexCounter, setIndexCounter] = React.useState(_initialScrollIndex);
-  const [Lastoffset, setLastOffset] = React.useState(0); // used to check if offset occured to see if swipe occured
+  const [Lastoffset, setLastOffset] = React.useState(2484); // used to check if offset occured to see if swipe occured
   const [lastSwipe, setLastSwipe] = React.useState(''); // used to tell Balance-screen what month we swiped from
   /*  const [MonthList, setMonthList] = React.useState([
     {
@@ -172,7 +172,8 @@ const MonthScreen = ({ navigation }) => {
   const changeMonthList = (e) => {
     const swipeoffset = e.nativeEvent.targetContentOffset.x;
     const newindex = swipeoffset / width;
-
+    console.log('Lastoffset: ' + Lastoffset);
+    console.log('swipeoffset: ' + swipeoffset);
     setIndexCounter(newindex);
 
     //check if swipe happened
@@ -183,7 +184,7 @@ const MonthScreen = ({ navigation }) => {
 
         //year navigation
         if (!isNaN(MonthList[newindex].month)) {
-          setYear(parseInt(year) - 1);
+          //setYear(parseInt(year));
           navigation.navigate('Balance', { fromMonth: lastSwipe });
         } else {
           //activate recalc of _ALL_ context values
@@ -202,25 +203,22 @@ const MonthScreen = ({ navigation }) => {
 
         //year display adjustment
         if (MonthList[newindex].month === 'November') {
-          //   console.log('yeardisplayadjust');
           setDisplayYear(parseInt(year) - 1);
         }
         setLastSwipe('left');
         const counter = _initialScrollIndex - newindex;
-        //console.log(`counter: ${counter}`);
         if (counter >= 4) {
           const tempMonthListCopy = [...MonthList];
           for (let i = 0; i < 4; i++) {
             tempMonthListCopy.unshift(tempMonthListCopy.pop());
           }
-          //console.log(tempMonthListCopy);
           setMonthList(tempMonthListCopy);
           flatlistRef.current.scrollToIndex({ index: 6, animated: false });
           setIndexCounter(6);
         }
       } else {
         //swipe right
-
+        console.log('swipe right');
         //year navigation
         if (!isNaN(MonthList[newindex].month)) {
           setYear(parseInt(year) + 1);
@@ -254,9 +252,7 @@ const MonthScreen = ({ navigation }) => {
           for (let i = 0; i < 9; i++) {
             tempMonthListCopy.unshift(tempMonthListCopy.pop());
           }
-
           setMonthList(tempMonthListCopy);
-
           flatlistRef.current.scrollToIndex({ index: 6, animated: false });
           setIndexCounter(6);
         }
@@ -270,7 +266,7 @@ const MonthScreen = ({ navigation }) => {
     // console.log('decran');
     setDisplayYear(parseInt(year) + 1);
     const decMonthListCopy = [...MonthList];
-    for (i = 0; i < 2; i++) {
+    for (let i = 0; i < 2; i++) {
       decMonthListCopy.unshift(decMonthListCopy.pop());
       // console.log(tempMonthListCopy);
     }
@@ -344,9 +340,6 @@ const MonthScreen = ({ navigation }) => {
       calcPiggySavings();
     }
     const createSavingsItem = () => {
-      // console.log('////////////////////////////');
-      //  console.log(SumOfAllPiggyBanksByMonthByPreset);
-      //console.log(monthpurchasewithpiggybank);
       let i;
       let MyArray = [];
       for (i = 0; i < SumOfAllPiggyBanksByMonthByPreset.length; i++) {
@@ -358,8 +351,6 @@ const MonthScreen = ({ navigation }) => {
           });
         }
       }
-
-      // console.log(MyArray);
       return MyArray;
     };
 
@@ -372,34 +363,18 @@ const MonthScreen = ({ navigation }) => {
   }, [presetContext.month, presets, year]);
   //renderItem
   const renderItem = (object) => {
-    return (
-      <SwipeItem
-        index={object.index}
-        // key={object.item.month}
-        activeindex={indexCounter}
-        monthlist={MonthList}
-        setMonthList={setMonthList}
-
-        // presetByMonth={object.item.data}
-        // monthIncomeSum={object.item.monthIncomeSum}
-        // monthExpenseSum={object.item.monthExpenseSum}
-      />
-    );
+    return <SwipeItem index={object.index} activeindex={indexCounter} monthlist={MonthList} setMonthList={setMonthList} />;
   };
   //jsx
   return (
     <>
-      {/*  {loading ? (
-        <FH_ActivityIndicator position={'absolute'} />
-      ) : ( */}
       <FlatList
-        windowSize={3}
+        windowSize={7}
         initialNumToRender={1}
         maxToRenderPerBatch={1}
         removeClippedSubviews={false}
         ref={flatlistRef}
         data={MonthList}
-        //extraData={presetContext.month}
         onScrollEndDrag={changeMonthList} // runs when movement finished
         snapToInterval={width}
         snapToAlignment={'start'}
@@ -413,7 +388,6 @@ const MonthScreen = ({ navigation }) => {
           return { length: width, offset: width * index, index };
         }}
       />
-      {/*   )} */}
     </>
   );
 };
