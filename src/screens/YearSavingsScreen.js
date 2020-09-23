@@ -22,19 +22,23 @@ const YearSavingsScreen = ({ navigation }) => {
         <View style={styles.card}>
           <View style={[styles.cardtextcontainer, { marginTop: 25 }]}>
             <Text style={styles.cardtext}>General Savings:</Text>
-            <Text style={[{ color: theme.colors.success }, styles.cardtext]}>{savings}</Text>
+            <Text style={[{ color: theme.colors.success }, styles.cardtext]}>{0 + savings}</Text>
           </View>
           <View style={styles.cardtextcontainer}>
             <Text style={styles.cardtext}>Capital:</Text>
             <Text style={[{ color: theme.colors.success }, styles.cardtext]}>{capital}</Text>
           </View>
-          <View style={styles.piggybankTitleContainer}>
-            <Text style={styles.piggybankTitle}>{icons.getIcon('piggybank')}</Text>
-            <Text style={styles.piggybankTitle}>Piggybank Purchase Savings</Text>
-          </View>
-          <View style={{ width: Dimensions.get('window').width * 0.9, minHeight: 300 }}>
-            <PiggybankSavingsItem purchases={purchases} year={year} />
-          </View>
+          {purchases && purchases.length !== 0 && (
+            <>
+              <View style={styles.piggybankTitleContainer}>
+                <Text style={styles.piggybankTitle}>{icons.getIcon('piggybank')}</Text>
+                <Text style={styles.piggybankTitle}>Piggybank Purchase Savings</Text>
+              </View>
+              <View style={{ width: Dimensions.get('window').width * 0.9, minHeight: 300 }}>
+                <PiggybankSavingsItem purchases={purchases} year={year} />
+              </View>
+            </>
+          )}
         </View>
       </ImageBackground>
     </View>
@@ -81,9 +85,9 @@ const styles = StyleSheet.create({
   },
   card: {
     borderWidth: 1,
+    minHeight: Dimensions.get('window').height * 0.5,
     borderColor: theme.colors.gray,
     borderRadius: 1,
-    justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: '#f5fcff',
     width: Dimensions.get('window').width * 0.9,

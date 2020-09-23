@@ -172,8 +172,8 @@ const MonthScreen = ({ navigation }) => {
   const changeMonthList = (e) => {
     const swipeoffset = e.nativeEvent.targetContentOffset.x;
     const newindex = swipeoffset / width;
-    console.log('Lastoffset: ' + Lastoffset);
-    console.log('swipeoffset: ' + swipeoffset);
+    //console.log('Lastoffset: ' + Lastoffset);
+    // console.log('swipeoffset: ' + swipeoffset);
     setIndexCounter(newindex);
 
     //check if swipe happened
@@ -218,7 +218,7 @@ const MonthScreen = ({ navigation }) => {
         }
       } else {
         //swipe right
-        console.log('swipe right');
+        //console.log('swipe right');
         //year navigation
         if (!isNaN(MonthList[newindex].month)) {
           setYear(parseInt(year) + 1);

@@ -6,8 +6,14 @@ import { theme } from '../constants';
 const { width, height } = Dimensions.get('window');
 import PresetContext from '../context/preset/presetContext';
 const YearExpenseScreen = () => {
-  const presetContext = React.useContext(PresetContext);
-  const { presets, calcCategorySumOnlyNegNumByYear, categorysumonlynegnumbyyear, setCategoryNameOnlyNegNumByYear } = presetContext;
+  const {
+    presets,
+    calcCategorySumOnlyNegNumByYear,
+    categorysumonlynegnumbyyear,
+    setCategoryNameOnlyNegNumByYear,
+    categorynameonlynegnumbyyear,
+  } = React.useContext(PresetContext);
+
   const [YearExpenseTotal, setYearExpenseTotal] = React.useState(0);
   React.useEffect(() => {
     presets && !categorysumonlynegnumbyyear && calcCategorySumOnlyNegNumByYear();
@@ -23,7 +29,11 @@ const YearExpenseScreen = () => {
       </View>
       <ImageBackground source={require('../../assets/iphone_725x414/antelope-canyon_iphoneslices__3.jpg')} style={styles.image}>
         <View style={styles.card}>
-          <DonutChart />
+          <DonutChart
+            CategorySumByYear={categorysumonlynegnumbyyear}
+            CategoryNamesByYear={categorynameonlynegnumbyyear}
+            colorScale={theme.colors.donutIncome}
+          />
           <View style={{ alignItems: 'flex-start', alignSelf: 'flex-start', paddingLeft: 15, justifyContent: 'flex-end' }}>
             <View style={{ flexDirection: 'row', borderBottomWidth: 3, borderBottomColor: theme.colors.light }}>
               <Text style={styles.cardtext}>Year Expenses:</Text>

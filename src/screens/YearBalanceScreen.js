@@ -1,10 +1,8 @@
 import React from 'react';
-import { View, FlatList, Dimensions, ImageBackground } from 'react-native';
+import { View, FlatList, Dimensions } from 'react-native';
 import PresetContext from '../context/preset/presetContext';
 import AuthContext from '../context/auth/authContext';
 import SwipeItem from '../components/SwipeItem';
-import FH_ActivityIndicator from '../components/FH_ActivityIndicator';
-import axios from 'axios';
 import { NavigationEvents } from 'react-navigation';
 const YearBalanceScreen = ({ navigation }) => {
   //context
@@ -100,7 +98,7 @@ const YearBalanceScreen = ({ navigation }) => {
       presets && setCategoryNameOnlyNegNumByYear(); */
   //  }
   // }, [year, localYear, presets]);
-  console.log(year);
+
   const changeMonthList = (e) => {
     const swipeoffset = e.nativeEvent.targetContentOffset.x;
     const newindex = swipeoffset / width;
