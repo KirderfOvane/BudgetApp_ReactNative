@@ -3,6 +3,8 @@ import { StyleSheet, Text, View, SafeAreaView, SectionList } from 'react-native'
 import Constants from 'expo-constants';
 import PresetItem from './PresetItem';
 import PresetContext from '../context/preset/presetContext';
+import MonthStats from './MonthStats';
+import FH_ActivityIndicator from '../components/FH_ActivityIndicator';
 const DATA = [
   {
     title: 'Main dishes',
@@ -55,11 +57,18 @@ const FH_SectionList = ({ posData, negData }) => {
   //}, [presetContext.month, presets, MonthSum]);
   // console.log(posData);
   //console.log(posData.length);
-
-  if (posData) {
+  const [localData, setLocalData] = React.useState({ m: '', p: '', n: '' });
+  const [Loading, setLoading] = React.useState(true);
+  React.useEffect(() => {
+    if (localData.m === presetContext.month && localData.p === posData.length && localData.n === negData.length) {
+      setLoading(false);
+    } else {
+      posData && negData && setLocalData({ m: presetContext.month, p: posData.length, n: negData.length });
+    }
+  }, [presetContext.month, posData, negData, localData]);
+  if (localData.m === presetContext.month && localData.p === posData.length && localData.n === negData.length) {
     return (
-      <SafeAreaView style={styles.container}>
-        {/* <Text>{presetContext.filteredmonthandposnum}</Text> */}
+      <>
         <SectionList
           initialNumToRender={7}
           removeClippedSubviews={true}
@@ -73,14 +82,15 @@ const FH_SectionList = ({ posData, negData }) => {
               data: negData,
             },
           ]}
-          extraData={posData}
+          extraData={localData}
           keyExtractor={(item, index) => item + index}
           renderItem={(preset) => <PresetItem preset={preset} />}
+          ListHeaderComponent={<MonthStats />}
           renderSectionHeader={({ section: { title } }) => <Text style={styles.header}>{title}</Text>}
         />
-      </SafeAreaView>
+      </>
     );
-  } else return null;
+  } else return <FH_ActivityIndicator />;
 };
 
 const styles = StyleSheet.create({
@@ -98,6 +108,8 @@ const styles = StyleSheet.create({
   header: {
     fontSize: 32,
     backgroundColor: '#fff',
+    textAlign: 'center',
+    paddingVertical: 25,
   },
   name: {
     flex: 1,

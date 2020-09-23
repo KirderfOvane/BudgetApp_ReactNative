@@ -40,16 +40,13 @@ const SwipeItem = ({ monthlist, activeindex, index, setMonthList, data }) => {
         {isNaN(monthlist[activeindex].month) ? ( // month
           <>
             {!filtered || filtered === 'positive' || filtered === 'negative' ? (
-              <ScrollView showsVerticalScrollIndicator={false} removeClippedSubviews={true}>
-                <MonthStats />
-                <View style={styles.card}>
-                  {filtered === null || filtered === 'positive' ? (
-                    <View style={styles.filterTitleView}>
-                      {/* <Text style={styles.filterTitleText}>Income</Text> */}
-                      <FH_SectionList posData={filteredmonthandposnum} negData={filteredmonthandnegnum} />
-                    </View>
-                  ) : null}
-                  {/*  {filtered === null || filtered === 'positive' ? (
+              /*    <ScrollView showsVerticalScrollIndicator={false} removeClippedSubviews={true}> */
+              /*  <MonthStats /> */
+              <View style={styles.card}>
+                {filtered === null || filtered === 'positive' ? (
+                  <FH_SectionList posData={filteredmonthandposnum} negData={filteredmonthandnegnum} />
+                ) : null}
+                {/*  {filtered === null || filtered === 'positive' ? (
                     <View style={styles.filterTitleView}>
                       <Text style={styles.filterTitleText}>Income</Text>
                       <PresetFilter data={filteredmonthandposnum} />
@@ -61,8 +58,8 @@ const SwipeItem = ({ monthlist, activeindex, index, setMonthList, data }) => {
                       <PresetFilter data={filteredmonthandnegnum} />
                     </View>
                   ) : null} */}
-                </View>
-              </ScrollView>
+                {/* </ScrollView> */}
+              </View>
             ) : null}
 
             {filtered === 'add' && <AddToBudget month={monthlist[activeindex].month} />}
@@ -95,6 +92,7 @@ const styles = StyleSheet.create({
   },
   card: {
     //flex: 1,
+    minHeight: 615,
     backgroundColor: 'white',
     marginHorizontal: 15,
     marginTop: 15,

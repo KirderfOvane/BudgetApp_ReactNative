@@ -247,7 +247,7 @@ const MonthScreen = ({ navigation }) => {
 
         setLastSwipe('right');
         const counter = newindex - _initialScrollIndex;
-        console.log(counter);
+        //console.log(counter);
         if (counter >= 4) {
           const tempMonthListCopy = [...MonthList];
 
@@ -394,8 +394,8 @@ const MonthScreen = ({ navigation }) => {
       ) : ( */}
       <FlatList
         windowSize={3}
-        initialNumToRender={3}
-        maxToRenderPerBatch={3}
+        initialNumToRender={1}
+        maxToRenderPerBatch={1}
         removeClippedSubviews={false}
         ref={flatlistRef}
         data={MonthList}
