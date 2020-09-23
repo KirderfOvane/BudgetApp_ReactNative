@@ -300,15 +300,17 @@ export default (state, action) => {
     case FILTER_NEGNUMANDMONTH:
       return {
         ...state,
-        filteredmonthandnegnum: state.presets.filter(
-          (preset) =>
-            preset.month === action.payload &&
-            preset.number < 0 &&
-            preset.type !== 'savings' &&
-            preset.type !== 'capital' &&
-            preset.type !== 'purchase' &&
-            preset.year.toString() === state.year.toString() // multiple datatypes
-        ),
+        filteredmonthandnegnum: state.presets
+          .filter(
+            (preset) =>
+              preset.month === action.payload &&
+              preset.number < 0 &&
+              preset.type !== 'savings' &&
+              preset.type !== 'capital' &&
+              preset.type !== 'purchase' &&
+              preset.year.toString() === state.year.toString() // multiple datatypes
+          )
+          .reverse(),
       };
 
     case FILTER_PRESETS:
