@@ -1,90 +1,75 @@
 import React from 'react';
-import { StyleSheet, Text, View, SafeAreaView, SectionList } from 'react-native';
+import { StyleSheet, Text, View, SectionList } from 'react-native';
 import Constants from 'expo-constants';
 import PresetItem from './PresetItem';
 import PresetContext from '../context/preset/presetContext';
 import MonthStats from './MonthStats';
 import FH_ActivityIndicator from '../components/FH_ActivityIndicator';
-const DATA = [
-  {
-    title: 'Main dishes',
-    data: ['Pizza', 'Burger', 'Risotto'],
-  },
-  {
-    title: 'Sides',
-    data: ['French Fries', 'Onion Rings', 'Fried Shrimps'],
-  },
-  {
-    title: 'Drinks',
-    data: ['Water', 'Coke', 'Beer'],
-  },
-  {
-    title: 'Desserts',
-    data: ['Cheese Cake', 'Ice Cream'],
-  },
-];
-
-const Item = ({ item }) => (
-  <View style={styles.item}>
-    <Text style={styles.name}>{item.name}</Text>
-    <Text style={styles.name}>{item.number}</Text>
-  </View>
-);
-
 const FH_SectionList = ({ posData, negData }) => {
   const presetContext = React.useContext(PresetContext);
-  const {
-    //  filteredmonthandposnum,
-    //  filteredmonthandnegnum,
-    presets,
-    MonthSum,
-    filterOutPositiveNumsAndMonth,
-    filterOutNegativeNumsAndMonth,
-  } = presetContext;
-  // React.useEffect(() => {
-  // if (presets !== null) {
-  //  filterOutPositiveNumsAndMonth('January');
-  // filterOutNegativeNumsAndMonth('January');
-  /*  calcMonthSum();
-      getMonthSavings(presetContext.month);
-      calcMonthSavings();
-      MonthSum && calcMonthBalance();
-      calcSum();
-      setPurchase();
-      calcCategoryByMonth();
-      getMonthPiggySavings(); */
-  // }
-  //}, [presetContext.month, presets, MonthSum]);
-  // console.log(posData);
-  //console.log(posData.length);
+  const { filtered } = presetContext;
+
+  const [localSections, setLocalSections] = React.useState([
+    {
+      title: 'Income',
+      data: [],
+    },
+    {
+      title: 'Expenses',
+      data: [],
+    },
+  ]);
   const [localData, setLocalData] = React.useState({ m: '', p: '', n: '' });
-  const [Loading, setLoading] = React.useState(true);
+
   React.useEffect(() => {
     if (localData.m === presetContext.month && localData.p === posData.length && localData.n === negData.length) {
-      setLoading(false);
+      null;
     } else {
       posData && negData && setLocalData({ m: presetContext.month, p: posData.length, n: negData.length });
     }
   }, [presetContext.month, posData, negData, localData]);
+  React.useEffect(() => {
+    if (localData.m === presetContext.month && localData.p === posData.length && localData.n === negData.length) {
+      filtered === 'positive' &&
+        setLocalSections([
+          {
+            title: 'Income',
+            data: posData,
+          },
+        ]);
+      filtered === 'negative' &&
+        setLocalSections([
+          {
+            title: 'Expenses',
+            data: negData,
+          },
+        ]);
+      filtered === null &&
+        setLocalSections([
+          {
+            title: 'Income',
+            data: posData,
+          },
+          {
+            title: 'Expenses',
+            data: negData,
+          },
+        ]);
+    }
+  }, [filtered, localData]);
+
   if (localData.m === presetContext.month && localData.p === posData.length && localData.n === negData.length) {
     return (
       <>
         <SectionList
           initialNumToRender={7}
           removeClippedSubviews={true}
-          sections={[
-            {
-              title: 'Income',
-              data: posData,
-            },
-            {
-              title: 'Expenses',
-              data: negData,
-            },
-          ]}
+          sections={localSections}
           extraData={localData}
-          keyExtractor={(item, index) => item + index}
-          renderItem={(preset) => <PresetItem preset={preset} />}
+          keyExtractor={(item) => item._id}
+          renderItem={(preset) => {
+            return <PresetItem preset={preset} />;
+          }}
           ListHeaderComponent={<MonthStats />}
           renderSectionHeader={({ section: { title } }) => <Text style={styles.header}>{title}</Text>}
         />

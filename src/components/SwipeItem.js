@@ -43,9 +43,7 @@ const SwipeItem = ({ monthlist, activeindex, index, setMonthList, data }) => {
               /*    <ScrollView showsVerticalScrollIndicator={false} removeClippedSubviews={true}> */
               /*  <MonthStats /> */
               <View style={styles.card}>
-                {filtered === null || filtered === 'positive' ? (
-                  <FH_SectionList posData={filteredmonthandposnum} negData={filteredmonthandnegnum} />
-                ) : null}
+                <FH_SectionList posData={filteredmonthandposnum} negData={filteredmonthandnegnum} />
                 {/*  {filtered === null || filtered === 'positive' ? (
                     <View style={styles.filterTitleView}>
                       <Text style={styles.filterTitleText}>Income</Text>
