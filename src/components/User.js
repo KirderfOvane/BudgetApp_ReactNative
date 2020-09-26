@@ -17,11 +17,33 @@ const User = ({ clickable }) => {
     clickable && navigate('User');
   };
 
+  //fits name accordingly to length
+  getUserName = (name) => {
+    // if name more than charlength
+    if (name.length > 10) {
+      // if name contains white space ,set first part as firstname
+      if (name.indexOf(' ') >= 0) {
+        const firstname = name.split(' ')[0];
+        // if firstname is still too long, use initials
+        if (firstname.length > 10) {
+          const firstInitial = name.split(' ')[0][0];
+          const lastnameInitial = name.split(' ')[1][0];
+          const initials = firstInitial + lastnameInitial;
+          return initials;
+        } else return firstname;
+        // if no whitespace, use ellipsis shortening
+      } else {
+        return name.slice(0, 9) + '...';
+      }
+    }
+    //if not to long name
+    return name;
+  };
   return (
     <>
       <TouchableOpacity onPress={onPressUser} style={{ flexDirection: 'row', paddingHorizontal: 10, alignContent: 'space-around' }}>
         <Text style={{ color: 'white', paddingHorizontal: 10, fontSize: theme.sizes.base, fontWeight: theme.fonts.weight.semibold }}>
-          {user ? user.name : ''}
+          {user ? getUserName(user.name) : ''}
         </Text>
         <FontAwesome5 name='user-alt' size={20} color='white' />
       </TouchableOpacity>
