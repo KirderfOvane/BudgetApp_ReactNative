@@ -7,7 +7,7 @@ import AlertContext from '../context/alert/alertContext';
 import PresetContext from '../context/preset/presetContext';
 import CategoryPicker from './CategoryPicker';
 import CheckBoxField from './CheckBoxField';
-import ToggleSwitch from 'toggle-switch-react-native';
+import ToggleSwitch from './ToggleSwitch';
 
 const AddToBudget = ({ month }) => {
   // context alert
