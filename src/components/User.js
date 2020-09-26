@@ -16,6 +16,7 @@ const User = ({ clickable }) => {
   const onPressUser = () => {
     clickable && navigate('User');
   };
+
   return (
     <>
       <TouchableOpacity onPress={onPressUser} style={{ flexDirection: 'row', paddingHorizontal: 10, alignContent: 'space-around' }}>

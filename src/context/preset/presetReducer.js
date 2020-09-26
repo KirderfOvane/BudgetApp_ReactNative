@@ -49,6 +49,7 @@ import {
   PRE_FILTER,
   SET_MONTH_PIGGYSAVINGS,
 } from '../types';
+import getCurrentYear from '../../../getCurrentYear';
 
 export default (state, action) => {
   switch (action.type) {
@@ -66,7 +67,7 @@ export default (state, action) => {
         error: null,
         edit: null,
         sum: null,
-        year: '2019',
+        year: getCurrentYear(),
         month: null,
         //  prefilter: [],
         //  filtered: null,

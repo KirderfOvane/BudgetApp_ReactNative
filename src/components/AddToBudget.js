@@ -225,7 +225,7 @@ const styles = StyleSheet.create({
     borderColor: theme.colors.black,
     padding: 20,
     shadowRadius: 5,
-    borderRadius: 5,
+    borderRadius: 16,
   },
   titlerow: {
     flexDirection: 'row',

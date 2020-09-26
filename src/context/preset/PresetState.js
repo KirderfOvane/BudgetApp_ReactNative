@@ -54,7 +54,7 @@ import {
   REMOVE_CSV,
   SET_MONTH_PIGGYSAVINGS,
 } from '../types';
-
+import getCurrentYear from '../../../getCurrentYear';
 const PresetState = (props) => {
   const initialState = {
     calculating: true,
@@ -72,7 +72,7 @@ const PresetState = (props) => {
     filteredmonthandnegnum: null, // year implemented
     categorymonthsum: [], // year implemented
     categoryyearsum: [], // year implemented
-    year: '2019', // year implemented. needs more strict control of datatype. it changes between string and number
+    year: getCurrentYear(), // year implemented. needs more strict control of datatype. it changes between string and number
     yearsum: null, // year implemented
     savings: null, // year not used
     capital: null, // year not used

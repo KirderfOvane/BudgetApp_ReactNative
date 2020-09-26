@@ -2,6 +2,7 @@ import React from 'react';
 import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
 import { theme } from '../constants';
 import PresetContext from '../context/preset/presetContext';
+import getCurrentYear from '../../getCurrentYear';
 const DateMenu = ({ monthlist, activeindex, navigation }) => {
   const presetContext = React.useContext(PresetContext);
   const { addMonth, setYear, year } = presetContext;
@@ -39,6 +40,7 @@ const DateMenu = ({ monthlist, activeindex, navigation }) => {
     </View>
   );
 };
+
 DateMenu.defaultProps = {
   monthlist: [
     { month: 'August', image: require('../../assets/iphone_725x414/antelope-canyon_iphoneslices__1.jpg') },
@@ -46,7 +48,7 @@ DateMenu.defaultProps = {
     { month: 'October', image: require('../../assets/iphone_725x414/antelope-canyon_iphoneslices__3.jpg') },
     { month: 'November', image: require('../../assets/iphone_725x414/antelope-canyon_iphoneslices__4.jpg') },
     { month: 'December', image: require('../../assets/iphone_725x414/antelope-canyon_iphoneslices__5.jpg') },
-    { month: '2019', image: require('../../assets/iphone_725x414/antelope-canyon_iphoneslices__6.jpg') },
+    { month: getCurrentYear(), image: require('../../assets/iphone_725x414/antelope-canyon_iphoneslices__6.jpg') },
     { month: 'January', image: require('../../assets/iphone_725x414/antelope-canyon_iphoneslices__7.jpg') },
     { month: 'February', image: require('../../assets/iphone_725x414/antelope-canyon_iphoneslices__8.jpg') },
     { month: 'March', image: require('../../assets/iphone_725x414/antelope-canyon_iphoneslices__9.jpg') },
