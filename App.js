@@ -34,8 +34,6 @@ import ChangeEmailScreen from './src/screens/ChangeEmailScreen';
 import CustomGoBack from './src/components/CustomGoBack';
 import MonthBottomTab from './src/components/MonthBottomTab';
 
-import DocumentPickerScreen from './src/screens/DocumentPickerScreen';
-
 //icons
 import { FontAwesome5 } from '@expo/vector-icons';
 import { Fontisto } from '@expo/vector-icons';
@@ -113,7 +111,7 @@ const switchNavigator = createSwitchNavigator({
             navigationOptions: { title: 'Expense', tabBarIcon: <Fontisto name='scissors' size={24} color='white' /> },
           },
           Income: YearIncomeScreen,
-          Savings: DocumentPickerScreen,
+          Savings: YearSavingsScreen,
         },
 
         {

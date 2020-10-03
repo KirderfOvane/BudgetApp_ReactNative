@@ -181,13 +181,15 @@ const PresetState = (props) => {
 
   // Upload CSV
   const uploadCSV = async (formData) => {
+    console.log('upload ran');
     const config = {
       headers: {
         'Content-Type': 'multipart/form-data',
+        'x-auth-token': axios.defaults.headers.common['x-auth-token'],
       },
     };
     try {
-      const res = await axios.post('/api/userpreset/upload', formData, config);
+      const res = await trackerApi.post('/api/userpreset/upload', formData, config);
 
       dispatch({ type: UPLOAD_CSV, payload: res.data });
     } catch (err) {

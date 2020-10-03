@@ -4,11 +4,11 @@ import { icons, theme } from '../constants';
 import PresetContext from '../context/preset/presetContext';
 import PresetItemName from './PresetItemName';
 import PresetItemNumber from './PresetItemNumber';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 // Inline Requires
 let CategoryPicker = null;
-const PresetItem = ({ preset, setMonthList }) => {
-  // console.log(preset);
+const CsvPresetItem = ({ preset, isFocused }) => {
   const presetContext = React.useContext(PresetContext);
   const { setEdit, sendEdit, edit, buildFlatListData, cancelEdit, filterPresets, clearFilter } = presetContext;
   // State
@@ -17,9 +17,9 @@ const PresetItem = ({ preset, setMonthList }) => {
     _id: preset.item._id,
     name: preset.item.name,
     number: preset.item.number,
-    category: preset.item.category,
-    type: preset.item.type,
-    piggybank: preset.item.piggybank,
+    category: 'Select Category',
+    type: 'Overhead',
+    //piggybank: preset.item.piggybank,
   });
   const [income, setIncome] = React.useState(true);
   const [pickerActive, setPickerActive] = React.useState(false);
@@ -36,11 +36,11 @@ const PresetItem = ({ preset, setMonthList }) => {
     if (localPreset.category !== 'Select Category') {
       setPickerButtonTitle(localPreset.category); //<--
     }
-
+    // inputCategoryRef.current.
     if (CategoryPicker === null) {
       CategoryPicker = require('./CategoryPicker').default;
     }
-
+    isFocused(preset.index);
     setPickerActive(!pickerActive);
   };
 
@@ -50,6 +50,7 @@ const PresetItem = ({ preset, setMonthList }) => {
     // localPreset.number > 0 ? filterPresets('positive') : filterPresets('negative');
   };
   const onNamePress = (e) => {
+    isFocused(preset.index);
     toggleInputMode('name');
   };
 
@@ -76,12 +77,13 @@ const PresetItem = ({ preset, setMonthList }) => {
   // init useRef
   const inputNumRef = React.useRef();
   const inputNameRef = React.useRef();
+  const inputCategoryRef = React.useRef();
 
   // useEffect
   React.useEffect(() => {
     // update database when edit is finished
     if (InputMode === 'finished') {
-      sendEdit(localPreset);
+      // sendEdit(localPreset);
       toggleInputMode('');
     }
 
@@ -93,23 +95,42 @@ const PresetItem = ({ preset, setMonthList }) => {
   return (
     <>
       {pickerActive ? (
-        /*  <View style={styles.containerwhenpickeractive}>
-          <View style={styles.picker}> */
-        <CategoryPicker
-          selected={selected}
-          selectedCategory={selectedCategory}
-          localPreset={localPreset}
-          setLocalPreset={setLocalPreset}
-          onCategoryPress={onCategoryPress}
-        />
-      ) : (
-        /*  <TouchableOpacity onPress={onCategoryPress}>
-              <Text style={styles.selectBtnInPicker}>Select</Text>
-            </TouchableOpacity>
+        <>
+          <View style={[styles.container]}>
+            <PresetItemName
+              fontSize={theme.sizes.base}
+              onNamePress={onNamePress}
+              InputMode={InputMode}
+              inputNameRef={inputNameRef}
+              changeName={changeName}
+              localPreset={localPreset}
+              onBlur={onBlur}
+            />
+
+            <PresetItemNumber
+              fontSize={theme.sizes.base}
+              onNumberPress={onNumberPress}
+              InputMode={InputMode}
+              inputNumRef={inputNumRef}
+              changeNumber={changeNumber}
+              localPreset={localPreset}
+              onBlur={onBlur}
+              income={income}
+            />
           </View>
-        </View> */
-        <View style={pickerActive ? styles.hide : styles.container}>
+          <CategoryPicker
+            selected={selected}
+            selectedCategory={selectedCategory}
+            localPreset={localPreset}
+            inputCategoryRef={inputCategoryRef}
+            setLocalPreset={setLocalPreset}
+            onCategoryPress={onCategoryPress}
+          />
+        </>
+      ) : (
+        <View style={styles.container}>
           <PresetItemName
+            fontSize={theme.sizes.base}
             onNamePress={onNamePress}
             InputMode={InputMode}
             inputNameRef={inputNameRef}
@@ -119,6 +140,7 @@ const PresetItem = ({ preset, setMonthList }) => {
           />
 
           <PresetItemNumber
+            fontSize={theme.sizes.base}
             onNumberPress={onNumberPress}
             InputMode={InputMode}
             inputNumRef={inputNumRef}
@@ -129,10 +151,16 @@ const PresetItem = ({ preset, setMonthList }) => {
           />
 
           <TouchableOpacity style={{ paddingTop: 10 }} onPress={onCategoryPress}>
-            <Text style={styles.categoryIcon}>{icons.getIcon(localPreset.category.toLowerCase())}</Text>
+            {localPreset.category !== 'Select Category' ? (
+              <Text style={styles.categoryIcon}>{icons.getIcon(localPreset.category.toLowerCase())}</Text>
+            ) : (
+              <Text style={{ borderWidth: 2, borderColor: 'black', color: 'black', backgroundColor: 'orange', borderRadius: 5 }}>
+                Select Category
+              </Text>
+            )}
           </TouchableOpacity>
           <TouchableOpacity style={styles.deleteButton} onPress={onDeletePress}>
-            <Text>{icons.getIcon('delete')}</Text>
+            <Text>{icons.getIcon('delete_dark')}</Text>
           </TouchableOpacity>
         </View>
       )}
@@ -159,7 +187,7 @@ const styles = StyleSheet.create({
     marginBottom: 180,
   },
   hide: {
-    display: 'none',
+    // display: 'none',
   },
 
   positivenumber: {
@@ -212,4 +240,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default PresetItem;
+export default CsvPresetItem;

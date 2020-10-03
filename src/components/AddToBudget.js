@@ -8,7 +8,8 @@ import PresetContext from '../context/preset/presetContext';
 import CategoryPicker from './CategoryPicker';
 import CheckBoxField from './CheckBoxField';
 import ToggleSwitch from './ToggleSwitch';
-
+import CSV_DocumentPicker from './CSV_DocumentPicker';
+import Csv_CreateTransactions from './Csv_CreateTransactions';
 const AddToBudget = ({ month }) => {
   // context alert
   const alertContext = React.useContext(AlertContext);
@@ -20,7 +21,7 @@ const AddToBudget = ({ month }) => {
 
   // context presets
   const presetContext = React.useContext(PresetContext);
-  const { presets, addPreset, edit, cancelEdit, sendEdit, calcSum, year, uploadCSV } = presetContext;
+  const { presets, addPreset, edit, cancelEdit, sendEdit, calcSum, year, uploadCSV, csvpresets } = presetContext;
 
   // states
   const [localPreset, setLocalPreset] = React.useState({
@@ -29,6 +30,8 @@ const AddToBudget = ({ month }) => {
     category: 'Select Category',
     type: 'overhead',
   });
+
+  const [csvActive, setCsvActive] = React.useState(false);
 
   const changeName = (newName) => {
     setLocalPreset({ ...localPreset, name: newName });
@@ -105,93 +108,127 @@ const AddToBudget = ({ month }) => {
   };
 
   //jsx
-  return (
-    <View style={styles.card}>
-      {/* Title */}
-      <View style={styles.titlerow}>
-        <Text style={styles.title}>ADD TO BUDGET</Text>
+  if (csvpresets) {
+    return (
+      <View style={[styles.card, { paddingHorizontal: 0, marginHorizontal: 5 }]}>
+        {/* Title */}
+        <View
+          style={[
+            styles.titlerow,
+            {
+              overflow: 'visible',
+              backgroundColor: theme.colors.light,
+              shadowOffset: { width: 0, height: 10 },
+              shadowColor: 'gray',
+              shadowOpacity: 0.1,
+              paddingBottom: 5,
+              borderColor: theme.colors.black,
+              shadowRadius: 5,
+            },
+          ]}
+        >
+          <Text style={[styles.title]}>Select Categories</Text>
+        </View>
+        {/* Csv */}
+        <Csv_CreateTransactions />
       </View>
-
-      {/* Alerts */}
-      <Alerts />
-
-      {/* Inputs */}
-      <TextInput
-        style={styles.input}
-        placeholder='Name'
-        onChangeText={changeName}
-        name='name'
-        value={localPreset.name}
-        autoCapitalize='none'
-        maxLength={25}
-      />
-      <TextInput
-        style={[styles.input, { color: income ? theme.colors.success : theme.colors.danger }]}
-        placeholder='number'
-        keyboardType='numeric'
-        onChangeText={changeNumber}
-        name='number'
-        value={localPreset.number.toString()}
-        label='number'
-        autoCapitalize='none'
-        autoCorrect={false}
-        maxLength={12}
-      />
-      {/* CategoryPicker */}
-      {pickerActive ? (
-        <View style={styles.picker}>
-          <CategoryPicker
-            selected={selected}
-            selectedCategory={selectedCategory}
-            localPreset={localPreset}
-            setLocalPreset={setLocalPreset}
-            pickerRef={pickerRef}
-          />
-          <TouchableOpacity onPress={onPickerBtnPress}>
-            <Text style={styles.selectBtnInPicker}>Select</Text>
-          </TouchableOpacity>
+    );
+  } else {
+    return (
+      <View style={styles.card}>
+        {/* Title */}
+        <View style={styles.titlerow}>
+          <Text style={styles.title}>ADD TO BUDGET</Text>
         </View>
-      ) : (
-        <View style={styles.picker}>
-          <TouchableOpacity style={styles.pickerbtnFlex} onPress={onPickerBtnPress}>
-            <Text style={styles.pickerbtn}>{pickerButtonTitle}</Text>
-          </TouchableOpacity>
-        </View>
-      )}
-      {/* Checkboxfield */}
-      {!pickerActive && checkboxfieldActive && (
-        <View style={[{ flex: 5 }, { flexDirection: 'row' }]}>
-          <CheckBoxField localPreset={localPreset} setLocalPreset={setLocalPreset} />
-          <View style={{ marginVertical: 25 }}>
-            <View style={{ flexDirection: 'row' }}>
-              <Text style={[styles.incomeexpensetoggle, { color: income ? theme.colors.success : theme.colors.gray }]}>Income </Text>
-              <Text style={styles.incomeexpensetoggle}> / </Text>
-              <Text style={[styles.incomeexpensetoggle, { color: income ? theme.colors.gray : theme.colors.danger }]}> Expense</Text>
-            </View>
-            <View style={{ alignSelf: 'center', marginTop: 10 }}>
-              <ToggleSwitch
-                isOn={!income}
-                onColor={theme.colors.danger}
-                offColor={theme.colors.success}
-                size='large'
-                onToggle={() => setIncome(!income)}
-              />
-            </View>
+
+        {/* Alerts */}
+        <Alerts />
+
+        {/* Inputs */}
+        <TextInput
+          style={styles.input}
+          placeholder='Name'
+          onChangeText={changeName}
+          name='name'
+          value={localPreset.name}
+          autoCapitalize='none'
+          maxLength={25}
+        />
+        <TextInput
+          style={[styles.input, { color: income ? theme.colors.success : theme.colors.danger }]}
+          placeholder='number'
+          keyboardType='numeric'
+          onChangeText={changeNumber}
+          name='number'
+          value={localPreset.number.toString()}
+          label='number'
+          autoCapitalize='none'
+          autoCorrect={false}
+          maxLength={12}
+        />
+        {/* CategoryPicker */}
+        {pickerActive ? (
+          <View style={styles.picker}>
+            <CategoryPicker
+              selected={selected}
+              selectedCategory={selectedCategory}
+              localPreset={localPreset}
+              setLocalPreset={setLocalPreset}
+              pickerRef={pickerRef}
+            />
+            <TouchableOpacity onPress={onPickerBtnPress}>
+              <Text style={styles.selectBtnInPicker}>Select</Text>
+            </TouchableOpacity>
           </View>
-          {/*  <Button title='Upload CSV-file' onPress={permissionFlow}></Button> */}
-        </View>
-      )}
-      {/* SubmitButton */}
-      {!pickerActive && (
-        <View style={styles.buttonView}>
-          <TouchableOpacity style={styles.button} testID='register-submit-button' placeholder='watwat' onPress={onSubmit} title='Register'>
-            <Text style={styles.registerbtntext}>ADD TO BUDGET</Text>
-          </TouchableOpacity>
-        </View>
-      )}
-      {/* end */}
-    </View>
-  );
+        ) : (
+          <View style={styles.picker}>
+            <TouchableOpacity style={styles.pickerbtnFlex} onPress={onPickerBtnPress}>
+              <Text style={styles.pickerbtn}>{pickerButtonTitle}</Text>
+            </TouchableOpacity>
+          </View>
+        )}
+        {/* Checkboxfield */}
+        {!pickerActive && checkboxfieldActive && (
+          <View style={[{ flex: 5 }, { flexDirection: 'row' }]}>
+            <CheckBoxField localPreset={localPreset} setLocalPreset={setLocalPreset} />
+            <View style={{ marginVertical: 25 }}>
+              <View style={{ flexDirection: 'row' }}>
+                <Text style={[styles.incomeexpensetoggle, { color: income ? theme.colors.success : theme.colors.gray }]}>Income </Text>
+                <Text style={styles.incomeexpensetoggle}> / </Text>
+                <Text style={[styles.incomeexpensetoggle, { color: income ? theme.colors.gray : theme.colors.danger }]}> Expense</Text>
+              </View>
+              <View style={{ alignSelf: 'center', marginTop: 10 }}>
+                <ToggleSwitch
+                  isOn={!income}
+                  onColor={theme.colors.danger}
+                  offColor={theme.colors.success}
+                  size='large'
+                  onToggle={() => setIncome(!income)}
+                />
+              </View>
+            </View>
+            <CSV_DocumentPicker />
+            {/*  <Button title='Upload CSV-file' onPress={permissionFlow}></Button> */}
+          </View>
+        )}
+        {/* SubmitButton */}
+        {!pickerActive && (
+          <View style={styles.buttonView}>
+            <TouchableOpacity
+              style={styles.button}
+              testID='register-submit-button'
+              placeholder='watwat'
+              onPress={onSubmit}
+              title='Register'
+            >
+              <Text style={styles.registerbtntext}>ADD TO BUDGET</Text>
+            </TouchableOpacity>
+          </View>
+        )}
+        {/* end */}
+      </View>
+    );
+  }
 };
 const styles = StyleSheet.create({
   picker: {

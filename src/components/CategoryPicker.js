@@ -49,7 +49,7 @@ const styles = StyleSheet.create({
   picker: {
     //  flex: 1,
     minHeight: 75,
-    maxHeight: 100,
+    //  maxHeight: 100,
     // paddingLeft: 15,
     paddingTop: 15,
     //borderWidth: 1,

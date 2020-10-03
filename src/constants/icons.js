@@ -57,6 +57,8 @@ function getIcon(name) {
       return <MaterialIcons name='payment' size={24} color='black' />;
     case 'delete':
       return <Feather name='delete' size={24} color='#eaeaea' />;
+    case 'delete_dark':
+      return <Feather name='delete' size={24} color='black' />;
     case 'gift':
       return <Feather name='gift' size={24} color='black' />;
     case 'piggybank':

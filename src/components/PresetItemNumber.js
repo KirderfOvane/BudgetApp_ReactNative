@@ -2,7 +2,7 @@ import React from 'react';
 import { TouchableOpacity, Text, StyleSheet, TextInput } from 'react-native';
 import { theme } from '../constants';
 
-const PresetItemNumber = ({ onNumberPress, InputMode, inputNumRef, changeNumber, localPreset, onBlur, income }) => {
+const PresetItemNumber = ({ onNumberPress, InputMode, inputNumRef, changeNumber, localPreset, onBlur, income, fontSize }) => {
   return (
     <TouchableOpacity style={{ flex: 4, minWidth: 10, maxWidth: 110 }} onPress={onNumberPress}>
       {InputMode === 'number' ? (
@@ -19,21 +19,26 @@ const PresetItemNumber = ({ onNumberPress, InputMode, inputNumRef, changeNumber,
           onBlur={onBlur}
         />
       ) : (
-        <Text style={localPreset.number > 0 ? styles.positivenumber : styles.negativenumber}>{localPreset.number}</Text>
+        <Text
+          style={localPreset.number > 0 ? [styles.positivenumber, { fontSize: fontSize }] : [styles.negativenumber, { fontSize: fontSize }]}
+        >
+          {localPreset.number}
+        </Text>
       )}
     </TouchableOpacity>
   );
 };
-
+//default prop values
+PresetItemNumber.defaultProps = {
+  fontSize: theme.sizes.font,
+};
 // css
 const styles = StyleSheet.create({
   positivenumber: {
     color: '#58c45f',
-    fontSize: theme.sizes.font,
   },
   negativenumber: {
     color: '#ec5a23',
-    fontSize: theme.sizes.font,
   },
   input: {
     textAlign: 'center',

@@ -2,7 +2,7 @@ import React from 'react';
 import { TouchableOpacity, Text, TextInput, StyleSheet } from 'react-native';
 import { theme } from '../constants';
 
-const PresetItemName = ({ onNamePress, InputMode, inputNameRef, changeName, localPreset, onBlur }) => {
+const PresetItemName = ({ onNamePress, InputMode, inputNameRef, changeName, localPreset, onBlur, fontSize }) => {
   return (
     <>
       <TouchableOpacity style={{ flex: 5 }} onPress={onNamePress}>
@@ -17,7 +17,7 @@ const PresetItemName = ({ onNamePress, InputMode, inputNameRef, changeName, loca
             onBlur={onBlur}
           />
         ) : (
-          <Text numberOfLines={1} ellipsizeMode={'tail'} style={styles.namebutton}>
+          <Text numberOfLines={1} ellipsizeMode={'tail'} style={[styles.namebutton, { fontSize: fontSize }]}>
             {localPreset.month}
             {localPreset.name}
           </Text>
@@ -26,7 +26,10 @@ const PresetItemName = ({ onNamePress, InputMode, inputNameRef, changeName, loca
     </>
   );
 };
-
+//default prop values
+PresetItemName.defaultProps = {
+  fontSize: theme.sizes.font,
+};
 // css
 const styles = StyleSheet.create({
   namebutton: {
