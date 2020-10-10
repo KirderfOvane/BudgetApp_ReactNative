@@ -9,7 +9,7 @@ const PresetItemName = ({ onNamePress, InputMode, inputNameRef, changeName, loca
         {InputMode === 'name' ? (
           <TextInput
             ref={inputNameRef}
-            style={styles.input}
+            style={localPreset.markDelete === false ? styles.input : styles.inputGrayedOut}
             onChangeText={changeName}
             name='name'
             value={localPreset.name}
@@ -49,6 +49,17 @@ const styles = StyleSheet.create({
     // minWidth: 25,
     fontSize: theme.sizes.font,
     color: theme.colors.dark,
+  },
+  inputGrayedOut: {
+    textAlign: 'center',
+    borderWidth: 1,
+    borderColor: 'gray',
+    borderRadius: 12,
+    maxHeight: 100,
+    minHeight: 40,
+    // minWidth: 25,
+    fontSize: theme.sizes.font,
+    color: theme.colors.gray,
   },
 });
 

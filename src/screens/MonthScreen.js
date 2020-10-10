@@ -3,6 +3,7 @@ import { View, Text, StyleSheet, FlatList, Dimensions, KeyboardAvoidingView } fr
 
 import PresetContext from '../context/preset/presetContext';
 import AuthContext from '../context/auth/authContext';
+import AlertContext from '../context/alert/alertContext';
 
 import SwipeItem from '../components/SwipeItem';
 import YearBalanceScreen from './YearBalanceScreen';
@@ -11,6 +12,8 @@ import FH_ActivityIndicator from '../components/FH_ActivityIndicator';
 const MonthScreen = ({ navigation }) => {
   //context
   const presetContext = React.useContext(PresetContext);
+  const alertContext = React.useContext(AlertContext);
+  const { setAlert } = alertContext;
   const authContext = React.useContext(AuthContext);
   const {
     presets,
@@ -42,6 +45,8 @@ const MonthScreen = ({ navigation }) => {
     setPurchase,
     setTotalOfAllPiggybanksThisMonth,
     setMonthPiggySavingsSums,
+    contacterror,
+    clearContactError,
   } = presetContext;
   const { loading } = authContext;
 
@@ -361,10 +366,19 @@ const MonthScreen = ({ navigation }) => {
     TotalOfAllPiggybanksThisMonth && TotalOfAllPiggybanksThisMonth !== 0 && setTotalOfAllPiggybanksThisMonth(TotalOfAllPiggybanksThisMonth);
     // eslint-disable-next-line
   }, [presetContext.month, presets, year]);
+
+  // Handles alert when wrong input is uploaded to csv-upload. Have to be here as if in children it will rerender with all children (windowSize+1).
+  React.useEffect(() => {
+    contacterror === 'Wrong filetype, only accepts csv!' && setAlert('Wrong filetype, only accepts csv!', 'danger');
+    contacterror === 'CSV does not contain valid Nordea-values!' && setAlert('CSV does not contain valid Nordea-values!', 'danger');
+    clearContactError();
+  }, [contacterror]);
+
   //renderItem
   const renderItem = (object) => {
     return <SwipeItem index={object.index} activeindex={indexCounter} monthlist={MonthList} setMonthList={setMonthList} />;
   };
+
   //jsx
   return (
     <>

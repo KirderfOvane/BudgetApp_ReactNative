@@ -19,11 +19,7 @@ const PresetItemNumber = ({ onNumberPress, InputMode, inputNumRef, changeNumber,
           onBlur={onBlur}
         />
       ) : (
-        <Text
-          style={localPreset.number > 0 ? [styles.positivenumber, { fontSize: fontSize }] : [styles.negativenumber, { fontSize: fontSize }]}
-        >
-          {localPreset.number}
-        </Text>
+        <Text style={localPreset.number > 0 ? styles.positivenumber : styles.negativenumber}>{localPreset.number}</Text>
       )}
     </TouchableOpacity>
   );
@@ -35,10 +31,12 @@ PresetItemNumber.defaultProps = {
 // css
 const styles = StyleSheet.create({
   positivenumber: {
-    color: '#58c45f',
+    color: theme.colors.success,
+    fontSize: theme.sizes.font,
   },
   negativenumber: {
     color: '#ec5a23',
+    fontSize: theme.sizes.font,
   },
   input: {
     textAlign: 'center',

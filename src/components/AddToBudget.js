@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, TextInput } from 'react-native';
 import { theme } from '../constants';
 import Alerts from '../components/Alerts';
@@ -21,7 +21,26 @@ const AddToBudget = ({ month }) => {
 
   // context presets
   const presetContext = React.useContext(PresetContext);
-  const { presets, addPreset, edit, cancelEdit, sendEdit, calcSum, year, uploadCSV, csvpresets } = presetContext;
+  const {
+    presets,
+    addPreset,
+    edit,
+    cancelEdit,
+    sendEdit,
+    calcSum,
+    year,
+    uploadCSV,
+    csvpresets,
+    contacterror,
+    clearContactError,
+  } = presetContext;
+
+  /* React.useEffect(() => {
+    console.log('addtobudget contacterror ran');
+    contacterror === 'Wrong filetype, only accepts csv!' && setAlert('Wrong filetype, only accepts csv!', 'danger');
+    contacterror === 'CSV does not contain valid Nordea-values!' && setAlert('CSV does not contain valid Nordea-values!', 'danger');
+    clearContactError();
+  }, [contacterror]); */
 
   // states
   const [localPreset, setLocalPreset] = React.useState({
@@ -130,7 +149,7 @@ const AddToBudget = ({ month }) => {
           <Text style={[styles.title]}>Select Categories</Text>
         </View>
         {/* Csv */}
-        <Csv_CreateTransactions />
+        <Csv_CreateTransactions setAlert={setAlert} />
       </View>
     );
   } else {
@@ -206,8 +225,8 @@ const AddToBudget = ({ month }) => {
                   onToggle={() => setIncome(!income)}
                 />
               </View>
+              <CSV_DocumentPicker />
             </View>
-            <CSV_DocumentPicker />
             {/*  <Button title='Upload CSV-file' onPress={permissionFlow}></Button> */}
           </View>
         )}

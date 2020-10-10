@@ -13,6 +13,7 @@ import {
   SUM,
   MONTHSUM,
   CONTACT_ERROR,
+  CLEAR_CONTACT_ERROR,
   CLEAR_PRESETS,
   GET_PRESETS,
   ADD_MONTH,
@@ -61,7 +62,7 @@ const PresetState = (props) => {
     presets: null,
     sum: null,
     edit: null,
-    error: null,
+    contacterror: null,
     month: null, // year implemented. Only indirect affects
     filtered: null, // not used atm
     MonthSum: null, // year implemented
@@ -181,7 +182,7 @@ const PresetState = (props) => {
 
   // Upload CSV
   const uploadCSV = async (formData) => {
-    console.log('upload ran');
+    // console.log('upload ran');
     const config = {
       headers: {
         'Content-Type': 'multipart/form-data',
@@ -190,7 +191,7 @@ const PresetState = (props) => {
     };
     try {
       const res = await trackerApi.post('/api/userpreset/upload', formData, config);
-
+      // console.log(res);
       dispatch({ type: UPLOAD_CSV, payload: res.data });
     } catch (err) {
       dispatch({
@@ -198,6 +199,10 @@ const PresetState = (props) => {
         payload: err.response.data,
       });
     }
+  };
+  // Clear Contact Error
+  const clearContactError = () => {
+    dispatch({ type: CLEAR_CONTACT_ERROR });
   };
 
   //Update CSV
@@ -1088,7 +1093,7 @@ const PresetState = (props) => {
       value={{
         presets: state.presets,
         edit: state.edit,
-        error: state.error,
+        contacterror: state.contacterror,
         sum: state.sum,
         month: state.month,
         MonthSum: state.MonthSum,
@@ -1169,6 +1174,7 @@ const PresetState = (props) => {
         clearCsv,
         removeCSV,
         buildFlatListData,
+        clearContactError,
       }}
     >
       {props.children}

@@ -12,6 +12,8 @@ import Purchases from '../components/Purchases';
 import MonthSavings from '../components/MonthSavings';
 import FH_SectionList from './FH_SectionList';
 
+import UseMemoTest from './UseMemoTest';
+
 const SwipeItem = ({ monthlist, activeindex, index, setMonthList, data }) => {
   //context
   const { filtered, filteredmonthandnegnum, filteredmonthandposnum } = React.useContext(PresetContext);
@@ -31,7 +33,8 @@ const SwipeItem = ({ monthlist, activeindex, index, setMonthList, data }) => {
   // initialNumToRender,windowSize to 3:
     PresetFilter(neg): 8 ram, 1332 Views  60 Views per item 
   */
-  // console.log('SwipeItemUpdate');
+
+  //console.log('SwipeItemRender');
 
   return (
     <View style={styles.container}>

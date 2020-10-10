@@ -48,6 +48,7 @@ import {
   LOGOUT,
   PRE_FILTER,
   SET_MONTH_PIGGYSAVINGS,
+  CLEAR_CONTACT_ERROR,
 } from '../types';
 import getCurrentYear from '../../../getCurrentYear';
 
@@ -337,7 +338,12 @@ export default (state, action) => {
     case CONTACT_ERROR:
       return {
         ...state,
-        error: action.payload,
+        contacterror: action.payload,
+      };
+    case CLEAR_CONTACT_ERROR:
+      return {
+        ...state,
+        contacterror: null,
       };
     default:
       return state;

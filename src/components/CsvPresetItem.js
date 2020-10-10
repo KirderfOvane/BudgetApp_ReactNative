@@ -4,7 +4,7 @@ import { icons, theme } from '../constants';
 import PresetContext from '../context/preset/presetContext';
 import PresetItemName from './PresetItemName';
 import PresetItemNumber from './PresetItemNumber';
-import { SafeAreaView } from 'react-native-safe-area-context';
+import SelectCategory from './SelectCategory';
 
 // Inline Requires
 let CategoryPicker = null;
@@ -14,11 +14,12 @@ const CsvPresetItem = ({ preset, isFocused }) => {
   // State
   const [InputMode, toggleInputMode] = React.useState('');
   const [localPreset, setLocalPreset] = React.useState({
-    _id: preset.item._id,
+    _id: preset.item.id,
     name: preset.item.name,
     number: preset.item.number,
     category: 'Select Category',
     type: 'Overhead',
+    markDelete: false,
     //piggybank: preset.item.piggybank,
   });
   const [income, setIncome] = React.useState(true);
@@ -31,6 +32,7 @@ const CsvPresetItem = ({ preset, isFocused }) => {
   const onDeletePress = (e) => {
     console.log('delete');
     console.log(localPreset._id);
+    setLocalPreset({ ...localPreset, markDelete: true });
   };
   const onCategoryPress = (e) => {
     if (localPreset.category !== 'Select Category') {
@@ -149,18 +151,9 @@ const CsvPresetItem = ({ preset, isFocused }) => {
             onBlur={onBlur}
             income={income}
           />
-
-          <TouchableOpacity style={{ paddingTop: 10 }} onPress={onCategoryPress}>
-            {localPreset.category !== 'Select Category' ? (
-              <Text style={styles.categoryIcon}>{icons.getIcon(localPreset.category.toLowerCase())}</Text>
-            ) : (
-              <Text style={{ borderWidth: 2, borderColor: 'black', color: 'black', backgroundColor: 'orange', borderRadius: 5 }}>
-                Select Category
-              </Text>
-            )}
-          </TouchableOpacity>
+          <SelectCategory onCategoryPress={onCategoryPress} localPreset={localPreset} />
           <TouchableOpacity style={styles.deleteButton} onPress={onDeletePress}>
-            <Text>{icons.getIcon('delete_dark')}</Text>
+            <Text>{localPreset.markDelete === false ? icons.getIcon('delete_dark') : icons.getIcon('gift')}</Text>
           </TouchableOpacity>
         </View>
       )}
