@@ -27,6 +27,7 @@ const CSV_DocumentPicker = () => {
     }
   }, [file]);
 
+  // jsx
   return (
     <TouchableOpacity onPress={_pickDocument} style={styles.container}>
       <Text>Upload CSV-file</Text>
@@ -34,6 +35,7 @@ const CSV_DocumentPicker = () => {
   );
 };
 
+// styling
 const styles = StyleSheet.create({
   container: {
     paddingVertical: 15,

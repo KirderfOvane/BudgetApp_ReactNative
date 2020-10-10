@@ -15,32 +15,9 @@ const AddToBudget = ({ month }) => {
   const alertContext = React.useContext(AlertContext);
   const { setAlert } = alertContext;
 
-  // context auth
-  const authContext = React.useContext(AuthContext);
-  const { isAuthenticated, clearErrors, login, error, forgotPassword } = authContext;
-
   // context presets
   const presetContext = React.useContext(PresetContext);
-  const {
-    presets,
-    addPreset,
-    edit,
-    cancelEdit,
-    sendEdit,
-    calcSum,
-    year,
-    uploadCSV,
-    csvpresets,
-    contacterror,
-    clearContactError,
-  } = presetContext;
-
-  /* React.useEffect(() => {
-    console.log('addtobudget contacterror ran');
-    contacterror === 'Wrong filetype, only accepts csv!' && setAlert('Wrong filetype, only accepts csv!', 'danger');
-    contacterror === 'CSV does not contain valid Nordea-values!' && setAlert('CSV does not contain valid Nordea-values!', 'danger');
-    clearContactError();
-  }, [contacterror]); */
+  const { addPreset, year, csvpresets } = presetContext;
 
   // states
   const [localPreset, setLocalPreset] = React.useState({

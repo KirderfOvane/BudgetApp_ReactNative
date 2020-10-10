@@ -1,25 +1,20 @@
 import React from 'react';
-import { View, Text, StyleSheet, ImageBackground, ScrollView, FlatList, SafeAreaView } from 'react-native';
+import { View, StyleSheet, ImageBackground } from 'react-native';
 import DateMenu from './DateMenu';
-import PresetFilter from './PresetFilter';
 import AddToBudget from './AddToBudget';
 import YearBalance from '../components/YearBalance';
 import CategoryBalance from '../components/CategoryBalance';
 import PresetContext from '../context/preset/presetContext';
 import { theme } from '../constants';
-import MonthStats from './MonthStats';
 import Purchases from '../components/Purchases';
 import MonthSavings from '../components/MonthSavings';
 import FH_SectionList from './FH_SectionList';
 
-import UseMemoTest from './UseMemoTest';
-
-const SwipeItem = ({ monthlist, activeindex, index, setMonthList, data }) => {
+const SwipeItem = ({ monthlist, activeindex, index }) => {
   //context
   const { filtered, filteredmonthandnegnum, filteredmonthandposnum } = React.useContext(PresetContext);
-  //console.log(data);
-  //const { filtered, filteredmonthandnegnum, filteredmonthandposnum } = presetContext;
-  /*
+
+  /* Diverse värden från Profiling som är från innan optimering.
   DateMenu: 8 ram, 143 Views 
   ImageBackground: 0 ram, 26 Views
   MonthStats: 10 ram, 208 Views
@@ -29,12 +24,9 @@ const SwipeItem = ({ monthlist, activeindex, index, setMonthList, data }) => {
   PresetItem: category: 1514 Views, 44 Views per item
   PresetItem: number: 1514 Views, 44 Views per item
   PresetItem: name: 1514 Views, 44 Views per item
-  
-  // initialNumToRender,windowSize to 3:
+    // initialNumToRender,windowSize to 3:
     PresetFilter(neg): 8 ram, 1332 Views  60 Views per item 
   */
-
-  //console.log('SwipeItemRender');
 
   return (
     <View style={styles.container}>
@@ -43,23 +35,8 @@ const SwipeItem = ({ monthlist, activeindex, index, setMonthList, data }) => {
         {isNaN(monthlist[activeindex].month) ? ( // month
           <>
             {!filtered || filtered === 'positive' || filtered === 'negative' ? (
-              /*    <ScrollView showsVerticalScrollIndicator={false} removeClippedSubviews={true}> */
-              /*  <MonthStats /> */
               <View style={styles.card}>
                 <FH_SectionList posData={filteredmonthandposnum} negData={filteredmonthandnegnum} />
-                {/*  {filtered === null || filtered === 'positive' ? (
-                    <View style={styles.filterTitleView}>
-                      <Text style={styles.filterTitleText}>Income</Text>
-                      <PresetFilter data={filteredmonthandposnum} />
-                    </View>
-                  ) : null}
-                  {filtered === null || filtered === 'negative' ? (
-                    <View style={styles.filterTitleView}>
-                      <Text style={styles.filterTitleText}>Expenses</Text>
-                      <PresetFilter data={filteredmonthandnegnum} />
-                    </View>
-                  ) : null} */}
-                {/* </ScrollView> */}
               </View>
             ) : null}
 
