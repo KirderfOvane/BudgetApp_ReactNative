@@ -3,25 +3,28 @@ import { TouchableOpacity, Text, StyleSheet, TextInput } from 'react-native';
 import { theme } from '../constants';
 
 const PresetItemNumber = ({ onNumberPress, InputMode, inputNumRef, changeNumber, localPreset, onBlur, income, fontSize }) => {
+  // destructuring
+  const { number, markDelete } = localPreset;
   return (
-    <TouchableOpacity style={{ flex: 4, minWidth: 10, maxWidth: 110 }} onPress={onNumberPress}>
-      {InputMode === 'number' ? (
-        <TextInput
-          ref={inputNumRef}
-          style={[styles.input, { color: income ? theme.colors.success : theme.colors.danger }]}
-          keyboardType='numeric'
-          onChangeText={changeNumber}
-          name='number'
-          value={localPreset.number.toString()}
-          autoCapitalize='none'
-          autoCorrect={false}
-          maxLength={8}
-          onBlur={onBlur}
-        />
-      ) : (
-        <Text style={localPreset.number > 0 ? styles.positivenumber : styles.negativenumber}>{localPreset.number}</Text>
-      )}
-    </TouchableOpacity>
+    <>
+      <TouchableOpacity style={{ flex: 4, minWidth: 10, maxWidth: 110 }} onPress={onNumberPress} ref={inputNumRef}>
+        {InputMode === 'number' && !markDelete ? (
+          <TextInput
+            style={[styles.input, { color: income ? theme.colors.success : theme.colors.danger }]}
+            keyboardType='numeric'
+            onChangeText={changeNumber}
+            name='number'
+            value={number.toString()}
+            autoCapitalize='none'
+            autoCorrect={false}
+            maxLength={8}
+            onBlur={onBlur}
+          />
+        ) : (
+          <Text style={!markDelete ? (number > 0 ? styles.positivenumber : styles.negativenumber) : styles.grayedOutNum}>{number}</Text>
+        )}
+      </TouchableOpacity>
+    </>
   );
 };
 //default prop values
@@ -38,6 +41,10 @@ const styles = StyleSheet.create({
     color: '#ec5a23',
     fontSize: theme.sizes.font,
   },
+  grayedOutNum: {
+    color: theme.colors.gray,
+    fontSize: theme.sizes.font,
+  },
   input: {
     textAlign: 'center',
     borderWidth: 1,
@@ -45,7 +52,6 @@ const styles = StyleSheet.create({
     borderRadius: 12,
     maxHeight: 100,
     minHeight: 40,
-
     fontSize: theme.sizes.font,
     color: theme.colors.dark,
   },

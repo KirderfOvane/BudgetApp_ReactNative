@@ -59,6 +59,8 @@ function getIcon(name) {
       return <Feather name='delete' size={24} color='#eaeaea' />;
     case 'delete_dark':
       return <Feather name='delete' size={24} color='black' />;
+    case 'plus':
+      return <AntDesign name='plus' size={24} color='gray' />;
     case 'gift':
       return <Feather name='gift' size={24} color='black' />;
     case 'piggybank':

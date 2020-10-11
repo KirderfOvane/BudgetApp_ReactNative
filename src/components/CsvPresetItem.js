@@ -30,15 +30,14 @@ const CsvPresetItem = ({ preset, isFocused }) => {
 
   // Activate editmode
   const onDeletePress = (e) => {
-    console.log('delete');
-    console.log(localPreset._id);
-    setLocalPreset({ ...localPreset, markDelete: true });
+    isFocused(preset.index);
+    const markDelTempValHolder = localPreset.markDelete;
+    setLocalPreset({ ...localPreset, markDelete: !markDelTempValHolder });
   };
   const onCategoryPress = (e) => {
     if (localPreset.category !== 'Select Category') {
       setPickerButtonTitle(localPreset.category); //<--
     }
-    // inputCategoryRef.current.
     if (CategoryPicker === null) {
       CategoryPicker = require('./CategoryPicker').default;
     }
@@ -49,7 +48,7 @@ const CsvPresetItem = ({ preset, isFocused }) => {
   // console.log(pickerActive);
   const onNumberPress = (e) => {
     toggleInputMode('number');
-    // localPreset.number > 0 ? filterPresets('positive') : filterPresets('negative');
+    isFocused(preset.index);
   };
   const onNamePress = (e) => {
     isFocused(preset.index);
@@ -64,7 +63,6 @@ const CsvPresetItem = ({ preset, isFocused }) => {
 
   // Deactivate editmode
   const onBlur = () => {
-    //filterPresets(null);
     toggleInputMode('finished');
   };
 
@@ -130,6 +128,7 @@ const CsvPresetItem = ({ preset, isFocused }) => {
           />
         </>
       ) : (
+        /* name */
         <View style={styles.container}>
           <PresetItemName
             fontSize={theme.sizes.base}
@@ -140,7 +139,7 @@ const CsvPresetItem = ({ preset, isFocused }) => {
             localPreset={localPreset}
             onBlur={onBlur}
           />
-
+          {/* number */}
           <PresetItemNumber
             fontSize={theme.sizes.base}
             onNumberPress={onNumberPress}
@@ -151,9 +150,11 @@ const CsvPresetItem = ({ preset, isFocused }) => {
             onBlur={onBlur}
             income={income}
           />
+          {/* category */}
           <SelectCategory onCategoryPress={onCategoryPress} localPreset={localPreset} />
+          {/* markdeletebutton */}
           <TouchableOpacity style={styles.deleteButton} onPress={onDeletePress}>
-            <Text>{localPreset.markDelete === false ? icons.getIcon('delete_dark') : icons.getIcon('gift')}</Text>
+            <Text>{localPreset.markDelete === false ? icons.getIcon('delete_dark') : icons.getIcon('plus')}</Text>
           </TouchableOpacity>
         </View>
       )}

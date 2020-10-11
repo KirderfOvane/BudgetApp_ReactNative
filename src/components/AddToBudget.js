@@ -80,7 +80,6 @@ const AddToBudget = ({ month }) => {
     }
 
     // validation passed
-
     addPreset({
       name: localPreset.name,
       number: income ? parseInt(localPreset.number) : parseInt(localPreset.number) * -1,
@@ -108,21 +107,7 @@ const AddToBudget = ({ month }) => {
     return (
       <View style={[styles.card, { paddingHorizontal: 0, marginHorizontal: 5 }]}>
         {/* Title */}
-        <View
-          style={[
-            styles.titlerow,
-            {
-              overflow: 'visible',
-              backgroundColor: theme.colors.light,
-              shadowOffset: { width: 0, height: 10 },
-              shadowColor: 'gray',
-              shadowOpacity: 0.1,
-              paddingBottom: 5,
-              borderColor: theme.colors.black,
-              shadowRadius: 5,
-            },
-          ]}
-        >
+        <View style={[styles.titlerow, styles.dropshadow]}>
           <Text style={[styles.title]}>Select Categories</Text>
         </View>
         {/* Csv */}
@@ -227,6 +212,16 @@ const AddToBudget = ({ month }) => {
   }
 };
 const styles = StyleSheet.create({
+  dropshadow: {
+    overflow: 'visible',
+    backgroundColor: theme.colors.light,
+    shadowOffset: { width: 0, height: 10 },
+    shadowColor: 'gray',
+    shadowOpacity: 0.1,
+    paddingBottom: 5,
+    borderColor: theme.colors.black,
+    shadowRadius: 5,
+  },
   picker: {
     //  flex: 1,
     minHeight: 75,

@@ -3,23 +3,23 @@ import { TouchableOpacity, Text, TextInput, StyleSheet } from 'react-native';
 import { theme } from '../constants';
 
 const PresetItemName = ({ onNamePress, InputMode, inputNameRef, changeName, localPreset, onBlur, fontSize }) => {
+  // destructuring
+  const { markDelete, name, month } = localPreset;
+
+  // jsx
   return (
     <>
-      <TouchableOpacity style={{ flex: 5 }} onPress={onNamePress}>
-        {InputMode === 'name' ? (
-          <TextInput
-            ref={inputNameRef}
-            style={localPreset.markDelete === false ? styles.input : styles.inputGrayedOut}
-            onChangeText={changeName}
-            name='name'
-            value={localPreset.name}
-            autoCorrect={false}
-            onBlur={onBlur}
-          />
+      <TouchableOpacity style={{ flex: 5 }} onPress={onNamePress} ref={inputNameRef}>
+        {InputMode === 'name' && !markDelete ? (
+          <TextInput style={styles.input} onChangeText={changeName} name='name' value={name} autoCorrect={false} onBlur={onBlur} />
         ) : (
-          <Text numberOfLines={1} ellipsizeMode={'tail'} style={[styles.namebutton, { fontSize: fontSize }]}>
-            {localPreset.month}
-            {localPreset.name}
+          <Text
+            numberOfLines={1}
+            ellipsizeMode={'tail'}
+            style={[styles.namebutton, { fontSize: fontSize }, markDelete && styles.nameGrayedOut]}
+          >
+            {month}
+            {name}
           </Text>
         )}
       </TouchableOpacity>
@@ -37,7 +37,7 @@ const styles = StyleSheet.create({
     fontSize: theme.sizes.font,
     marginRight: 8,
     fontWeight: 'normal',
-    color: '#000000',
+    color: theme.colors.black,
   },
   input: {
     textAlign: 'center',
@@ -50,15 +50,7 @@ const styles = StyleSheet.create({
     fontSize: theme.sizes.font,
     color: theme.colors.dark,
   },
-  inputGrayedOut: {
-    textAlign: 'center',
-    borderWidth: 1,
-    borderColor: 'gray',
-    borderRadius: 12,
-    maxHeight: 100,
-    minHeight: 40,
-    // minWidth: 25,
-    fontSize: theme.sizes.font,
+  nameGrayedOut: {
     color: theme.colors.gray,
   },
 });
