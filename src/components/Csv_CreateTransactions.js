@@ -7,18 +7,36 @@ import CsvPrompt from './CsvPrompt';
 
 const Csv_CreateTransactions = ({ onSubmit }) => {
   // context
-  const { csvpresets } = React.useContext(PresetContext);
-  //console.log(csvpresets.length);
+  const { csvpresets, submitCsvItems } = React.useContext(PresetContext);
+
   // state
   const [Prompt, setPrompt] = React.useState(false);
   const [validCsv, setValidCsv] = React.useState(null);
-
   // useRef
   const flatList = React.useRef();
   // focus on item when clicked on.
   const isFocused = (index) => {
     flatList.current.scrollToIndex({ index });
   };
+
+  // useEffect
+  React.useEffect(() => {
+    //check for valid csv to add
+    const isValidCsv = csvpresets.filter((item) => (item.category !== undefined && item.markDelete === false ? item : null));
+    setValidCsv(isValidCsv);
+
+    // if no invalid csv items submit,otherwise setPrompt to true
+    if (isValidCsv.length !== 0 && isValidCsv.length !== csvpresets.length) {
+      setPrompt(true);
+    } else {
+      submitCsvItems('submit');
+    }
+    if (csvpresets.length <= 1) {
+      clearCsv();
+      setPrompt(false);
+    }
+    //eslint-disable-next-line
+  }, [csvpresets]); //breaks if you add clearCsv and submitCsvItems
 
   // renderItem
   const renderItem = (csvpreset) => {

@@ -191,7 +191,8 @@ const PresetState = (props) => {
     };
     try {
       const res = await trackerApi.post('/api/userpreset/upload', formData, config);
-      // console.log(res);
+      // console.log(res.data.map((item) => item.id));
+      // console.log(res.data.length);
       dispatch({ type: UPLOAD_CSV, payload: res.data });
     } catch (err) {
       dispatch({
@@ -208,7 +209,8 @@ const PresetState = (props) => {
   //Update CSV
   const updateCsvPresets = (preset) => {
     // console.log(preset);
-    //console.log(csvpresets);
+    //console.log(state.csvpresets.length);
+    //console.log(state.csvpresets.map((item) => item.id));
     dispatch({ type: UPDATE_CSV, payload: preset });
   };
 

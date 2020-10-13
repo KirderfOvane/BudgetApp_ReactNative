@@ -103,7 +103,7 @@ export default (state, action) => {
     case UPDATE_CSV:
       return {
         ...state,
-        csvpresets: state.csvpresets.map((preset) => (preset.id === action.payload._id ? action.payload : preset)),
+        csvpresets: state.csvpresets.map((preset) => (preset.id === action.payload.id ? action.payload : preset)),
       };
     case REMOVE_CSV:
       return {

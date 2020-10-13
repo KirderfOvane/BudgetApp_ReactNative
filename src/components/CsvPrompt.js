@@ -7,7 +7,6 @@ const CsvPrompt = ({ setPrompt, validCsv, csvpresets }) => {
   return (
     <View>
       <Text>
-        {' '}
         {csvpresets.length - validCsv.length} of {csvpresets.length}
         transactions does not have a category selected
       </Text>

@@ -3,37 +3,14 @@ import { TouchableOpacity, Text, StyleSheet } from 'react-native';
 import PresetContext from '../context/preset/presetContext';
 import { theme } from '../constants';
 
-const Csv_CreateTransactions_Footer = ({ setPrompt, setValidCsv }) => {
+const Csv_CreateTransactions_Footer = () => {
   // context
-  const { csvpresets, submitCsvItems } = React.useContext(PresetContext);
+  const { submitCsvItems } = React.useContext(PresetContext);
   // logic
 
   const onAddToBudgetClick = () => {
     submitCsvItems('step1');
   };
-
-  // useEffect
-  React.useEffect(() => {
-    //check for valid csv to add
-
-    //const tests = csvpresets.filter((item) => (item.category && item.markdelete === false ? item : null));
-    //const tests = csvpresets.filter((item) => (item.category ? item : null));
-    console.log(csvpresets);
-    setValidCsv(isValidCsv);
-    //console.log(csvpresets.length);
-    // if no invalid csv items submit,otherwise setPrompt to true
-    if (isValidCsv.length !== 0 && isValidCsv.length !== csvpresets.length) {
-      setPrompt(true);
-    } else {
-      submitCsvItems('submit');
-    }
-
-    if (csvpresets.length <= 1) {
-      clearCsv();
-      setPrompt(false);
-    }
-    //eslint-disable-next-line
-  }, [csvpresets]); //breaks if you add clearCsv and submitCsvItems
 
   return (
     <TouchableOpacity
