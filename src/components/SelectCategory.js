@@ -6,7 +6,7 @@ const SelectCategory = ({ localPreset, onCategoryPress }) => {
   const { markDelete, category } = localPreset;
   //jsx
   return (
-    <TouchableOpacity style={{ paddingTop: 10 }} onPress={onCategoryPress}>
+    <TouchableOpacity onPress={onCategoryPress}>
       {category !== 'Select Category' ? (
         <Text style={[styles.categoryIcon, markDelete && styles.iconGrayedOut]}>{icons.getIcon(category.toLowerCase())}</Text>
       ) : (
@@ -24,15 +24,19 @@ const styles = StyleSheet.create({
     backgroundColor: theme.colors.light,
     borderRadius: 5,
   },
+
   categorybuttonActive: {
     borderWidth: 2,
     borderColor: 'black',
     color: 'black',
     backgroundColor: 'orange',
     borderRadius: 5,
+    overflow: 'hidden',
+    paddingVertical: 5,
+    paddingHorizontal: 2,
   },
   categoryIcon: {
-    flex: 1,
+    //  flex: 1,
     marginHorizontal: 10,
   },
   iconGrayedOut: {

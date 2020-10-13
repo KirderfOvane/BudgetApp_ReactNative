@@ -4,6 +4,7 @@ import PresetContext from '../context/preset/presetContext';
 import AuthContext from '../context/auth/authContext';
 import SwipeItem from '../components/SwipeItem';
 import { NavigationEvents } from 'react-navigation';
+
 const YearBalanceScreen = ({ navigation }) => {
   //context
   const presetContext = React.useContext(PresetContext);
@@ -26,7 +27,7 @@ const YearBalanceScreen = ({ navigation }) => {
       //swipe right
       addMonth('January');
       navigation.navigate('Month');
-    } else {
+    } else if (newindex < 6) {
       setYear(parseInt(year) - 1);
       navigation.navigate('Month', { fromYear: 'December' });
     }
@@ -38,6 +39,7 @@ const YearBalanceScreen = ({ navigation }) => {
   const doFocus = () => {
     setFocus(true);
   };
+
   return (
     <>
       <NavigationEvents onWillFocus={doFocus} onWillBlur={notFocus} />

@@ -6,11 +6,12 @@ import PresetItemName from './PresetItemName';
 import PresetItemNumber from './PresetItemNumber';
 import SelectCategory from './SelectCategory';
 
-// Inline Requires
+// Inline Requires init variable
 let CategoryPicker = null;
 const CsvPresetItem = ({ preset, isFocused }) => {
-  const presetContext = React.useContext(PresetContext);
-  const { setEdit, sendEdit, edit, buildFlatListData, cancelEdit, filterPresets, clearFilter } = presetContext;
+  // Context
+  const { doSubmitCsv, updateCsvPresets } = React.useContext(PresetContext);
+
   // State
   const [InputMode, toggleInputMode] = React.useState('');
   const [localPreset, setLocalPreset] = React.useState({
@@ -45,7 +46,6 @@ const CsvPresetItem = ({ preset, isFocused }) => {
     setPickerActive(!pickerActive);
   };
 
-  // console.log(pickerActive);
   const onNumberPress = (e) => {
     toggleInputMode('number');
     isFocused(preset.index);
@@ -79,7 +79,7 @@ const CsvPresetItem = ({ preset, isFocused }) => {
   const inputNameRef = React.useRef();
   const inputCategoryRef = React.useRef();
 
-  // useEffect
+  // useEffect input-interaction
   React.useEffect(() => {
     // update database when edit is finished
     if (InputMode === 'finished') {
@@ -90,6 +90,19 @@ const CsvPresetItem = ({ preset, isFocused }) => {
     InputMode === 'name' && inputNameRef.current.focus();
     InputMode === 'number' && inputNumRef.current.focus();
   }, [InputMode]);
+
+  const addToDB = () => {
+    //  console.log('addtoDB reached');
+  };
+  // useEffect add csvpresets to db in 2 steps
+  React.useEffect(() => {
+    //  console.log('CsvPresetItem useEffect ran' + doSubmitCsv);
+    doSubmitCsv === 'step1' && localPreset.category !== 'Select Category' && console.log(localPreset.category);
+    doSubmitCsv === 'step1' && localPreset.category !== 'Select Category' && updateCsvPresets(localPreset);
+
+    doSubmitCsv === 'submit' && localPreset.category !== 'Select Category' && localPreset.markdelete !== true && addToDB();
+    //eslint-disable-next-line
+  }, [doSubmitCsv]);
 
   // jsx
   return (

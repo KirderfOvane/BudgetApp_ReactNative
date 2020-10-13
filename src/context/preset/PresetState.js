@@ -207,7 +207,8 @@ const PresetState = (props) => {
 
   //Update CSV
   const updateCsvPresets = (preset) => {
-    //console.log('updatecsv');
+    // console.log(preset);
+    //console.log(csvpresets);
     dispatch({ type: UPDATE_CSV, payload: preset });
   };
 

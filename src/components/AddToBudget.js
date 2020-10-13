@@ -105,13 +105,13 @@ const AddToBudget = ({ month }) => {
   //jsx
   if (csvpresets) {
     return (
-      <View style={[styles.card, { paddingHorizontal: 0, marginHorizontal: 5 }]}>
+      <View style={[styles.card, { paddingHorizontal: 0, marginHorizontal: 4 }]}>
         {/* Title */}
         <View style={[styles.titlerow, styles.dropshadow]}>
           <Text style={[styles.title]}>Select Categories</Text>
         </View>
         {/* Csv */}
-        <Csv_CreateTransactions setAlert={setAlert} />
+        <Csv_CreateTransactions onSubmit={onSubmit} />
       </View>
     );
   } else {

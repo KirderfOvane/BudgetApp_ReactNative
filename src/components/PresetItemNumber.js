@@ -2,15 +2,17 @@ import React from 'react';
 import { TouchableOpacity, Text, StyleSheet, TextInput } from 'react-native';
 import { theme } from '../constants';
 
-const PresetItemNumber = ({ onNumberPress, InputMode, inputNumRef, changeNumber, localPreset, onBlur, income, fontSize }) => {
+const PresetItemNumber = ({ onNumberPress, InputMode, inputNumRef, changeNumber, localPreset, onBlur }) => {
   // destructuring
   const { number, markDelete } = localPreset;
+
+  // jsx
   return (
     <>
       <TouchableOpacity style={{ flex: 4, minWidth: 10, maxWidth: 110 }} onPress={onNumberPress} ref={inputNumRef}>
         {InputMode === 'number' && !markDelete ? (
           <TextInput
-            style={[styles.input, { color: income ? theme.colors.success : theme.colors.danger }]}
+            style={[styles.input, { color: number > 0 ? theme.colors.success : theme.colors.danger }]}
             keyboardType='numeric'
             onChangeText={changeNumber}
             name='number'
@@ -21,7 +23,9 @@ const PresetItemNumber = ({ onNumberPress, InputMode, inputNumRef, changeNumber,
             onBlur={onBlur}
           />
         ) : (
-          <Text style={!markDelete ? (number > 0 ? styles.positivenumber : styles.negativenumber) : styles.grayedOutNum}>{number}</Text>
+          <Text style={[!markDelete ? (parseFloat(number) > 0 ? styles.positivenumber : styles.negativenumber) : styles.grayedOutNum]}>
+            {number}
+          </Text>
         )}
       </TouchableOpacity>
     </>
@@ -38,7 +42,7 @@ const styles = StyleSheet.create({
     fontSize: theme.sizes.font,
   },
   negativenumber: {
-    color: '#ec5a23',
+    color: theme.colors.danger,
     fontSize: theme.sizes.font,
   },
   grayedOutNum: {
