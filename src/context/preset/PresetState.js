@@ -48,11 +48,6 @@ import {
   DELETE_PIGGYBANK,
   SUM_PIGGYBANKS_MONTH,
   CALC_MONTH_BALANCE,
-  UPLOAD_CSV,
-  UPDATE_CSV,
-  SUBMIT_CSV,
-  CLEAR_CSV,
-  REMOVE_CSV,
   SET_MONTH_PIGGYSAVINGS,
 } from '../types';
 import getCurrentYear from '../../../getCurrentYear';
@@ -90,8 +85,6 @@ const PresetState = (props) => {
     SumPiggybanksMonth: 0, // year implemented
     MonthBalance: null, // year implemented
     purchases: null, // year independent
-    csvpresets: null, // used to store values from csv-file in stagingarea
-    doSubmitCsv: '',
     prefilter: [],
     MonthPiggySavingsSums: null,
   };
@@ -180,49 +173,11 @@ const PresetState = (props) => {
     filterOutNegativeNumsAndMonth(state.month); */
   };
 
-  // Upload CSV
-  const uploadCSV = async (formData) => {
-    // console.log('upload ran');
-    const config = {
-      headers: {
-        'Content-Type': 'multipart/form-data',
-        'x-auth-token': axios.defaults.headers.common['x-auth-token'],
-      },
-    };
-    try {
-      const res = await trackerApi.post('/api/userpreset/upload', formData, config);
-      // console.log(res.data.map((item) => item.id));
-      // console.log(res.data.length);
-      dispatch({ type: UPLOAD_CSV, payload: res.data });
-    } catch (err) {
-      dispatch({
-        type: CONTACT_ERROR,
-        payload: err.response.data,
-      });
-    }
-  };
   // Clear Contact Error
   const clearContactError = () => {
     dispatch({ type: CLEAR_CONTACT_ERROR });
   };
 
-  //Update CSV
-  const updateCsvPresets = (preset) => {
-    // console.log(preset);
-    //console.log(state.csvpresets.length);
-    //console.log(state.csvpresets.map((item) => item.id));
-    dispatch({ type: UPDATE_CSV, payload: preset });
-  };
-
-  //Remove CSV
-  const removeCSV = (preset) => {
-    dispatch({ type: REMOVE_CSV, payload: preset });
-  };
-
-  // Clear CSV
-  const clearCsv = () => {
-    dispatch({ type: CLEAR_CSV });
-  };
   // Add month-val coming from Datemenu
   const addMonth = (month) => {
     dispatch({ type: ADD_MONTH, payload: month });
@@ -1088,9 +1043,6 @@ const PresetState = (props) => {
     dispatch({ type: SET_MONTH_PIGGYSAVINGS, payload: array });
   };
 
-  const submitCsvItems = (string) => {
-    dispatch({ type: SUBMIT_CSV, payload: string });
-  };
   return (
     <PresetContext.Provider
       value={{
@@ -1124,8 +1076,6 @@ const PresetState = (props) => {
         monthpiggysavings: state.monthpiggysavings,
         SumPiggybanksMonth: state.SumPiggybanksMonth,
         MonthBalance: state.MonthBalance,
-        csvpresets: state.csvpresets,
-        doSubmitCsv: state.doSubmitCsv,
         prefilter: state.prefilter,
         calculating: state.calculating,
         MonthPiggySavingsSums: state.MonthPiggySavingsSums,
@@ -1171,11 +1121,6 @@ const PresetState = (props) => {
         deletePiggybank,
         setTotalOfAllPiggybanksThisMonth,
         calcMonthBalance,
-        uploadCSV,
-        submitCsvItems,
-        updateCsvPresets,
-        clearCsv,
-        removeCSV,
         buildFlatListData,
         clearContactError,
       }}

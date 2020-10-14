@@ -1,13 +1,15 @@
 import React from 'react';
 import { FlatList, View, Text } from 'react-native';
-import PresetContext from '../context/preset/presetContext';
+import CsvContext from '../context/csv/csvContext';
 import CsvPresetItem from './CsvPresetItem';
 import Csv_CreateTransactions_Footer from './Csv_CreateTransactions_Footer';
 import CsvPrompt from './CsvPrompt';
 
 const Csv_CreateTransactions = ({ onSubmit }) => {
   // context
-  const { csvpresets, submitCsvItems } = React.useContext(PresetContext);
+
+  const csvContext = React.useContext(CsvContext);
+  const { csvpresets, submitCsvItems, clearCsv } = csvContext;
 
   // state
   const [Prompt, setPrompt] = React.useState(false);
@@ -42,20 +44,18 @@ const Csv_CreateTransactions = ({ onSubmit }) => {
   const renderItem = (csvpreset) => {
     return <CsvPresetItem preset={csvpreset} isFocused={isFocused} />;
   };
-
+  console.log('render create..');
   return (
     <>
-      {Prompt && csvpresets ? (
-        <CsvPrompt setPrompt={setPrompt} validCsv={validCsv} csvpresets={csvpresets} />
-      ) : (
-        <FlatList
-          data={csvpresets}
-          keyExtractor={(item) => item.id}
-          renderItem={renderItem}
-          ref={flatList}
-          ListFooterComponent={<Csv_CreateTransactions_Footer setValidCsv={setValidCsv} setPrompt={setPrompt} />}
-        />
-      )}
+      {Prompt && csvpresets && <CsvPrompt setPrompt={setPrompt} validCsv={validCsv} csvpresets={csvpresets} />}
+
+      <FlatList
+        data={csvpresets}
+        keyExtractor={(item) => item.id}
+        renderItem={renderItem}
+        ref={flatList}
+        ListFooterComponent={<Csv_CreateTransactions_Footer setValidCsv={setValidCsv} setPrompt={setPrompt} />}
+      />
     </>
   );
 };

@@ -7,6 +7,7 @@ import { createBottomTabNavigator } from 'react-navigation-tabs';
 import AuthState from './src/context/auth/AuthState';
 import AlertState from './src/context/alert/AlertState';
 import PresetState from './src/context/preset/PresetState';
+import CsvState from './src/context/csv/CsvState';
 
 //Refs
 import { setNavigator } from './src/navigationRef';
@@ -237,9 +238,11 @@ export default () => {
   return (
     <AuthState>
       <PresetState>
-        <AlertState>
-          <App ref={setNavigator} />
-        </AlertState>
+        <CsvState>
+          <AlertState>
+            <App ref={setNavigator} />
+          </AlertState>
+        </CsvState>
       </PresetState>
     </AuthState>
   );

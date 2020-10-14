@@ -2,7 +2,7 @@ import React, { useMemo } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, TextInput } from 'react-native';
 import { theme } from '../constants';
 import Alerts from '../components/Alerts';
-import AuthContext from '../context/auth/authContext';
+import CsvContext from '../context/csv/csvContext';
 import AlertContext from '../context/alert/alertContext';
 import PresetContext from '../context/preset/presetContext';
 import CategoryPicker from './CategoryPicker';
@@ -15,9 +15,13 @@ const AddToBudget = ({ month }) => {
   const alertContext = React.useContext(AlertContext);
   const { setAlert } = alertContext;
 
+  // context csv
+  const csvContext = React.useContext(CsvContext);
+  const { csvpresets } = csvContext;
+
   // context presets
   const presetContext = React.useContext(PresetContext);
-  const { addPreset, year, csvpresets } = presetContext;
+  const { addPreset, year } = presetContext;
 
   // states
   const [localPreset, setLocalPreset] = React.useState({
@@ -26,8 +30,6 @@ const AddToBudget = ({ month }) => {
     category: 'Select Category',
     type: 'overhead',
   });
-
-  const [csvActive, setCsvActive] = React.useState(false);
 
   const changeName = (newName) => {
     setLocalPreset({ ...localPreset, name: newName });
@@ -101,7 +103,7 @@ const AddToBudget = ({ month }) => {
     // Alert Success
     setAlert('Successfully added to budget!', 'success');
   };
-
+  console.log(csvpresets);
   //jsx
   if (csvpresets) {
     return (

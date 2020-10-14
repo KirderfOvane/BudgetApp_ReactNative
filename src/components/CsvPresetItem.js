@@ -1,7 +1,7 @@
 import React from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, TextInput } from 'react-native';
 import { icons, theme } from '../constants';
-import PresetContext from '../context/preset/presetContext';
+import CsvContext from '../context/csv/csvContext';
 import PresetItemName from './PresetItemName';
 import PresetItemNumber from './PresetItemNumber';
 import SelectCategory from './SelectCategory';
@@ -11,7 +11,7 @@ let CategoryPicker = null;
 const CsvPresetItem = ({ preset, isFocused }) => {
   // console.log(preset.item.id);
   // Context
-  const { doSubmitCsv, updateCsvPresets } = React.useContext(PresetContext);
+  const { doSubmitCsv, updateCsvPresets } = React.useContext(CsvContext);
 
   // State
   const [InputMode, toggleInputMode] = React.useState('');
@@ -58,6 +58,7 @@ const CsvPresetItem = ({ preset, isFocused }) => {
 
   // change value in picker
   const selectedCategory = (value) => {
+    console.log(value);
     setSelected(value);
     setLocalPreset({ ...localPreset, category: value });
   };

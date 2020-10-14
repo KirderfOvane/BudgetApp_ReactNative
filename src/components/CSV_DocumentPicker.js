@@ -2,12 +2,13 @@ import React from 'react';
 import { StyleSheet, Text, TouchableOpacity } from 'react-native';
 import * as DocumentPicker from 'expo-document-picker';
 import { withNavigation } from 'react-navigation';
-import PresetContext from '../context/preset/presetContext';
+import CsvContext from '../context/csv/csvContext';
 import { theme } from '../constants';
 
 const CSV_DocumentPicker = () => {
-  //context presets
-  const { uploadCSV } = React.useContext(PresetContext);
+  //context csv
+  const csvContext = React.useContext(CsvContext);
+  //const { uploadCSV } = csvContext;
 
   // state
   const [file, setFile] = React.useState(null);
@@ -23,7 +24,7 @@ const CSV_DocumentPicker = () => {
     if (file) {
       const formData = new FormData();
       formData.append('file', file, file.name);
-      uploadCSV(formData);
+      csvContext.uploadCSV(formData);
     }
   }, [file]);
 
