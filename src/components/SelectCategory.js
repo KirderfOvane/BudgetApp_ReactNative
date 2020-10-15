@@ -29,7 +29,7 @@ const styles = StyleSheet.create({
     borderWidth: 2,
     borderColor: 'black',
     color: 'black',
-    backgroundColor: 'orange',
+    backgroundColor: theme.colors.danger,
     borderRadius: 5,
     overflow: 'hidden',
     paddingVertical: 5,

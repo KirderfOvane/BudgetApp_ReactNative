@@ -53,4 +53,6 @@ export const UPLOAD_CSV = 'UPLOAD_CSV';
 export const UPDATE_CSV = 'UPDATE_CSV';
 export const CONTACT_ERROR = 'CONTACT_ERROR';
 export const CLEAR_CONTACT_ERROR = 'CLEAR_CONTACT_ERROR';
+export const CLEAR_CSV = 'CLEAR_CSV';
 export const SUBMIT_CSV = 'SUBMIT_CSV';
+export const REMOVE_CSV = 'REMOVE_CSV';

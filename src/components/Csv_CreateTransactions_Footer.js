@@ -3,13 +3,14 @@ import { TouchableOpacity, Text, StyleSheet } from 'react-native';
 import CsvContext from '../context/csv/csvContext';
 import { theme } from '../constants';
 
-const Csv_CreateTransactions_Footer = () => {
+const Csv_CreateTransactions_Footer = ({ clickAdd, setClickAdd }) => {
   // context
   const csvContext = React.useContext(CsvContext);
   const { submitCsvItems } = csvContext;
   // logic
 
   const onAddToBudgetClick = () => {
+    setClickAdd(true);
     submitCsvItems('step1');
   };
 

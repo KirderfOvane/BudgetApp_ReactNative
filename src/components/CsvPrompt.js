@@ -3,42 +3,63 @@ import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
 import CsvContext from '../context/csv/csvContext';
 import { theme } from '../constants';
 
-const CsvPrompt = ({ setPrompt, validCsv, csvpresets }) => {
+const CsvPrompt = ({ setPrompt, validCsv, csvpresets, setClickAdd }) => {
   //context
-  const { submitCsvItems } = React.useContext(CsvContext);
+  const { submitCsvItems, clearCsv, doSubmitCsv } = React.useContext(CsvContext);
 
   const onAdd = () => {
-    console.log('add');
+    submitCsvItems('submit');
   };
   const onBack = () => {
     submitCsvItems('');
     setPrompt(false);
+    // setClickAdd(false);
   };
-  return (
-    <>
-      <View style={{ flexDirection: 'row', marginTop: 25, alignSelf: 'center' }}>
-        <Text style={styles.strongtext}>{csvpresets.length - validCsv.length}</Text>
-        <Text style={styles.text}>of </Text>
-        <Text style={styles.strongtext}>{csvpresets.length}</Text>
-      </View>
-      <Text style={styles.text}> transactions do not have a category selected</Text>
-
+  const onExit = () => {
+    // submitCsvItems('');
+    //setClickAdd(false);
+    clearCsv();
+    // setPrompt(false);
+  };
+  // console.log(doSubmitCsv);
+  if (doSubmitCsv === 'noValidCsv') {
+    return (
       <View>
-        <TouchableOpacity style={styles.addbtn} onPress={onAdd}>
-          <Text style={styles.text}>Add the </Text>
-          <Text style={[styles.strongtext, styles.strongtextcolor]}>{validCsv.length}</Text>
-          <View style={{ flexDirection: 'row', alignSelf: 'center' }}>
-            <Text style={styles.text}>{validCsv.length > 1 ? 'transactions ' : 'transaction '}</Text>
-            <Text style={styles.text}>that has a</Text>
-          </View>
-          <Text style={styles.text}>category specified</Text>
-        </TouchableOpacity>
+        <Text>At least One Transaction need to have a category assigned</Text>
         <TouchableOpacity style={styles.backbtn} onPress={onBack}>
-          <Text style={styles.text}> Go back</Text>
+          <Text style={styles.text}>Go back</Text>
+        </TouchableOpacity>
+        <TouchableOpacity style={styles.backbtn} onPress={onExit}>
+          <Text style={styles.text}>Exit Csv Upload</Text>
         </TouchableOpacity>
       </View>
-    </>
-  );
+    );
+  } else {
+    return (
+      <>
+        <View style={{ flexDirection: 'row', marginTop: 25, alignSelf: 'center' }}>
+          <Text style={styles.strongtext}>{csvpresets.length - validCsv.length}</Text>
+          <Text style={styles.text}>of </Text>
+          <Text style={styles.strongtext}>{csvpresets.length}</Text>
+        </View>
+        <Text style={styles.text}> transactions do not have a category selected</Text>
+        <View>
+          <TouchableOpacity style={styles.addbtn} onPress={onAdd}>
+            <Text style={styles.text}>Add the </Text>
+            <Text style={[styles.strongtext, styles.strongtextcolor]}>{validCsv.length}</Text>
+            <View style={{ flexDirection: 'row', alignSelf: 'center' }}>
+              <Text style={styles.text}>{validCsv.length > 1 ? 'transactions ' : 'transaction '}</Text>
+              <Text style={styles.text}>that has a</Text>
+            </View>
+            <Text style={styles.text}>category specified</Text>
+          </TouchableOpacity>
+          <TouchableOpacity style={styles.backbtn} onPress={onBack}>
+            <Text style={styles.text}> Go back</Text>
+          </TouchableOpacity>
+        </View>
+      </>
+    );
+  }
 };
 const styles = StyleSheet.create({
   text: {

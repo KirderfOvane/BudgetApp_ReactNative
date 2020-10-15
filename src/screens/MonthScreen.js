@@ -4,6 +4,7 @@ import { View, Text, StyleSheet, FlatList, Dimensions, KeyboardAvoidingView } fr
 import PresetContext from '../context/preset/presetContext';
 import AuthContext from '../context/auth/authContext';
 import AlertContext from '../context/alert/alertContext';
+import CsvContext from '../context/csv/csvContext';
 
 import SwipeItem from '../components/SwipeItem';
 import YearBalanceScreen from './YearBalanceScreen';
@@ -49,6 +50,7 @@ const MonthScreen = ({ navigation }) => {
     clearContactError,
   } = presetContext;
   const { loading } = authContext;
+  const { csvpresets } = React.useContext(CsvContext);
 
   //console.log('################');
   //console.log(prefilter[0]);
@@ -374,6 +376,21 @@ const MonthScreen = ({ navigation }) => {
     clearContactError();
   }, [contacterror]);
 
+  // adjust flatlist when valid csv is loaded.
+  const [FlatList_WindowSize, setFlatList_WindowSize] = React.useState(7);
+  const [scrollEnabled, setScrollEnabled] = React.useState(true);
+  React.useEffect(() => {
+    if (csvpresets) {
+      const csvWinSize = 1;
+      setFlatList_WindowSize(csvWinSize);
+      setScrollEnabled(false);
+    } else {
+      const swipeWinSize = 7;
+      setFlatList_WindowSize(swipeWinSize);
+      setScrollEnabled(true);
+    }
+  }, [csvpresets]);
+
   //renderItem
   const renderItem = (object) => {
     return <SwipeItem index={object.index} activeindex={indexCounter} monthlist={MonthList} setMonthList={setMonthList} />;
@@ -383,7 +400,8 @@ const MonthScreen = ({ navigation }) => {
   return (
     <>
       <FlatList
-        windowSize={7}
+        scrollEnabled={scrollEnabled}
+        windowSize={FlatList_WindowSize}
         initialNumToRender={1}
         maxToRenderPerBatch={1}
         removeClippedSubviews={false}

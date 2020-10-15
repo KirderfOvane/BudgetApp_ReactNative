@@ -2,6 +2,7 @@ import React from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, TextInput } from 'react-native';
 import { icons, theme } from '../constants';
 import CsvContext from '../context/csv/csvContext';
+import PresetContext from '../context/preset/presetContext';
 import PresetItemName from './PresetItemName';
 import PresetItemNumber from './PresetItemNumber';
 import SelectCategory from './SelectCategory';
@@ -10,8 +11,8 @@ import SelectCategory from './SelectCategory';
 let CategoryPicker = null;
 const CsvPresetItem = ({ preset, isFocused }) => {
   // Context
-  const { doSubmitCsv, updateCsvPresets } = React.useContext(CsvContext);
-
+  const { doSubmitCsv, updateCsvPresets, csvpresets, removeCSV } = React.useContext(CsvContext);
+  const { year, month, addPreset } = React.useContext(PresetContext);
   // State
   const [InputMode, toggleInputMode] = React.useState('');
   const [localPreset, setLocalPreset] = React.useState({
@@ -93,14 +94,29 @@ const CsvPresetItem = ({ preset, isFocused }) => {
 
   const addToDB = () => {
     console.log('addtoDB reached');
+    addPreset({
+      name: localPreset.name,
+      number: parseFloat(localPreset.number),
+      month: month,
+      year: year,
+      category: localPreset.category,
+      type: localPreset.type,
+      piggybank: [{ month, year, savedAmount: '' }],
+    });
+    removeCSV(localPreset);
   };
+
   // useEffect add csvpresets to db in 2 steps. doSubmitCsv is the active step.
   React.useEffect(() => {
-    // if item category have been set, update item in the csvpresets-list
-    doSubmitCsv === 'step1' && localPreset.category !== 'Select Category' && updateCsvPresets(localPreset);
-    // if doSubmitCsv is submit and localPreset have a category and not set for deletion,add item to database.
-    doSubmitCsv === 'submit' && localPreset.category !== 'Select Category' && localPreset.markdelete !== true && addToDB();
-  }, [doSubmitCsv]);
+    console.log(doSubmitCsv);
+    if (csvpresets && doSubmitCsv !== '') {
+      //console.log('updateCsvPresets ran');
+      // if item category have been set, update item in the csvpresets-list
+      doSubmitCsv === 'step1' && localPreset.category !== 'Select Category' && updateCsvPresets(localPreset);
+      // if doSubmitCsv is submit and localPreset have a category and not set for deletion,add item to database.
+      doSubmitCsv === 'submit' && localPreset.category !== 'Select Category' && localPreset.markdelete !== true && addToDB();
+    }
+  }, [doSubmitCsv]); // listens to steps
 
   // jsx
   return (

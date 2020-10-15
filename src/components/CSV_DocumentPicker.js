@@ -25,6 +25,7 @@ const CSV_DocumentPicker = () => {
       const formData = new FormData();
       formData.append('file', file, file.name);
       csvContext.uploadCSV(formData);
+      setFile(null);
     }
   }, [file]);
 
