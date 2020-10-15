@@ -5,7 +5,7 @@ import CsvPresetItem from './CsvPresetItem';
 import Csv_CreateTransactions_Footer from './Csv_CreateTransactions_Footer';
 import CsvPrompt from './CsvPrompt';
 
-const Csv_CreateTransactions = ({ onSubmit }) => {
+const Csv_CreateTransactions = () => {
   // context
 
   const csvContext = React.useContext(CsvContext);
@@ -44,12 +44,13 @@ const Csv_CreateTransactions = ({ onSubmit }) => {
   const renderItem = (csvpreset) => {
     return <CsvPresetItem preset={csvpreset} isFocused={isFocused} />;
   };
-  console.log('render create..');
+
   return (
     <>
       {Prompt && csvpresets && <CsvPrompt setPrompt={setPrompt} validCsv={validCsv} csvpresets={csvpresets} />}
 
       <FlatList
+        style={Prompt && { display: 'none' }}
         data={csvpresets}
         keyExtractor={(item) => item.id}
         renderItem={renderItem}

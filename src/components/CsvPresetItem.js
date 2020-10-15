@@ -9,7 +9,6 @@ import SelectCategory from './SelectCategory';
 // Inline Requires init variable
 let CategoryPicker = null;
 const CsvPresetItem = ({ preset, isFocused }) => {
-  // console.log(preset.item.id);
   // Context
   const { doSubmitCsv, updateCsvPresets } = React.useContext(CsvContext);
 
@@ -58,7 +57,6 @@ const CsvPresetItem = ({ preset, isFocused }) => {
 
   // change value in picker
   const selectedCategory = (value) => {
-    console.log(value);
     setSelected(value);
     setLocalPreset({ ...localPreset, category: value });
   };
@@ -96,15 +94,12 @@ const CsvPresetItem = ({ preset, isFocused }) => {
   const addToDB = () => {
     console.log('addtoDB reached');
   };
-  // useEffect add csvpresets to db in 2 steps
+  // useEffect add csvpresets to db in 2 steps. doSubmitCsv is the active step.
   React.useEffect(() => {
-    // console.log(localPreset);
-    //  console.log('CsvPresetItem useEffect ran' + doSubmitCsv);
-    // doSubmitCsv === 'step1' && localPreset.category !== 'Select Category' && console.log(localPreset);
+    // if item category have been set, update item in the csvpresets-list
     doSubmitCsv === 'step1' && localPreset.category !== 'Select Category' && updateCsvPresets(localPreset);
-
+    // if doSubmitCsv is submit and localPreset have a category and not set for deletion,add item to database.
     doSubmitCsv === 'submit' && localPreset.category !== 'Select Category' && localPreset.markdelete !== true && addToDB();
-    //eslint-disable-next-line
   }, [doSubmitCsv]);
 
   // jsx

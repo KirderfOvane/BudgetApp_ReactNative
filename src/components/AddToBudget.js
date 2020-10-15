@@ -103,7 +103,7 @@ const AddToBudget = ({ month }) => {
     // Alert Success
     setAlert('Successfully added to budget!', 'success');
   };
-  console.log(csvpresets);
+
   //jsx
   if (csvpresets) {
     return (
