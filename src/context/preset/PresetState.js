@@ -93,6 +93,7 @@ const PresetState = (props) => {
 
   // Get Presets
   const getPresets = async () => {
+    console.log('getpresets ran');
     const config = {
       headers: {
         'Content-Type': 'application/json',

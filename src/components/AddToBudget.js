@@ -22,7 +22,7 @@ const AddToBudget = ({ month }) => {
 
   // context presets
   const presetContext = React.useContext(PresetContext);
-  const { addPreset, year } = presetContext;
+  const { addPreset, year, getPresets } = presetContext;
 
   // states
   const [localPreset, setLocalPreset] = React.useState({
@@ -103,6 +103,8 @@ const AddToBudget = ({ month }) => {
     localPreset.category && selectedCategory('Select Category');
     // Alert Success
     setAlert('Successfully added to budget!', 'success');
+    //get presets
+    getPresets();
   };
 
   //jsx

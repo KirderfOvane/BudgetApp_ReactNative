@@ -270,22 +270,17 @@ const MonthScreen = ({ navigation }) => {
 
   // set monthlist with focus on december
   const decemberMonthList = () => {
-    // console.log('decran');
     setDisplayYear(parseInt(year) + 1);
     const decMonthListCopy = [...MonthList];
     for (let i = 0; i < 2; i++) {
       decMonthListCopy.unshift(decMonthListCopy.pop());
-      // console.log(tempMonthListCopy);
     }
-    // console.log(tempMonthListCopy.map((month) => month.month));
-    // console.log(tempMonthListCopy);
     setMonthList(decMonthListCopy);
     flatlistRef.current.scrollToIndex({ index: 6, animated: false });
     setIndexCounter(6);
   };
   // from Year params
   let fromYear = navigation.getParam('fromYear');
-  //console.log(year);
   // swipe left from yearscreen
   React.useEffect(() => {
     if (fromYear === 'December') {
@@ -309,7 +304,7 @@ const MonthScreen = ({ navigation }) => {
       calcCategoryByMonth(presetContext.month);
       getMonthPiggySavings(presetContext.month);
     }
-  }, []); // old dependencies: presetContext.month, presets, MonthSum
+  }, [presets]); // old dependencies: presetContext.month, presets, MonthSum
 
   React.useEffect(() => {
     filteredmonthandposnum && calcPosMonth(filteredmonthandposnum);
