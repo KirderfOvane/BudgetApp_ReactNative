@@ -5,11 +5,14 @@ import Alerts from '../components/Alerts';
 import CsvContext from '../context/csv/csvContext';
 import AlertContext from '../context/alert/alertContext';
 import PresetContext from '../context/preset/presetContext';
-import CategoryPicker from './CategoryPicker';
+//import CategoryPicker from './CategoryPicker';
 import CheckBoxField from './CheckBoxField';
 import ToggleSwitch from './ToggleSwitch';
 import CSV_DocumentPicker from './CSV_DocumentPicker';
 import Csv_CreateTransactions from './Csv_CreateTransactions';
+
+// Inline Requires
+let CategoryPicker = null;
 
 const AddToBudget = ({ month }) => {
   // context alert
@@ -47,13 +50,23 @@ const AddToBudget = ({ month }) => {
   const pickerRef = React.useRef(null);
 
   //logic
-  const onPickerBtnPress = () => {
+  /*  const onPickerBtnPress = () => {
     if (localPreset.category !== 'Select Category') {
       setPickerButtonTitle(localPreset.category); //<--
     }
+    
+  }; */
+  const onCategoryPress = (e) => {
+    if (localPreset.category !== 'Select Category') {
+      setPickerButtonTitle(localPreset.category); //<--
+    }
+
+    if (CategoryPicker === null) {
+      CategoryPicker = require('./CategoryPicker').default;
+    }
+
     setPickerActive(!pickerActive);
   };
-
   // change value in picker
   const selectedCategory = (value) => {
     setSelected(value);
@@ -94,15 +107,25 @@ const AddToBudget = ({ month }) => {
     });
 
     // Reset Inputs
-    setLocalPreset({
+    /*   setLocalPreset({
       name: '',
-      number: ''.toString(),
+      number: '',
       category: '',
       type: 'overhead',
-    });
+    }); */
     localPreset.category && selectedCategory('Select Category');
+    console.log(localPreset);
+    setLocalPreset({ ...localPreset, name: '' });
+    //setLocalPreset({ ...localPreset, number: '' });
+    //setLocalPreset({ ...localPreset, category: '' });
+    // setLocalPreset({ ...localPreset, type: 'overhead' });
     // Alert Success
+    setCheckboxfieldActive(false);
+    setTimeout(function () {
+      setCheckboxfieldActive(true);
+    }, 5000);
     setAlert('Successfully added to budget!', 'success');
+    // setAlert('Successfully added to budget!', 'success');
     //get presets
     getPresets();
   };
@@ -161,14 +184,15 @@ const AddToBudget = ({ month }) => {
               localPreset={localPreset}
               setLocalPreset={setLocalPreset}
               pickerRef={pickerRef}
+              onCategoryPress={onCategoryPress}
             />
-            <TouchableOpacity onPress={onPickerBtnPress}>
+            {/* <TouchableOpacity onPress={onPickerBtnPress}>
               <Text style={styles.selectBtnInPicker}>Select</Text>
-            </TouchableOpacity>
+            </TouchableOpacity> */}
           </View>
         ) : (
           <View style={styles.picker}>
-            <TouchableOpacity style={styles.pickerbtnFlex} onPress={onPickerBtnPress}>
+            <TouchableOpacity style={styles.pickerbtnFlex} onPress={onCategoryPress}>
               <Text style={styles.pickerbtn}>{pickerButtonTitle}</Text>
             </TouchableOpacity>
           </View>
