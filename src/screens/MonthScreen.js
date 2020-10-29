@@ -48,6 +48,7 @@ const MonthScreen = ({ navigation }) => {
     setMonthPiggySavingsSums,
     contacterror,
     clearContactError,
+    calcAllMonthSum,
   } = presetContext;
   const { loading } = authContext;
   const { csvpresets } = React.useContext(CsvContext);
@@ -191,8 +192,27 @@ const MonthScreen = ({ navigation }) => {
 
         //year navigation
         if (!isNaN(MonthList[newindex].month)) {
+          calcYearsum(parseInt(MonthList[newindex].month)); // year summary used in BarChart
+          calcAllMonthSum([
+            // months in barchart
+            'January',
+            'February',
+            'March',
+            'April',
+            'May',
+            'June',
+            'July',
+            'August',
+            'September',
+            'October',
+            'November',
+            'December',
+          ]);
+          calcCapital(); // capital in
+          calcSavings();
+          calcSum();
           //setYear(parseInt(year));
-          navigation.navigate('Balance', { fromMonth: lastSwipe });
+          navigation.navigate('Balance', { fromMonth: true });
         } else {
           //activate recalc of _ALL_ context values
           addMonth(MonthList[newindex].month);
@@ -229,6 +249,25 @@ const MonthScreen = ({ navigation }) => {
         //year navigation
         if (!isNaN(MonthList[newindex].month)) {
           setYear(parseInt(year) + 1);
+          calcYearsum(parseInt(MonthList[newindex].month)); // year summary used in BarChart
+          calcAllMonthSum([
+            // months in barchart
+            'January',
+            'February',
+            'March',
+            'April',
+            'May',
+            'June',
+            'July',
+            'August',
+            'September',
+            'October',
+            'November',
+            'December',
+          ]);
+          calcCapital(); // capital in
+          calcSavings();
+          calcSum();
           navigation.navigate('Balance', { fromMonth: lastSwipe });
         } else {
           //activate recalc of _ALL_ context values

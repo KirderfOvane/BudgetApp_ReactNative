@@ -10,15 +10,16 @@ const YearBalanceScreen = ({ navigation }) => {
   const presetContext = React.useContext(PresetContext);
   const authContext = React.useContext(AuthContext);
   //context destruct
-  const { getPresets, year, presets, addMonth, setYear } = presetContext;
+  const { getPresets, year, presets, addMonth, setYear, month } = presetContext;
   const { isAuthenticated, user } = authContext;
   //state
   const { width } = Dimensions.get('window');
 
-  let fromMonth = navigation.getParam('fromMonth');
+  // let fromMonth = navigation.getParam('fromMonth');
+
   React.useEffect(() => {
     presets === null && isAuthenticated && user && getPresets();
-  }, [year, isAuthenticated, user]);
+  }, [year, isAuthenticated, user, presets]);
 
   const changeMonthList = (e) => {
     const swipeoffset = e.nativeEvent.targetContentOffset.x;
@@ -38,6 +39,7 @@ const YearBalanceScreen = ({ navigation }) => {
   };
   const doFocus = () => {
     setFocus(true);
+    getPresets();
   };
 
   return (

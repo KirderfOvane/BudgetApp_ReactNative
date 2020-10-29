@@ -4,6 +4,7 @@ import { VictoryBar, VictoryChart, VictoryAxis, VictoryLegend, VictoryLabel } fr
 import PresetContext from '../context/preset/presetContext';
 import AuthContext from '../context/auth/authContext';
 import { theme } from '../constants';
+import { NavigationEvents } from 'react-navigation';
 
 const BarChart = ({ year }) => {
   // context

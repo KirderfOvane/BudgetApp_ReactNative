@@ -25,7 +25,23 @@ const AddToBudget = ({ month }) => {
 
   // context presets
   const presetContext = React.useContext(PresetContext);
-  const { addPreset, year, getPresets } = presetContext;
+  const {
+    addPreset,
+    year,
+    getPresets,
+    getMonthPiggySavings,
+    calcCategoryByMonth,
+    setPurchase,
+    calcSum,
+    calcMonthBalance,
+    MonthSum,
+    calcMonthSavings,
+    getMonthSavings,
+    calcMonthSum,
+    filterOutNegativeNumsAndMonth,
+    filterOutPositiveNumsAndMonth,
+    addMonth,
+  } = presetContext;
 
   // states
   const [localPreset, setLocalPreset] = React.useState({
@@ -114,7 +130,7 @@ const AddToBudget = ({ month }) => {
       type: 'overhead',
     }); */
     localPreset.category && selectedCategory('Select Category');
-    console.log(localPreset);
+    //console.log(localPreset);
     setLocalPreset({ ...localPreset, name: '' });
     //setLocalPreset({ ...localPreset, number: '' });
     //setLocalPreset({ ...localPreset, category: '' });
@@ -128,6 +144,18 @@ const AddToBudget = ({ month }) => {
     // setAlert('Successfully added to budget!', 'success');
     //get presets
     getPresets();
+    //activate recalc of _ALL_ context values
+    addMonth(month);
+    filterOutPositiveNumsAndMonth(month);
+    filterOutNegativeNumsAndMonth(month);
+    calcMonthSum(month);
+    getMonthSavings(month);
+    calcMonthSavings(month);
+    MonthSum && calcMonthBalance();
+    calcSum();
+    setPurchase();
+    calcCategoryByMonth(month);
+    getMonthPiggySavings(month);
   };
 
   //jsx
