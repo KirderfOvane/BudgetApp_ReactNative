@@ -4,13 +4,14 @@ import { icons, theme } from '../constants';
 import PresetContext from '../context/preset/presetContext';
 import PresetItemName from './PresetItemName';
 import PresetItemNumber from './PresetItemNumber';
+import { DELETE_PRESET } from '../context/types';
 
 // Inline Requires
 let CategoryPicker = null;
 const PresetItem = ({ preset, setMonthList }) => {
   // console.log(preset);
   const presetContext = React.useContext(PresetContext);
-  const { setEdit, sendEdit, edit, buildFlatListData, cancelEdit, filterPresets, clearFilter } = presetContext;
+  const { presets, sendEdit, deletePreset, buildFlatListData, cancelEdit, filterPresets, clearFilter } = presetContext;
   // State
   const [InputMode, toggleInputMode] = React.useState('');
   const [localPreset, setLocalPreset] = React.useState({
@@ -29,8 +30,10 @@ const PresetItem = ({ preset, setMonthList }) => {
 
   // Activate editmode
   const onDeletePress = (e) => {
-    console.log('delete');
+    console.log(presets.length);
     console.log(localPreset._id);
+    deletePreset(localPreset._id);
+    console.log(presets.length);
   };
   const onCategoryPress = (e) => {
     if (localPreset.category !== 'Select Category') {

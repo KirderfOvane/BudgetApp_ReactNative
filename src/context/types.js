@@ -56,3 +56,4 @@ export const CLEAR_CONTACT_ERROR = 'CLEAR_CONTACT_ERROR';
 export const CLEAR_CSV = 'CLEAR_CSV';
 export const SUBMIT_CSV = 'SUBMIT_CSV';
 export const REMOVE_CSV = 'REMOVE_CSV';
+export const DELETE_PRESET = 'DELETE_PRESET';

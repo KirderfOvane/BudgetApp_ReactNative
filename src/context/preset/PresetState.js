@@ -136,8 +136,14 @@ const PresetState = (props) => {
 
   // Delete preset
   const deletePreset = async (id) => {
+    const config = {
+      headers: {
+        'Content-Type': 'application/json',
+        'x-auth-token': axios.defaults.headers.common['x-auth-token'],
+      },
+    };
     try {
-      await trackerApi.delete(`/api/userpreset/${id}`);
+      await trackerApi.delete(`/api/userpreset/${id}`, config);
       dispatch({
         type: DELETE_PRESET,
         payload: id,
