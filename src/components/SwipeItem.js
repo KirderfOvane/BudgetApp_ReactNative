@@ -10,7 +10,7 @@ import Purchases from '../components/Purchases';
 import MonthSavings from '../components/MonthSavings';
 import FH_SectionList from './FH_SectionList';
 
-const SwipeItem = ({ monthlist, activeindex, index }) => {
+const SwipeItem = ({ monthlist, activeindex, index, monthScrollRef, changeMonthList }) => {
   //context
   const { filtered, filteredmonthandnegnum, filteredmonthandposnum } = React.useContext(PresetContext);
 
@@ -30,7 +30,7 @@ const SwipeItem = ({ monthlist, activeindex, index }) => {
 
   return (
     <View style={styles.container}>
-      <DateMenu monthlist={monthlist} activeindex={activeindex} />
+      <DateMenu monthlist={monthlist} activeindex={activeindex} monthScrollRef={monthScrollRef} changeMonthList={changeMonthList} />
       <ImageBackground source={monthlist[index].image} style={styles.image}>
         {isNaN(monthlist[activeindex].month) ? ( // month
           <>

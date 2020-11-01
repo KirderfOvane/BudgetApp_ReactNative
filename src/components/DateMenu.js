@@ -3,17 +3,24 @@ import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
 import { theme } from '../constants';
 import PresetContext from '../context/preset/presetContext';
 import getCurrentYear from '../../getCurrentYear';
-const DateMenu = ({ monthlist, activeindex, navigation }) => {
+
+const DateMenu = ({ monthlist, activeindex, monthScrollRef, changeMonthList }) => {
   const presetContext = React.useContext(PresetContext);
   const { addMonth, setYear, year } = presetContext;
   const onPressJanuary = () => {
-    addMonth('January');
-    navigation.navigate('Month');
+    //console.log(monthlist[activeindex + 1].month);
+    //console.log(activeindex);
+    changeMonthList(activeindex + 1);
+    // console.log(monthScrollRef.current);
+    monthScrollRef.current.scrollToIndex({ index: activeindex + 1, animated: true });
+    //addMonth('January');
+    //navigation.navigate('Month');
   };
   const onPressDecember = () => {
+    console.log('dec');
     setYear(parseInt(year) - 1);
     addMonth('December');
-    navigation.navigate('Month', { fromYear: 'December' });
+    // navigation.navigate('Month', { fromYear: 'December' });
   };
 
   return (

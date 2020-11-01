@@ -53,109 +53,12 @@ const MonthScreen = ({ navigation }) => {
   const { loading } = authContext;
   const { csvpresets } = React.useContext(CsvContext);
 
-  //console.log('################');
-  //console.log(prefilter[0]);
   //state
-
   const [displayYear, setDisplayYear] = React.useState(year);
   const [_initialScrollIndex, set_InitialScrollIndex] = React.useState(6);
   const [indexCounter, setIndexCounter] = React.useState(_initialScrollIndex);
   const [Lastoffset, setLastOffset] = React.useState(2484); // used to check if offset occured to see if swipe occured
   const [lastSwipe, setLastSwipe] = React.useState(''); // used to tell Balance-screen what month we swiped from
-  /*  const [MonthList, setMonthList] = React.useState([
-    {
-      // data: prefilter[7],
-      month: 'August',
-      //monthIncomeSum: prefilter[7][2],
-      // monthExpenseSum: prefilter[7][3],
-      image: require('../../assets/iphone_725x414/antelope-canyon_iphoneslices__1.jpg'),
-    },
-    {
-      // data: prefilter[8],
-      month: 'September',
-      // monthIncomeSum: prefilter[8][2],
-      // monthExpenseSum: prefilter[8][3],
-      image: require('../../assets/iphone_725x414/antelope-canyon_iphoneslices__2.jpg'),
-    },
-    {
-      // data: prefilter[9],
-      month: 'October',
-      //  monthIncomeSum: prefilter[9][2],
-      // monthExpenseSum: prefilter[9][3],
-      image: require('../../assets/iphone_725x414/antelope-canyon_iphoneslices__3.jpg'),
-    },
-    {
-      // data: prefilter[10],
-      month: 'November',
-      //   monthIncomeSum: prefilter[10][2],
-      //  monthExpenseSum: prefilter[10][3],
-      image: require('../../assets/iphone_725x414/antelope-canyon_iphoneslices__4.jpg'),
-    },
-    {
-      // data: prefilter[11],
-      month: 'December',
-      //   monthIncomeSum: prefilter[11][2],
-      // monthExpenseSum: prefilter[11][3],
-      image: require('../../assets/iphone_725x414/antelope-canyon_iphoneslices__5.jpg'),
-    },
-    {
-      //  data: [[], []],
-      month: displayYear.toString(),
-      //  monthIncomeSum: [11][2],
-      //monthExpenseSum: prefilter[11][3],
-      image: require('../../assets/iphone_725x414/antelope-canyon_iphoneslices__6.jpg'),
-    },
-    {
-      data: prefilter[0],
-      month: 'January',
-      //  monthIncomeSum: prefilter[0][2],
-      // monthExpenseSum: prefilter[0][3],
-      image: require('../../assets/iphone_725x414/antelope-canyon_iphoneslices__7.jpg'),
-    },
-    {
-      data: prefilter[1],
-      month: 'February',
-      //  monthIncomeSum: prefilter[1][2],
-      //  monthExpenseSum: prefilter[1][3],
-      image: require('../../assets/iphone_725x414/antelope-canyon_iphoneslices__8.jpg'),
-    },
-    {
-      data: prefilter[2],
-      month: 'March',
-      // monthIncomeSum: prefilter[2][2],
-      // monthExpenseSum: prefilter[2][3],
-      image: require('../../assets/iphone_725x414/antelope-canyon_iphoneslices__9.jpg'),
-    },
-    {
-      data: prefilter[3],
-      month: 'April',
-      //  monthIncomeSum: prefilter[3][2],
-      //monthExpenseSum: prefilter[3][3],
-      image: require('../../assets/iphone_725x414/antelope-canyon_iphoneslices__10.jpg'),
-    },
-    {
-      data: prefilter[4],
-      month: 'May',
-      //  monthIncomeSum: prefilter[4][2],
-      //  monthExpenseSum: prefilter[4][3],
-      image: require('../../assets/iphone_725x414/antelope-canyon_iphoneslices__11.jpg'),
-    },
-    {
-      data: prefilter[5],
-      month: 'June',
-      //    monthIncomeSum: prefilter[5][2],
-      //monthExpenseSum: prefilter[5][3],
-      image: require('../../assets/iphone_725x414/antelope-canyon_iphoneslices__12.jpg'),
-    },
-    {
-      data: prefilter[6],
-      month: 'July',
-      //    monthIncomeSum: prefilter[6][2],
-      // monthExpenseSum: prefilter[6][3],
-      image: require('../../assets/iphone_725x414/antelope-canyon_iphoneslices__13.jpg'),
-    },
-  ]); */
-
   const [MonthList, setMonthList] = React.useState([
     { data: [[], []], month: 'August', image: require('../../assets/iphone_725x414/antelope-canyon_iphoneslices__1.jpg') },
     { data: [[], []], month: 'September', image: require('../../assets/iphone_725x414/antelope-canyon_iphoneslices__2.jpg') },
@@ -176,12 +79,20 @@ const MonthScreen = ({ navigation }) => {
   const { width, height } = Dimensions.get('window');
   const flatlistRef = React.useRef(null);
 
-  //logic
+  // Swipe logic
   const changeMonthList = (e) => {
-    const swipeoffset = e.nativeEvent.targetContentOffset.x;
+    let swipeoffset;
+    // Input of e is type number if button is pressed in DateMenu
+    if (typeof e === 'number') {
+      swipeoffset = Lastoffset + width;
+      //return console.log(e);
+    } else {
+      swipeoffset = e.nativeEvent.targetContentOffset.x;
+    }
+
     const newindex = swipeoffset / width;
-    //console.log('Lastoffset: ' + Lastoffset);
-    // console.log('swipeoffset: ' + swipeoffset);
+    console.log('Lastoffset: ' + Lastoffset);
+    console.log('swipeoffset: ' + swipeoffset);
     setIndexCounter(newindex);
 
     //check if swipe happened
@@ -189,7 +100,7 @@ const MonthScreen = ({ navigation }) => {
       //check DIRECTION
       if (Lastoffset > swipeoffset) {
         //swipe left
-
+        console.log('swipe left');
         //year navigation
         if (!isNaN(MonthList[newindex].month)) {
           calcYearsum(parseInt(MonthList[newindex].month)); // year summary used in BarChart
@@ -245,7 +156,7 @@ const MonthScreen = ({ navigation }) => {
         }
       } else {
         //swipe right
-        //console.log('swipe right');
+        console.log('swipe right');
         //year navigation
         if (!isNaN(MonthList[newindex].month)) {
           setYear(parseInt(year) + 1);
@@ -303,7 +214,11 @@ const MonthScreen = ({ navigation }) => {
           setIndexCounter(6);
         }
       }
-      setLastOffset(e.nativeEvent.targetContentOffset.x);
+      if (typeof e !== 'number') {
+        setLastOffset(e.nativeEvent.targetContentOffset.x);
+      } else {
+        setLastOffset((currVal) => currVal + width);
+      }
     } else null; //console.log('No Swipe');
   };
 
@@ -427,7 +342,16 @@ const MonthScreen = ({ navigation }) => {
 
   //renderItem
   const renderItem = (object) => {
-    return <SwipeItem index={object.index} activeindex={indexCounter} monthlist={MonthList} setMonthList={setMonthList} />;
+    return (
+      <SwipeItem
+        index={object.index}
+        activeindex={indexCounter}
+        monthlist={MonthList}
+        setMonthList={setMonthList}
+        monthScrollRef={flatlistRef}
+        changeMonthList={changeMonthList}
+      />
+    );
   };
 
   //jsx
