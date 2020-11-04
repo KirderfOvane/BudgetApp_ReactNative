@@ -9,17 +9,19 @@ const DateMenu = ({ monthlist, activeindex, monthScrollRef, changeMonthList }) =
   const { addMonth, setYear, year } = presetContext;
   const onPressJanuary = () => {
     //console.log(monthlist[activeindex + 1].month);
-    //console.log(activeindex);
+    console.log(activeindex);
+    console.log(monthlist.map((m) => m.month));
     changeMonthList(activeindex + 1);
-    // console.log(monthScrollRef.current);
     monthScrollRef.current.scrollToIndex({ index: activeindex + 1, animated: true });
     //addMonth('January');
     //navigation.navigate('Month');
   };
   const onPressDecember = () => {
+    changeMonthList(activeindex - 1);
+    monthScrollRef.current.scrollToIndex({ index: activeindex - 1, animated: true });
     console.log('dec');
-    setYear(parseInt(year) - 1);
-    addMonth('December');
+    // setYear(parseInt(year) - 1);
+    //addMonth('December');
     // navigation.navigate('Month', { fromYear: 'December' });
   };
 

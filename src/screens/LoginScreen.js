@@ -19,8 +19,8 @@ const LoginScreen = ({ navigation }) => {
 
   //state
   const [localUser, setlocalUser] = React.useState({
-    email: 'fredrik_hjelmaeus@hotmail.com',
-    password: 'v1llage',
+    email: 'newuser@gmail.com',
+    password: 'password',
   });
   const { email, password } = localUser;
 
@@ -143,6 +143,7 @@ const LoginScreen = ({ navigation }) => {
                   name='email'
                   value={email}
                   autoCapitalize='none'
+                  secureTextEntry={false}
                 />
               )}
               <TouchableOpacity

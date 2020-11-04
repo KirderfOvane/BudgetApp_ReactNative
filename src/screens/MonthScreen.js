@@ -202,7 +202,7 @@ const MonthScreen = ({ navigation }) => {
 
         setLastSwipe('right');
         const counter = newindex - _initialScrollIndex;
-        //console.log(counter);
+        console.log(counter);
         if (counter >= 4) {
           const tempMonthListCopy = [...MonthList];
 
