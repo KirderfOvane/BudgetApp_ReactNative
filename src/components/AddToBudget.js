@@ -13,6 +13,7 @@ import Csv_CreateTransactions from './Csv_CreateTransactions';
 
 // Inline Requires
 let CategoryPicker = null;
+let FileformatPicker = null;
 
 const AddToBudget = ({ month }) => {
   // context alert
@@ -62,16 +63,14 @@ const AddToBudget = ({ month }) => {
   const [pickerActive, setPickerActive] = React.useState(false);
   const [income, setIncome] = React.useState(true);
   const [selected, setSelected] = React.useState('Select Category');
+  const [uploadFileClicked, setUploadFileClicked] = React.useState(false);
+  const [fileformat, setFileformat] = React.useState('RFC4180');
+  const [selectedFileFormat, setSelectedFileFormat] = React.useState('RFC4180');
   //useRef
   const pickerRef = React.useRef(null);
 
   //logic
-  /*  const onPickerBtnPress = () => {
-    if (localPreset.category !== 'Select Category') {
-      setPickerButtonTitle(localPreset.category); //<--
-    }
-    
-  }; */
+
   const onCategoryPress = (e) => {
     if (localPreset.category !== 'Select Category') {
       setPickerButtonTitle(localPreset.category); //<--
@@ -83,10 +82,32 @@ const AddToBudget = ({ month }) => {
 
     setPickerActive(!pickerActive);
   };
+
+  const onFileFormatPress = (e) => {
+    if (fileformat !== 'RFC4180') {
+      setFileformat(fileformat); //<--
+    }
+
+    if (FileformatPicker === null) {
+      FileformatPicker = require('./FileformatPicker').default;
+    }
+
+    setPickerActive(!pickerActive);
+  };
+
   // change value in picker
   const selectedCategory = (value) => {
     setSelected(value);
     setLocalPreset({ ...localPreset, category: value });
+  };
+
+  const changePickerFileFormatSelect = (value) => {
+    // convert all but RFC4180 to lowercase to be compatible with backend
+    if (value !== 'RFC4180') {
+      setSelectedFileFormat(value.toLowerCase());
+    } else {
+      setSelectedFileFormat(value);
+    }
   };
 
   //submit
@@ -160,6 +181,7 @@ const AddToBudget = ({ month }) => {
 
   //jsx
   if (csvpresets) {
+    console.log('csvpresets found!');
     return (
       <View style={[styles.card, { paddingHorizontal: 0, marginHorizontal: 4 }]}>
         {/* Title */}
@@ -170,49 +192,25 @@ const AddToBudget = ({ month }) => {
         <Csv_CreateTransactions onSubmit={onSubmit} />
       </View>
     );
-  } else {
+  }
+
+  if (uploadFileClicked && !csvpresets) {
     return (
       <View style={styles.card}>
-        {/* Title */}
         <View style={styles.titlerow}>
-          <Text style={styles.title}>ADD TO BUDGET</Text>
+          <Text style={styles.title}>Select file format</Text>
         </View>
-
-        {/* Alerts */}
-        <Alerts />
-
-        {/* Inputs */}
-        <TextInput
-          style={styles.input}
-          placeholder='Name'
-          onChangeText={changeName}
-          name='name'
-          value={localPreset.name}
-          autoCapitalize='none'
-          maxLength={25}
-        />
-        <TextInput
-          style={[styles.input, { color: income ? theme.colors.success : theme.colors.danger }]}
-          placeholder='number'
-          keyboardType='numeric'
-          onChangeText={changeNumber}
-          name='number'
-          value={localPreset.number.toString()}
-          label='number'
-          autoCapitalize='none'
-          autoCorrect={false}
-          maxLength={12}
-        />
-        {/* CategoryPicker */}
+        <View style={{ marginVertical: 15 }}>
+          <Text style={styles.paragraph}>For a default csv-formatting, choose RFC4180</Text>
+        </View>
+        {/* FileFormatPicker */}
         {pickerActive ? (
           <View style={styles.picker}>
-            <CategoryPicker
-              selected={selected}
-              selectedCategory={selectedCategory}
-              localPreset={localPreset}
-              setLocalPreset={setLocalPreset}
+            <FileformatPicker
+              selectedFileFormat={selectedFileFormat}
+              changePickerFileFormatSelect={changePickerFileFormatSelect}
               pickerRef={pickerRef}
-              onCategoryPress={onCategoryPress}
+              onFileFormatPress={onFileFormatPress}
             />
             {/* <TouchableOpacity onPress={onPickerBtnPress}>
               <Text style={styles.selectBtnInPicker}>Select</Text>
@@ -220,53 +218,116 @@ const AddToBudget = ({ month }) => {
           </View>
         ) : (
           <View style={styles.picker}>
-            <TouchableOpacity style={styles.pickerbtnFlex} onPress={onCategoryPress}>
-              <Text style={styles.pickerbtn}>{pickerButtonTitle}</Text>
+            <TouchableOpacity style={styles.pickerbtnFlex} onPress={onFileFormatPress}>
+              <Text style={styles.pickerbtn}>{selectedFileFormat}</Text>
             </TouchableOpacity>
           </View>
         )}
-        {/* Checkboxfield */}
-        {!pickerActive && checkboxfieldActive && (
-          <View style={[{ flex: 5 }, { flexDirection: 'row' }]}>
-            <CheckBoxField localPreset={localPreset} setLocalPreset={setLocalPreset} />
-            <View style={{ marginVertical: 25 }}>
-              <View style={{ flexDirection: 'row' }}>
-                <Text style={[styles.incomeexpensetoggle, { color: income ? theme.colors.success : theme.colors.gray }]}>Income </Text>
-                <Text style={styles.incomeexpensetoggle}> / </Text>
-                <Text style={[styles.incomeexpensetoggle, { color: income ? theme.colors.gray : theme.colors.danger }]}> Expense</Text>
-              </View>
-              <View style={{ alignSelf: 'center', marginTop: 10 }}>
-                <ToggleSwitch
-                  isOn={!income}
-                  onColor={theme.colors.danger}
-                  offColor={theme.colors.success}
-                  size='large'
-                  onToggle={() => setIncome(!income)}
-                />
-              </View>
-              <CSV_DocumentPicker />
-            </View>
-            {/*  <Button title='Upload CSV-file' onPress={permissionFlow}></Button> */}
-          </View>
-        )}
-        {/* SubmitButton */}
+        {/* Uploadbutton */}
         {!pickerActive && (
-          <View style={styles.buttonView}>
-            <TouchableOpacity
-              style={styles.button}
-              testID='register-submit-button'
-              placeholder='watwat'
-              onPress={onSubmit}
-              title='Register'
-            >
-              <Text style={styles.registerbtntext}>ADD TO BUDGET</Text>
-            </TouchableOpacity>
-          </View>
+          <CSV_DocumentPicker
+            setUploadFileClicked={setUploadFileClicked}
+            selectedFileFormat={selectedFileFormat}
+            setSelectedFileFormat={setSelectedFileFormat}
+          />
         )}
-        {/* end */}
       </View>
     );
   }
+
+  return (
+    <View style={styles.card}>
+      {/* Title */}
+      <View style={styles.titlerow}>
+        <Text style={styles.title}>ADD TO BUDGET</Text>
+      </View>
+
+      {/* Alerts */}
+      <Alerts />
+
+      {/* Inputs */}
+      <TextInput
+        style={styles.input}
+        placeholder='Name'
+        onChangeText={changeName}
+        name='name'
+        value={localPreset.name}
+        autoCapitalize='none'
+        maxLength={25}
+      />
+      <TextInput
+        style={[styles.input, { color: income ? theme.colors.success : theme.colors.danger }]}
+        placeholder='number'
+        keyboardType='numeric'
+        onChangeText={changeNumber}
+        name='number'
+        value={localPreset.number.toString()}
+        label='number'
+        autoCapitalize='none'
+        autoCorrect={false}
+        maxLength={12}
+      />
+      {/* CategoryPicker */}
+      {pickerActive ? (
+        <View style={styles.picker}>
+          <CategoryPicker
+            selected={selected}
+            selectedCategory={selectedCategory}
+            localPreset={localPreset}
+            setLocalPreset={setLocalPreset}
+            pickerRef={pickerRef}
+            onCategoryPress={onCategoryPress}
+          />
+          {/* <TouchableOpacity onPress={onPickerBtnPress}>
+              <Text style={styles.selectBtnInPicker}>Select</Text>
+            </TouchableOpacity> */}
+        </View>
+      ) : (
+        <View style={styles.picker}>
+          <TouchableOpacity style={styles.pickerbtnFlex} onPress={onCategoryPress}>
+            <Text style={styles.pickerbtn}>{pickerButtonTitle}</Text>
+          </TouchableOpacity>
+        </View>
+      )}
+      {/* RightSidefield */}
+      {!pickerActive && checkboxfieldActive && (
+        <View style={[{ flex: 5 }, { flexDirection: 'row' }]}>
+          <CheckBoxField localPreset={localPreset} setLocalPreset={setLocalPreset} />
+          <View style={{ marginVertical: 25 }}>
+            <View style={{ flexDirection: 'row' }}>
+              <Text style={[styles.incomeexpensetoggle, { color: income ? theme.colors.success : theme.colors.gray }]}>Income </Text>
+              <Text style={styles.incomeexpensetoggle}> / </Text>
+              <Text style={[styles.incomeexpensetoggle, { color: income ? theme.colors.gray : theme.colors.danger }]}> Expense</Text>
+            </View>
+            <View style={{ alignSelf: 'center', marginTop: 10 }}>
+              <ToggleSwitch
+                isOn={!income}
+                onColor={theme.colors.danger}
+                offColor={theme.colors.success}
+                size='large'
+                onToggle={() => setIncome(!income)}
+              />
+            </View>
+            {/* Upload File */}
+            <TouchableOpacity onPress={() => setUploadFileClicked(true)} style={styles.container}>
+              <Text>Upload file</Text>
+            </TouchableOpacity>
+
+            {/*  <CSV_DocumentPicker /> */}
+          </View>
+        </View>
+      )}
+      {/* SubmitButton */}
+      {!pickerActive && (
+        <View style={styles.buttonView}>
+          <TouchableOpacity style={styles.button} testID='register-submit-button' placeholder='watwat' onPress={onSubmit} title='Register'>
+            <Text style={styles.registerbtntext}>ADD TO BUDGET</Text>
+          </TouchableOpacity>
+        </View>
+      )}
+      {/* end */}
+    </View>
+  );
 };
 const styles = StyleSheet.create({
   dropshadow: {
@@ -391,6 +452,21 @@ const styles = StyleSheet.create({
     color: theme.colors.light,
     fontWeight: theme.fonts.weight.semibold,
     fontSize: 20,
+  },
+  container: {
+    paddingVertical: 15,
+    paddingHorizontal: 0,
+    marginHorizontal: 0,
+    marginVertical: 15,
+    borderWidth: 1,
+    borderColor: theme.colors.dark,
+    borderRadius: 12,
+    backgroundColor: theme.colors.light,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  paragraph: {
+    fontSize: theme.sizes.base,
   },
 });
 export default AddToBudget;

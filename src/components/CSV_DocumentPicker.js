@@ -1,11 +1,11 @@
 import React from 'react';
-import { StyleSheet, Text, TouchableOpacity } from 'react-native';
+import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import * as DocumentPicker from 'expo-document-picker';
 import { withNavigation } from 'react-navigation';
 import CsvContext from '../context/csv/csvContext';
 import { theme } from '../constants';
 
-const CSV_DocumentPicker = () => {
+const CSV_DocumentPicker = ({ selectedFileFormat, setSelectedFileFormat, setUploadFileClicked }) => {
   //context csv
   const csvContext = React.useContext(CsvContext);
   //const { uploadCSV } = csvContext;
@@ -22,8 +22,9 @@ const CSV_DocumentPicker = () => {
   // useeffect
   React.useEffect(() => {
     if (file) {
+      // setUploadFileClicked(true);
       const formData = new FormData();
-      formData.append('file', file, file.name);
+      formData.append(selectedFileFormat, file, file.name);
       csvContext.uploadCSV(formData);
       setFile(null);
     }
@@ -31,25 +32,39 @@ const CSV_DocumentPicker = () => {
 
   // jsx
   return (
-    <TouchableOpacity onPress={_pickDocument} style={styles.container}>
-      <Text>Upload CSV-file</Text>
-    </TouchableOpacity>
+    <View style={styles.buttonView}>
+      <TouchableOpacity style={styles.button} testID='register-submit-button' placeholder='watwat' onPress={_pickDocument} title='Register'>
+        <Text style={styles.registerbtntext}>Upload</Text>
+      </TouchableOpacity>
+    </View>
   );
 };
 
-// styling
 const styles = StyleSheet.create({
-  container: {
-    paddingVertical: 15,
-    paddingHorizontal: 0,
-    marginHorizontal: 0,
-    marginVertical: 15,
-    borderWidth: 1,
-    borderColor: theme.colors.dark,
-    borderRadius: 12,
-    backgroundColor: theme.colors.light,
+  buttonView: {
+    flex: 1,
+  },
+  button: {
+    //marginTop: 85,
+    textAlign: 'center',
+    //    justifyContent: 'space-between',
     alignItems: 'center',
-    justifyContent: 'center',
+    fontWeight: theme.fonts.weight.bold,
+    fontSize: 25,
+    fontFamily: theme.fonts.family.main,
+    color: theme.colors.light,
+    backgroundColor: theme.colors.dark,
+    paddingVertical: 10,
+    borderWidth: 2,
+    borderColor: theme.colors.gray,
+    borderStyle: 'solid',
+    borderRadius: 8,
+    overflow: 'hidden',
+  },
+  registerbtntext: {
+    color: theme.colors.light,
+    fontWeight: theme.fonts.weight.semibold,
+    fontSize: 20,
   },
 });
 
