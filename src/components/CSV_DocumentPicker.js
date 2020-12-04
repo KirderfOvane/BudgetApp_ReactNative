@@ -8,7 +8,6 @@ import { theme } from '../constants';
 const CSV_DocumentPicker = ({ selectedFileFormat, setSelectedFileFormat, setUploadFileClicked }) => {
   //context csv
   const csvContext = React.useContext(CsvContext);
-  //const { uploadCSV } = csvContext;
 
   // state
   const [file, setFile] = React.useState(null);
@@ -17,6 +16,10 @@ const CSV_DocumentPicker = ({ selectedFileFormat, setSelectedFileFormat, setUplo
   const _pickDocument = async () => {
     let result = await DocumentPicker.getDocumentAsync({});
     result && result.type === 'success' && setFile(result);
+  };
+
+  const onCancel = () => {
+    setUploadFileClicked(false);
   };
 
   // useeffect
@@ -36,6 +39,15 @@ const CSV_DocumentPicker = ({ selectedFileFormat, setSelectedFileFormat, setUplo
       <TouchableOpacity style={styles.button} testID='register-submit-button' placeholder='watwat' onPress={_pickDocument} title='Register'>
         <Text style={styles.registerbtntext}>Upload</Text>
       </TouchableOpacity>
+      <TouchableOpacity
+        style={styles.cancelbutton}
+        testID='register-submit-button'
+        placeholder='watwat'
+        onPress={onCancel}
+        title='Register'
+      >
+        <Text style={styles.cancelbuttontext}>Cancel</Text>
+      </TouchableOpacity>
     </View>
   );
 };
@@ -45,7 +57,7 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   button: {
-    //marginTop: 85,
+    marginTop: 25,
     textAlign: 'center',
     //    justifyContent: 'space-between',
     alignItems: 'center',
@@ -60,6 +72,27 @@ const styles = StyleSheet.create({
     borderStyle: 'solid',
     borderRadius: 8,
     overflow: 'hidden',
+  },
+  cancelbutton: {
+    marginTop: 10,
+    textAlign: 'center',
+    alignItems: 'center',
+    fontWeight: theme.fonts.weight.bold,
+    fontSize: 25,
+    fontFamily: theme.fonts.family.main,
+    color: theme.colors.dark,
+    backgroundColor: theme.colors.light,
+    paddingVertical: 10,
+    borderWidth: 2,
+    borderColor: theme.colors.gray,
+    borderStyle: 'solid',
+    borderRadius: 8,
+    overflow: 'hidden',
+  },
+  cancelbuttontext: {
+    color: theme.colors.gray,
+    fontWeight: theme.fonts.weight.semibold,
+    fontSize: 20,
   },
   registerbtntext: {
     color: theme.colors.light,
