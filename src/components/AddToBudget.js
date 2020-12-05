@@ -10,6 +10,7 @@ import CheckBoxField from './CheckBoxField';
 import ToggleSwitch from './ToggleSwitch';
 import CSV_DocumentPicker from './CSV_DocumentPicker';
 import Csv_CreateTransactions from './Csv_CreateTransactions';
+import SelectFields from './file/SelectFields';
 
 // Inline Requires
 let CategoryPicker = null;
@@ -63,7 +64,7 @@ const AddToBudget = ({ month }) => {
   const [pickerActive, setPickerActive] = React.useState(false);
   const [income, setIncome] = React.useState(true);
   const [selected, setSelected] = React.useState('Select Category');
-  const [uploadFileClicked, setUploadFileClicked] = React.useState(false);
+  const [uploadFileClicked, setUploadFileClicked] = React.useState('');
   const [fileformat, setFileformat] = React.useState('RFC4180');
   const [selectedFileFormat, setSelectedFileFormat] = React.useState('RFC4180');
   //useRef
@@ -180,7 +181,7 @@ const AddToBudget = ({ month }) => {
   };
 
   //jsx
-  if (csvpresets) {
+  if (csvpresets && uploadFileClicked === '') {
     console.log('csvpresets found!');
     return (
       <View style={[styles.card, { paddingHorizontal: 0, marginHorizontal: 4 }]}>
@@ -194,7 +195,17 @@ const AddToBudget = ({ month }) => {
     );
   }
 
-  if (uploadFileClicked && !csvpresets) {
+  if (csvpresets && uploadFileClicked === 'selectfields') {
+    // console.log('RFCSUPERDUPERTIME');
+    //console.log(csvpresets);
+    return (
+      <>
+        <SelectFields csvpresets={csvpresets} />
+      </>
+    );
+  }
+
+  if (uploadFileClicked === 'selectformat' && !csvpresets) {
     return (
       <View style={styles.card}>
         <View style={styles.titlerow}>
@@ -309,7 +320,7 @@ const AddToBudget = ({ month }) => {
               />
             </View>
             {/* Upload File */}
-            <TouchableOpacity onPress={() => setUploadFileClicked(true)} style={styles.container}>
+            <TouchableOpacity onPress={() => setUploadFileClicked('selectformat')} style={styles.container}>
               <Text>Upload file</Text>
             </TouchableOpacity>
 

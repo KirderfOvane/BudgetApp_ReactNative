@@ -19,17 +19,27 @@ const CSV_DocumentPicker = ({ selectedFileFormat, setSelectedFileFormat, setUplo
   };
 
   const onCancel = () => {
-    setUploadFileClicked(false);
+    setUploadFileClicked('');
   };
 
   // useeffect
   React.useEffect(() => {
     if (file) {
-      // setUploadFileClicked(true);
-      const formData = new FormData();
-      formData.append(selectedFileFormat, file, file.name);
-      csvContext.uploadCSV(formData);
-      setFile(null);
+      if (selectedFileFormat !== 'RFC4180') {
+        setUploadFileClicked('');
+        const formData = new FormData();
+        formData.append(selectedFileFormat, file, file.name);
+        csvContext.uploadCSV(formData);
+        setFile(null);
+      } else {
+        // When file is RFC4180
+        setUploadFileClicked('selectfields');
+        const formData = new FormData();
+        formData.append(selectedFileFormat, file, file.name);
+        csvContext.uploadCSV(formData);
+        setFile(null);
+        console.log('RFC4180 TIME');
+      }
     }
   }, [file]);
 
@@ -59,7 +69,6 @@ const styles = StyleSheet.create({
   button: {
     marginTop: 25,
     textAlign: 'center',
-    //    justifyContent: 'space-between',
     alignItems: 'center',
     fontWeight: theme.fonts.weight.bold,
     fontSize: 25,
