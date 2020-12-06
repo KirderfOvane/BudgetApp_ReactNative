@@ -200,7 +200,7 @@ const AddToBudget = ({ month }) => {
     //console.log(csvpresets);
     return (
       <>
-        <SelectFields csvpresets={csvpresets} />
+        <SelectFields csvpresets={csvpresets} setUploadFileClicked={setUploadFileClicked} />
       </>
     );
   }

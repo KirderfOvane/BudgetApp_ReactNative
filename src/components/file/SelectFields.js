@@ -2,17 +2,77 @@ import React from 'react';
 import { StyleSheet, Text, TouchableOpacity, View, FlatList, ScrollView } from 'react-native';
 import { theme } from '../../constants';
 import SelectFieldsRow from './SelectFieldsRow';
+import CsvContext from '../../context/csv/csvContext';
+import AlertContext from '../../context/alert/alertContext';
+import Alerts from '../Alerts';
 
-const SelectFields = ({ csvpresets }) => {
+let FieldsPicker = null;
+
+const SelectFields = ({ csvpresets, setUploadFileClicked }) => {
+  //context
+  const { updateCsvPresets } = React.useContext(CsvContext);
+  const { setAlert } = React.useContext(AlertContext);
   // State
   const [description, setDescription] = React.useState('');
   const [value, setValue] = React.useState('');
   const [selectPhase, setSelectPhase] = React.useState('description');
+  const [pickerActive, setPickerActive] = React.useState(false);
+  const [selectedFileFormat, setSelectedFileFormat] = React.useState(Object.keys(csvpresets[0].row)[0]);
+  const [fileformat, setFileformat] = React.useState(Object.keys(csvpresets[0].row)[0]);
+  const [pickerItems, setPickerItems] = React.useState(Object.keys(csvpresets[0].row));
+  //useRef
+  const fieldsPickerRef = React.useRef(null);
 
-  // when value and description is selected, trigger this
-  React.useEffect(() => {
-    selectPhase === '' && console.log(description, value);
-  }, [selectPhase]);
+  const onFileFormatPress = (e) => {
+    if (FieldsPicker === null) {
+      FieldsPicker = require('./FieldsPicker').default;
+    }
+
+    setPickerActive(!pickerActive);
+  };
+
+  const changePickerFileFormatSelect = (value) => {
+    setSelectedFileFormat(value);
+  };
+
+  // submitbutton
+  const onSubmit = () => {
+    if (selectPhase === 'description') {
+      // setDescription to selectedFileFormat
+      setDescription(selectedFileFormat);
+      // setSelectPhase to 'value'
+      setSelectPhase('value');
+      // remove selectedFileFormat from pickerItems with setPickerItems
+      const newPickerList = Object.keys(csvpresets[0].row).filter((item) => selectedFileFormat !== item);
+      setPickerItems(newPickerList);
+      setPickerActive(true);
+    } else {
+      // setValue to selectedFileFormat
+      setValue(selectedFileFormat);
+
+      try {
+        csvpresets.map((preset) => {
+          if (isNaN(preset.row[selectedFileFormat])) {
+            setSelectPhase('value');
+            setValue('');
+            throw new Error('The number fields did not contain valid numbers');
+          } else {
+            // create an object with id,name and number
+            updateCsvPresets({
+              id: preset.id,
+              name: preset.row[description],
+              number: parseFloat(preset.row[selectedFileFormat]),
+            });
+          }
+        });
+
+        setUploadFileClicked('');
+      } catch (err) {
+        setAlert('Not valid numbers field', 'danger');
+        console.log(err);
+      }
+    }
+  };
 
   return (
     <View style={styles.card}>
@@ -24,70 +84,33 @@ const SelectFields = ({ csvpresets }) => {
           {selectPhase === 'description' ? 'Please select the description field' : 'Please select the value field'}
         </Text>
       </View>
-
-      {/* Header-field constructed from CSV */}
-      {/*     <SelectFieldsRow
-        rowItem={csvpresets[0]}
-        header={true}
-        selectPhase={selectPhase}
-        setSelectPhase={setSelectPhase}
-        setValue={setValue}
-        value={value}
-        setDescription={setDescription}
-        description={description}
-      /> */}
-
-      {/* csv-list */}
-      <FlatList
-        data={csvpresets}
-        renderItem={(rowItem) => {
-          // console.log(csvpresets.length);
-          console.log(rowItem.index === 0);
-          //  console.log('rowitem: ', Object.keys(rowItem.item.row)[0]);
-          // return (
-          /*  <FlatList
-              snapToInterval={120}
-              snapToAlignment={'start'}
-              style={styles.table}
-              horizontal={true}
-              data={Object.keys(rowItem.item.row)}
-              renderItem={(colItem) => { */
-          // console.log(colItem.item);
-          if (rowItem.index === 0) {
-            // console.log(Object.keys(rowItem.item.row));
-            return (
-              <FlatList
-                snapToInterval={120}
-                snapToAlignment={'start'}
-                style={styles.table}
-                horizontal={true}
-                data={Object.keys(rowItem.item.row)}
-                renderItem={(colItem) => {
-                  console.log(colItem.item);
-                  return (
-                    <View style={styles.col}>
-                      <Text>{colItem.item}</Text>
-                    </View>
-                  );
-                }}
-              />
-            );
-          }
-          if (rowItem.index >= 1) {
-            return (
-              <View style={styles.col}>
-                <Text>fest</Text>
-              </View>
-            );
-          }
-          //}}
-          // />
-          // );
-          {
-            /* <SelectFieldsRow rowItem={rowItem} key={rowItem.id} presetCount={csvpresets.length} />; */
-          }
-        }}
-      />
+      <Alerts />
+      {/* FileFormatPicker */}
+      {pickerActive ? (
+        <View style={styles.picker}>
+          <FieldsPicker
+            selectedFileFormat={selectedFileFormat}
+            changePickerFileFormatSelect={changePickerFileFormatSelect}
+            fieldsPickerRef={fieldsPickerRef}
+            onFileFormatPress={onFileFormatPress}
+            pickerItems={pickerItems}
+          />
+        </View>
+      ) : (
+        <View style={styles.picker}>
+          <TouchableOpacity style={styles.pickerbtnFlex} onPress={onFileFormatPress}>
+            <Text style={styles.pickerbtn}>{selectedFileFormat}</Text>
+          </TouchableOpacity>
+        </View>
+      )}
+      {/* SubmitButton */}
+      {!pickerActive && (
+        <View style={styles.buttonView}>
+          <TouchableOpacity style={styles.button} testID='register-submit-button' placeholder='watwat' onPress={onSubmit} title='Register'>
+            <Text style={styles.registerbtntext}>Next</Text>
+          </TouchableOpacity>
+        </View>
+      )}
     </View>
   );
 };
@@ -208,6 +231,7 @@ const styles = StyleSheet.create({
   },
   buttonView: {
     flex: 1,
+    marginTop: 35,
   },
   button: {
     //marginTop: 85,
