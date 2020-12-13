@@ -24,15 +24,16 @@ const Csv_CreateTransactions = () => {
   // useEffect
   React.useEffect(() => {
     if (csvpresets) {
-      console.log('csvpreset ran');
+      // console.log('csvpreset ran');
       //check for valid csv to add
       const isValidCsv = csvpresets.filter((item) => (item.category !== undefined && item.markDelete === false ? item : null));
+      //console.log('test', isValidCsv);
       setValidCsv(isValidCsv);
       // isValidCsv ? setValidCsv(isValidCsv) : setValidCsv([]);
-      console.log(isValidCsv.length, clickAdd);
+      //console.log(isValidCsv.length, clickAdd);
       // if no valid csv items at all
       if (isValidCsv.length === 0 && clickAdd) {
-        console.log('ran');
+        //console.log('ran');
         submitCsvItems('noValidCsv');
         setPrompt(true);
       } else {
@@ -47,7 +48,7 @@ const Csv_CreateTransactions = () => {
           clearCsv();
           setPrompt(false);
         }
-        console.log('no action on csvpresets change');
+        //  console.log('no action on csvpresets change');
       }
     }
     //eslint-disable-next-line

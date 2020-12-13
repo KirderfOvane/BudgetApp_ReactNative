@@ -79,10 +79,10 @@ const SelectFields = ({ csvpresets, setUploadFileClicked }) => {
       <View style={styles.titlerow}>
         <Text style={styles.title}>Select Fields</Text>
       </View>
-      <View style={{ marginVertical: 15 }}>
-        <Text style={styles.paragraph}>
-          {selectPhase === 'description' ? 'Please select the description field' : 'Please select the value field'}
-        </Text>
+      <View style={styles.paragraph__container}>
+        <Text style={styles.paragraph}>{selectPhase === 'description' ? 'Please select the ' : 'Please select the '}</Text>
+        <Text style={styles.strongparagraph}> {selectPhase === 'description' ? 'description ' : 'value '}</Text>
+        <Text style={styles.paragraph}> field.</Text>
       </View>
       <Alerts />
       {/* FileFormatPicker */}
@@ -268,7 +268,20 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   paragraph: {
-    fontSize: theme.sizes.base,
+    fontSize: theme.sizes.font,
+  },
+  strongparagraph: {
+    fontSize: theme.sizes.font,
+    color: theme.colors.danger,
+    fontWeight: theme.fonts.weight.semibold,
+  },
+  paragraph__container: {
+    marginVertical: 15,
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignContent: 'center',
+    alignItems: 'center',
+    alignSelf: 'center',
   },
 });
 

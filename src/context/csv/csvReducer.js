@@ -1,4 +1,4 @@
-import { UPLOAD_CSV, UPDATE_CSV, SUBMIT_CSV, CLEAR_CSV, REMOVE_CSV } from '../types';
+import { UPLOAD_CSV, UPDATE_CSV, SUBMIT_CSV, CLEAR_CSV, REMOVE_CSV, CONTACT_ERROR, CLEAR_CONTACT_ERROR } from '../types';
 
 export default (state, action) => {
   switch (action.type) {
@@ -26,6 +26,16 @@ export default (state, action) => {
       return {
         ...state,
         csvpresets: action.payload,
+      };
+    case CONTACT_ERROR:
+      return {
+        ...state,
+        contacterror: action.payload,
+      };
+    case CLEAR_CONTACT_ERROR:
+      return {
+        ...state,
+        contacterror: null,
       };
     default:
       return state;

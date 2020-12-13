@@ -10,6 +10,7 @@ const CsvState = (props) => {
   const initialState = {
     csvpresets: null, // used to store values from csv-file in stagingarea
     doSubmitCsv: '',
+    contacterror: null,
   };
 
   const [state, dispatch] = useReducer(csvReducer, initialState);
@@ -28,6 +29,7 @@ const CsvState = (props) => {
 
       dispatch({ type: UPLOAD_CSV, payload: res.data });
     } catch (err) {
+      console.log(err.response.data);
       dispatch({
         type: CONTACT_ERROR,
         payload: err.response.data,
@@ -54,16 +56,23 @@ const CsvState = (props) => {
     dispatch({ type: SUBMIT_CSV, payload: string });
   };
 
+  // Clear Contact Error
+  const clearContactError = () => {
+    dispatch({ type: CLEAR_CONTACT_ERROR });
+  };
+
   return (
     <CsvContext.Provider
       value={{
         csvpresets: state.csvpresets,
         doSubmitCsv: state.doSubmitCsv,
+        contacterror: state.contacterror,
         uploadCSV,
         submitCsvItems,
         updateCsvPresets,
         clearCsv,
         removeCSV,
+        clearContactError,
       }}
     >
       {props.children}

@@ -182,7 +182,7 @@ const AddToBudget = ({ month }) => {
 
   //jsx
   if (csvpresets && uploadFileClicked === '') {
-    console.log('csvpresets found!');
+    //console.log('csvpresets found!', uploadFileClicked);
     return (
       <View style={[styles.card, { paddingHorizontal: 0, marginHorizontal: 4 }]}>
         {/* Title */}
@@ -196,8 +196,6 @@ const AddToBudget = ({ month }) => {
   }
 
   if (csvpresets && uploadFileClicked === 'selectfields') {
-    // console.log('RFCSUPERDUPERTIME');
-    //console.log(csvpresets);
     return (
       <>
         <SelectFields csvpresets={csvpresets} setUploadFileClicked={setUploadFileClicked} />
@@ -300,7 +298,7 @@ const AddToBudget = ({ month }) => {
           </TouchableOpacity>
         </View>
       )}
-      {/* RightSidefield */}
+      {/* Lower Half */}
       {!pickerActive && checkboxfieldActive && (
         <View style={[{ flex: 5 }, { flexDirection: 'row' }]}>
           <CheckBoxField localPreset={localPreset} setLocalPreset={setLocalPreset} />
@@ -320,9 +318,11 @@ const AddToBudget = ({ month }) => {
               />
             </View>
             {/* Upload File */}
-            <TouchableOpacity onPress={() => setUploadFileClicked('selectformat')} style={styles.container}>
-              <Text>Upload file</Text>
-            </TouchableOpacity>
+            {localPreset.type === 'overhead' && (
+              <TouchableOpacity onPress={() => setUploadFileClicked('selectformat')} style={styles.container}>
+                <Text>Upload file</Text>
+              </TouchableOpacity>
+            )}
 
             {/*  <CSV_DocumentPicker /> */}
           </View>
@@ -383,6 +383,7 @@ const styles = StyleSheet.create({
     padding: 20,
     shadowRadius: 5,
     borderRadius: 16,
+    zIndex: 1000,
   },
   titlerow: {
     flexDirection: 'row',

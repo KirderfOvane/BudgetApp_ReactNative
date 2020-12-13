@@ -108,7 +108,7 @@ const CsvPresetItem = ({ preset, isFocused }) => {
 
   // useEffect add csvpresets to db in 2 steps. doSubmitCsv is the active step.
   React.useEffect(() => {
-    console.log(doSubmitCsv);
+    //console.log(doSubmitCsv);
     if (csvpresets && doSubmitCsv !== '') {
       //console.log('updateCsvPresets ran');
       // if item category have been set, update item in the csvpresets-list

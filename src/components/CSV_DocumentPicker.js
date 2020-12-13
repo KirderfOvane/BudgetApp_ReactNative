@@ -3,12 +3,14 @@ import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import * as DocumentPicker from 'expo-document-picker';
 import { withNavigation } from 'react-navigation';
 import CsvContext from '../context/csv/csvContext';
+import AlertContext from '../context/alert/alertContext';
+
 import { theme } from '../constants';
 
 const CSV_DocumentPicker = ({ selectedFileFormat, setSelectedFileFormat, setUploadFileClicked }) => {
   //context csv
-  const csvContext = React.useContext(CsvContext);
-
+  const { uploadCSV, contacterror, clearContactError } = React.useContext(CsvContext);
+  const { setAlert } = React.useContext(AlertContext);
   // state
   const [file, setFile] = React.useState(null);
 
@@ -26,22 +28,31 @@ const CSV_DocumentPicker = ({ selectedFileFormat, setSelectedFileFormat, setUplo
   React.useEffect(() => {
     if (file) {
       if (selectedFileFormat !== 'RFC4180') {
-        setUploadFileClicked('');
         const formData = new FormData();
         formData.append(selectedFileFormat, file, file.name);
-        csvContext.uploadCSV(formData);
+        uploadCSV(formData);
+
         setFile(null);
+        setUploadFileClicked('');
       } else {
         // When file is RFC4180
         setUploadFileClicked('selectfields');
         const formData = new FormData();
         formData.append(selectedFileFormat, file, file.name);
-        csvContext.uploadCSV(formData);
+        uploadCSV(formData);
         setFile(null);
         console.log('RFC4180 TIME');
       }
     }
   }, [file]);
+
+  React.useEffect(() => {
+    if (contacterror) {
+      //setUploadFileClicked('selectformat');
+      console.log('ERRORRORORORORO');
+      setAlert(contacterror, 'danger');
+    }
+  }, [contacterror]);
 
   // jsx
   return (
