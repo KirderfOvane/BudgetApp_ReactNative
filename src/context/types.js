@@ -57,3 +57,5 @@ export const CLEAR_CSV = 'CLEAR_CSV';
 export const SUBMIT_CSV = 'SUBMIT_CSV';
 export const REMOVE_CSV = 'REMOVE_CSV';
 export const DELETE_PRESET = 'DELETE_PRESET';
+export const FILE_ERROR = 'FILE_ERROR';
+export const CLEAR_FILE_ERROR = 'CLEAR_FILE_ERROR';

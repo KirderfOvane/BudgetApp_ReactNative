@@ -4,13 +4,13 @@ import trackerApi from '../../api/tracker';
 import CsvContext from './csvContext';
 import csvReducer from './csvReducer';
 
-import { UPLOAD_CSV, UPDATE_CSV, SUBMIT_CSV, CLEAR_CSV, REMOVE_CSV, CONTACT_ERROR } from '../types';
+import { UPLOAD_CSV, UPDATE_CSV, SUBMIT_CSV, CLEAR_CSV, REMOVE_CSV, FILE_ERROR, CLEAR_FILE_ERROR } from '../types';
 
 const CsvState = (props) => {
   const initialState = {
     csvpresets: null, // used to store values from csv-file in stagingarea
     doSubmitCsv: '',
-    contacterror: null,
+    fileerror: null,
   };
 
   const [state, dispatch] = useReducer(csvReducer, initialState);
@@ -29,9 +29,9 @@ const CsvState = (props) => {
 
       dispatch({ type: UPLOAD_CSV, payload: res.data });
     } catch (err) {
-      console.log(err.response.data);
+      // console.log('upload return shit', err.response.data);
       dispatch({
-        type: CONTACT_ERROR,
+        type: FILE_ERROR,
         payload: err.response.data,
       });
     }
@@ -57,8 +57,8 @@ const CsvState = (props) => {
   };
 
   // Clear Contact Error
-  const clearContactError = () => {
-    dispatch({ type: CLEAR_CONTACT_ERROR });
+  const clearFileError = () => {
+    dispatch({ type: CLEAR_FILE_ERROR });
   };
 
   return (
@@ -66,13 +66,13 @@ const CsvState = (props) => {
       value={{
         csvpresets: state.csvpresets,
         doSubmitCsv: state.doSubmitCsv,
-        contacterror: state.contacterror,
+        fileerror: state.fileerror,
         uploadCSV,
         submitCsvItems,
         updateCsvPresets,
         clearCsv,
         removeCSV,
-        clearContactError,
+        clearFileError,
       }}
     >
       {props.children}

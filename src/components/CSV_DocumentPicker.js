@@ -2,6 +2,7 @@ import React from 'react';
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import * as DocumentPicker from 'expo-document-picker';
 import { withNavigation } from 'react-navigation';
+import PresetContext from '../context/preset/presetContext';
 import CsvContext from '../context/csv/csvContext';
 import AlertContext from '../context/alert/alertContext';
 
@@ -9,8 +10,8 @@ import { theme } from '../constants';
 
 const CSV_DocumentPicker = ({ selectedFileFormat, setSelectedFileFormat, setUploadFileClicked }) => {
   //context csv
-  const { uploadCSV, contacterror, clearContactError } = React.useContext(CsvContext);
-  const { setAlert } = React.useContext(AlertContext);
+  const { uploadCSV } = React.useContext(CsvContext);
+
   // state
   const [file, setFile] = React.useState(null);
 
@@ -31,35 +32,34 @@ const CSV_DocumentPicker = ({ selectedFileFormat, setSelectedFileFormat, setUplo
         const formData = new FormData();
         formData.append(selectedFileFormat, file, file.name);
         uploadCSV(formData);
-
         setFile(null);
         setUploadFileClicked('');
       } else {
         // When file is RFC4180
-        setUploadFileClicked('selectfields');
         const formData = new FormData();
         formData.append(selectedFileFormat, file, file.name);
         uploadCSV(formData);
         setFile(null);
         console.log('RFC4180 TIME');
+        setUploadFileClicked('selectfields');
       }
     }
   }, [file]);
 
-  React.useEffect(() => {
-    if (contacterror) {
-      //setUploadFileClicked('selectformat');
-      console.log('ERRORRORORORORO');
-      setAlert(contacterror, 'danger');
-    }
-  }, [contacterror]);
-
   // jsx
   return (
     <View style={styles.buttonView}>
-      <TouchableOpacity style={styles.button} testID='register-submit-button' placeholder='watwat' onPress={_pickDocument} title='Register'>
-        <Text style={styles.registerbtntext}>Upload</Text>
-      </TouchableOpacity>
+      {selectedFileFormat !== 'select file format' && (
+        <TouchableOpacity
+          style={styles.button}
+          testID='register-submit-button'
+          placeholder='watwat'
+          onPress={_pickDocument}
+          title='Register'
+        >
+          <Text style={styles.registerbtntext}>Upload</Text>
+        </TouchableOpacity>
+      )}
       <TouchableOpacity
         style={styles.cancelbutton}
         testID='register-submit-button'

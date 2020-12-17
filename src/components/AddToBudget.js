@@ -23,7 +23,7 @@ const AddToBudget = ({ month }) => {
 
   // context csv
   const csvContext = React.useContext(CsvContext);
-  const { csvpresets } = csvContext;
+  const { csvpresets, fileerror, clearFileError } = csvContext;
 
   // context presets
   const presetContext = React.useContext(PresetContext);
@@ -179,6 +179,16 @@ const AddToBudget = ({ month }) => {
     calcCategoryByMonth(month);
     getMonthPiggySavings(month);
   };
+
+  React.useEffect(() => {
+    console.log('%TOOMANYRERENDERS%');
+    if (fileerror) {
+      //console.log(fileerror.length);
+      setAlert(fileerror, 'danger');
+      clearFileError();
+      //console.log('bajskorv', fileerror);
+    }
+  }, [fileerror]);
 
   //jsx
   if (csvpresets && uploadFileClicked === '') {

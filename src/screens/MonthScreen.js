@@ -320,8 +320,10 @@ const MonthScreen = ({ navigation }) => {
 
   // Handles alert when wrong input is uploaded to csv-upload. Have to be here as if in children it will rerender with all children (windowSize+1).
   React.useEffect(() => {
+    console.log('monthscreen here: ', contacterror);
     contacterror === 'Wrong filetype, only accepts csv!' && setAlert('Wrong filetype, only accepts csv!', 'danger');
     contacterror === 'CSV does not contain valid Nordea-values!' && setAlert('CSV does not contain valid Nordea-values!', 'danger');
+    contacterror === 'CSV does not contain valid RFC4180-values!' && setAlert('CSV does not contain valid RFC4180-values!', 'danger');
     clearContactError();
   }, [contacterror]);
 
