@@ -2,10 +2,9 @@ import React, { useReducer } from 'react';
 import setAuthToken from '../../../setAuthToken';
 import AuthContext from './authContext';
 import authReducer from './authReducer';
-import { AsyncStorage } from 'react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import trackerApi from '../../api/tracker';
 import hookActions from '../../actions/hookActions';
-import registerAction from '../../actions/registerAction';
 import { navigate } from '../../navigationRef';
 import axios from 'axios';
 

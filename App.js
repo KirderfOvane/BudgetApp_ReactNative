@@ -8,6 +8,7 @@ import AuthState from './src/context/auth/AuthState';
 import AlertState from './src/context/alert/AlertState';
 import PresetState from './src/context/preset/PresetState';
 import CsvState from './src/context/csv/CsvState';
+import GuideState from './src/context/guide/GuideState';
 
 //Refs
 import { setNavigator } from './src/navigationRef';
@@ -34,6 +35,7 @@ import ChangePasswordScreen from './src/screens/ChangePasswordScreen';
 import ChangeEmailScreen from './src/screens/ChangeEmailScreen';
 import CustomGoBack from './src/components/CustomGoBack';
 import MonthBottomTab from './src/components/MonthBottomTab';
+import GuideScreen from './src/screens/GuideScreen';
 
 //icons
 import { FontAwesome5 } from '@expo/vector-icons';
@@ -217,6 +219,9 @@ const switchNavigator = createSwitchNavigator({
           },
         }
       ),
+      guideFlow: createStackNavigator({
+        Guide: GuideScreen,
+      }),
     },
     {
       navigationOptions: {
@@ -240,7 +245,9 @@ export default () => {
       <PresetState>
         <CsvState>
           <AlertState>
-            <App ref={setNavigator} />
+            <GuideState>
+              <App ref={setNavigator} />
+            </GuideState>
           </AlertState>
         </CsvState>
       </PresetState>

@@ -1,6 +1,6 @@
 import axios from 'axios';
 import trackerApi from '../api/tracker';
-import { AsyncStorage } from 'react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 /*   
       To run this you need a valid/fresh token , fresh ngrok link pasted in the get http

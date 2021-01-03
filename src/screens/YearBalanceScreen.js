@@ -21,6 +21,11 @@ const YearBalanceScreen = ({ navigation }) => {
     presets === null && isAuthenticated && user && getPresets();
   }, [year, isAuthenticated, user, presets]);
 
+  React.useEffect(() => {
+    //presets === null && presets.length === 0 && navigation.navigate('Guide');
+    navigation.navigate('Guide');
+  }, []);
+
   const changeMonthList = (e) => {
     const swipeoffset = e.nativeEvent.targetContentOffset.x;
     const newindex = swipeoffset / width;
