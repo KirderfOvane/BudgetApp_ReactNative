@@ -219,9 +219,28 @@ const switchNavigator = createSwitchNavigator({
           },
         }
       ),
-      guideFlow: createStackNavigator({
-        Guide: GuideScreen,
-      }),
+      guideFlow: createStackNavigator(
+        {
+          Guide: {
+            screen: GuideScreen,
+            navigationOptions: { headerShown: false },
+          },
+        },
+        {
+          navigationOptions: {
+            headerTitleStyle: {
+              color: theme.colors.light, // Specify the height of your custom header
+            },
+            headerStyle: {
+              backgroundColor: theme.colors.dark,
+              height: 120,
+            },
+            headerShown: false,
+            headerLeft: () => <CustomGoBack />,
+            title: 'User Profile',
+          },
+        }
+      ),
     },
     {
       navigationOptions: {

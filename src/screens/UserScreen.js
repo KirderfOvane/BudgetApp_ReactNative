@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, Button, StyleSheet, TouchableOpacity } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import AuthContext from '../context/auth/authContext';
 import PresetContext from '../context/preset/presetContext';
 import { AntDesign } from '@expo/vector-icons';
@@ -12,6 +12,11 @@ const UserScreen = ({ navigation }) => {
   const presetContext = React.useContext(PresetContext);
   const { user, logout } = authContext;
   const { clearPresets, resetSums, presets } = presetContext;
+
+  const onGuide = () => {
+    navigation.navigate('Guide');
+  };
+
   const onLogout = () => {
     resetSums();
     clearPresets();
@@ -59,8 +64,14 @@ const UserScreen = ({ navigation }) => {
       </View>
       <TouchableOpacity onPress={onLogout}>
         <Text style={styles.logout}>
-          Logout
+          Logout {'  '}
           <MaterialCommunityIcons style={styles.logoutIcon} name='logout-variant' size={24} color={theme.colors.light} />
+        </Text>
+      </TouchableOpacity>
+      <TouchableOpacity onPress={onGuide}>
+        <Text style={styles.appguide}>
+          App Guide {'  '}
+          <MaterialCommunityIcons name='comment-eye-outline' size={24} color={theme.colors.dark} />
         </Text>
       </TouchableOpacity>
     </View>
@@ -106,15 +117,37 @@ const styles = StyleSheet.create({
     color: theme.colors.light,
     backgroundColor: theme.colors.dark,
     paddingVertical: 10,
+    paddingLeft: 65,
+    borderWidth: 2,
+    borderColor: theme.colors.gray,
+    borderStyle: 'solid',
+    borderRadius: 8,
+    overflow: 'hidden',
+    paddingRight: 25,
+  },
+  logoutIcon: {
+    padding: 25,
+  },
+  appguide: {
+    marginHorizontal: 15,
+    marginTop: 15,
+    textAlign: 'center',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    paddingLeft: 65,
+    fontWeight: theme.fonts.weight.bold,
+    fontSize: 25,
+    fontFamily: theme.fonts.family.main,
+    color: theme.colors.dark,
+    backgroundColor: theme.colors.light,
+    paddingVertical: 10,
 
     borderWidth: 2,
     borderColor: theme.colors.gray,
     borderStyle: 'solid',
     borderRadius: 8,
     overflow: 'hidden',
-  },
-  logoutIcon: {
-    padding: 25,
+    paddingRight: 25,
   },
 });
 export default withNavigation(UserScreen);

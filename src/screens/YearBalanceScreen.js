@@ -4,6 +4,8 @@ import PresetContext from '../context/preset/presetContext';
 import AuthContext from '../context/auth/authContext';
 import SwipeItem from '../components/SwipeItem';
 import { NavigationEvents } from 'react-navigation';
+import StartModal from '../components/guide/StartModal';
+import GuideContext from '../context/guide/guideContext';
 
 const YearBalanceScreen = ({ navigation }) => {
   //context
@@ -12,19 +14,13 @@ const YearBalanceScreen = ({ navigation }) => {
   //context destruct
   const { getPresets, year, presets, addMonth, setYear, month } = presetContext;
   const { isAuthenticated, user } = authContext;
+  const { setUserExited, exitedguide } = React.useContext(GuideContext);
   //state
-  const { width } = Dimensions.get('window');
-
-  // let fromMonth = navigation.getParam('fromMonth');
+  const { width, height } = Dimensions.get('window');
 
   React.useEffect(() => {
     presets === null && isAuthenticated && user && getPresets();
   }, [year, isAuthenticated, user, presets]);
-
-  React.useEffect(() => {
-    //presets === null && presets.length === 0 && navigation.navigate('Guide');
-    navigation.navigate('Guide');
-  }, []);
 
   const changeMonthList = (e) => {
     const swipeoffset = e.nativeEvent.targetContentOffset.x;
@@ -50,6 +46,8 @@ const YearBalanceScreen = ({ navigation }) => {
   return (
     <>
       <NavigationEvents onWillFocus={doFocus} onWillBlur={notFocus} />
+      {/* guidemodal */}
+      {!exitedguide && <StartModal navigation={navigation} user={user} setUserExited={setUserExited} />}
 
       {isFocused && (
         <FlatList

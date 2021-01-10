@@ -1,8 +1,9 @@
 import React from 'react';
 import { withNavigation } from 'react-navigation';
-import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, Image } from 'react-native';
 import { MaterialIcons } from '@expo/vector-icons';
 import PresetContext from '../context/preset/presetContext';
+import LogoSvg from '../../assets/LogoSvg';
 
 const Logo = ({ paddingSides, clickable, clickpath, navigation }) => {
   const { year, calcYearsum, calcAllMonthSum, calcCapital, calcSum, calcSavings } = React.useContext(PresetContext);
@@ -24,7 +25,7 @@ const Logo = ({ paddingSides, clickable, clickpath, navigation }) => {
         'November',
         'December',
       ]);
-      calcCapital(); // capital in
+      calcCapital(); // capital inss
       calcSavings();
       calcSum();
     }
@@ -32,7 +33,8 @@ const Logo = ({ paddingSides, clickable, clickpath, navigation }) => {
   };
   return (
     <TouchableOpacity onPress={onClick} style={[styles.logo, { paddingHorizontal: paddingSides }]}>
-      <MaterialIcons name='insert-chart' size={66} color='white' />
+      {/*  <MaterialIcons name='insert-chart' size={66} color='white' /> */}
+      <LogoSvg />
     </TouchableOpacity>
   );
 };
@@ -44,6 +46,7 @@ Logo.defaultProps = {
 
 const styles = StyleSheet.create({
   logo: {
+    color: 'white',
     /*     borderWidth: 2,
     borderColor: 'blue', */
   },

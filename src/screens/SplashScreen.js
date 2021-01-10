@@ -4,11 +4,13 @@ import { View, Text, ImageBackground, StyleSheet, TouchableOpacity } from 'react
 import Footer from '../components/Footer';
 import Logo from '../components/Logo';
 import { theme } from '../constants';
+import guideContext from '../context/guide/guideContext';
 
 const LandingScreen = ({ navigation }) => {
   // Context
   const authContext = React.useContext(AuthContext);
   const { loadUser, isAuthenticated } = authContext;
+  const { loadGuideExitStatus } = React.useContext(guideContext);
 
   // State
 
@@ -16,6 +18,7 @@ const LandingScreen = ({ navigation }) => {
 
   // useEffect
   React.useEffect(() => {
+    loadGuideExitStatus();
     setTimeout(function () {
       loadUser();
     }, 3000);
