@@ -40,6 +40,10 @@ import GuideScreen from './src/screens/GuideScreen';
 //icons
 import { FontAwesome5 } from '@expo/vector-icons';
 import { Fontisto } from '@expo/vector-icons';
+import { AntDesign } from '@expo/vector-icons';
+import { FontAwesome } from '@expo/vector-icons';
+import IncomeSvg from './assets/IncomeSvg';
+import ExpenseSvg from './assets/ExpenseSvg';
 
 //theme
 import { theme } from './src/constants';
@@ -111,10 +115,22 @@ const switchNavigator = createSwitchNavigator({
           },
           Expense: {
             screen: YearExpenseScreen,
-            navigationOptions: { title: 'Expense', tabBarIcon: <Fontisto name='scissors' size={24} color='white' /> },
+            navigationOptions: { title: 'Expense', tabBarIcon: /*  <Fontisto name='scissors' size={24} color='white' /> */ <ExpenseSvg /> },
           },
-          Income: YearIncomeScreen,
-          Savings: YearSavingsScreen,
+          Income: {
+            screen: YearIncomeScreen,
+            navigationOptions: {
+              title: 'Income',
+              tabBarIcon: /*  <AntDesign name='piechart' size={24} color='white' /> */ <IncomeSvg />,
+            },
+          },
+          Savings: {
+            screen: YearSavingsScreen,
+            navigationOptions: {
+              title: 'Savings',
+              tabBarIcon: <FontAwesome name='bank' size={24} color='white' />,
+            },
+          },
         },
 
         {
@@ -141,9 +157,15 @@ const switchNavigator = createSwitchNavigator({
           },
           //bottom tab navigator
           tabBarOptions: {
+            tabStyle: { padding: 0, margin: 0 },
+            // labelStyle: { top: 15 },
             style: {
               backgroundColor: theme.colors.dark,
+              //paddingTop: 15,
+              //padding: 25,
             },
+            activeTintColor: 'white',
+            inactiveTintColor: 'gray',
           },
         }
       ),

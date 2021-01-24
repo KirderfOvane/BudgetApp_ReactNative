@@ -51,90 +51,182 @@ const GuideScreen = ({ navigation }) => {
       NextButtonComponent={Next}
       DoneButtonComponent={Done}
       DotComponent={Dots}
-      onSkip={() => navigation.replace('Balance')}
+      onSkip={() => navigation.navigate('Balance')}
       onDone={() => navigation.navigate('Balance')}
       pages={[
         {
           backgroundColor: theme.colors.dark,
-
           image: (
             <Image
               style={{ width: windowWidth, height: windowHeight, marginTop: 60 }}
-              source={require('../../assets/guide/IMG_0631.jpg')}
+              source={require('../../assets/guide/210117/guide_step1_compressed.jpg')}
             />
           ),
-          title: 'Connect to the World',
-          subtitle: 'A New Way To Connect With The World',
-        },
-        {
-          backgroundColor: theme.colors.dark,
-          image: <Image style={{ width: windowWidth, height: windowHeight }} source={require('../../assets/guide/IMG_0631.jpg')} />,
           title: 'Share Your Favorites',
           subtitle: 'Share Your Thoughts With Similar Kind of People',
         },
         {
           backgroundColor: theme.colors.dark,
-          image: <Image style={{ width: windowWidth, height: windowHeight }} source={require('../../assets/guide/IMG_0632.jpg')} />,
+          image: (
+            <Image
+              style={{ width: windowWidth, height: windowHeight, marginTop: 60 }}
+              source={require('../../assets/guide/210117/guide_step2_compressed.jpg')}
+            />
+          ),
           title: 'Become The Star',
           subtitle: 'Let The Spot Light Capture You',
         },
         {
           backgroundColor: theme.colors.dark,
-          image: <Image style={{ width: windowWidth, height: windowHeight }} source={require('../../assets/guide/IMG_0632.jpg')} />,
+          image: (
+            <Image
+              style={{ width: windowWidth, height: windowHeight, marginTop: 60 }}
+              source={require('../../assets/guide/210117/guide_step3_compressed.jpg')}
+            />
+          ),
           title: 'Become The Star',
           subtitle: 'Let The Spot Light Capture You',
         },
         {
           backgroundColor: theme.colors.dark,
-          image: <Image style={{ width: windowWidth, height: windowHeight }} source={require('../../assets/guide/IMG_0632.jpg')} />,
+          image: (
+            <Image
+              style={{ width: windowWidth, height: windowHeight, marginBottom: 100 }}
+              source={require('../../assets/guide/210117/guide_step4_compressed.jpg')}
+            />
+          ),
           title: 'Become The Star',
           subtitle: 'Let The Spot Light Capture You',
         },
         {
           backgroundColor: theme.colors.dark,
-          image: <Image style={{ width: windowWidth, height: windowHeight }} source={require('../../assets/guide/IMG_0632.jpg')} />,
+          image: (
+            <Image
+              style={{ width: windowWidth, height: windowHeight, marginTop: 60 }}
+              source={require('../../assets/guide/210117/guide_step5_compressed.jpg')}
+            />
+          ),
           title: 'Become The Star',
           subtitle: 'Let The Spot Light Capture You',
         },
         {
           backgroundColor: theme.colors.dark,
-          image: <Image style={{ width: windowWidth, height: windowHeight }} source={require('../../assets/guide/IMG_0632.jpg')} />,
+          image: (
+            <Image
+              style={{ width: windowWidth, height: windowHeight }}
+              source={require('../../assets/guide/210117/guide_step6_compressed.jpg')}
+            />
+          ),
           title: 'Become The Star',
           subtitle: 'Let The Spot Light Capture You',
         },
         {
           backgroundColor: theme.colors.dark,
-          image: <Image style={{ width: windowWidth, height: windowHeight }} source={require('../../assets/guide/IMG_0632.jpg')} />,
+          image: (
+            <Image
+              style={{ width: windowWidth, height: windowHeight }}
+              source={require('../../assets/guide/210117/guide_step7_compressed.jpg')}
+            />
+          ),
           title: 'Become The Star',
           subtitle: 'Let The Spot Light Capture You',
         },
         {
           backgroundColor: theme.colors.dark,
-          image: <Image style={{ width: windowWidth, height: windowHeight }} source={require('../../assets/guide/IMG_0632.jpg')} />,
+          image: (
+            <Image
+              style={{ width: windowWidth, height: windowHeight }}
+              source={require('../../assets/guide/210117/guide_step8_compressed.jpg')}
+            />
+          ),
           title: 'Become The Star',
           subtitle: 'Let The Spot Light Capture You',
         },
         {
           backgroundColor: theme.colors.dark,
-          image: <Image style={{ width: windowWidth, height: windowHeight }} source={require('../../assets/guide/IMG_0632.jpg')} />,
+          image: (
+            <Image
+              style={{ width: windowWidth, height: windowHeight }}
+              source={require('../../assets/guide/210117/guide_step9_compressed.jpg')}
+            />
+          ),
           title: 'Become The Star',
           subtitle: 'Let The Spot Light Capture You',
         },
         {
           backgroundColor: theme.colors.dark,
-          image: <Image style={{ width: windowWidth, height: windowHeight }} source={require('../../assets/guide/IMG_0632.jpg')} />,
+          image: (
+            <Image
+              style={{ width: windowWidth, height: windowHeight, marginBottom: 100 }}
+              source={require('../../assets/guide/210117/guide_step10_compressed.jpg')}
+            />
+          ),
           title: 'Become The Star',
           subtitle: 'Let The Spot Light Capture You',
         },
         {
           backgroundColor: theme.colors.dark,
-          image: <Image style={{ width: windowWidth, height: windowHeight }} source={require('../../assets/guide/IMG_0632.jpg')} />,
+          image: (
+            <Image
+              style={{ width: windowWidth, height: windowHeight, marginBottom: 100 }}
+              source={require('../../assets/guide/210117/guide_step11_compressed.jpg')}
+            />
+          ),
           title: 'Become The Star',
           subtitle: 'Let The Spot Light Capture You',
         },
         {
           backgroundColor: theme.colors.dark,
-          image: <Image style={{ width: windowWidth, height: windowHeight }} source={require('../../assets/guide/IMG_0632.jpg')} />,
+          image: (
+            <Image
+              style={{ width: windowWidth, height: windowHeight, marginTop: 60 }}
+              source={require('../../assets/guide/210117/guide_step12_compressed.jpg')}
+            />
+          ),
+          title: 'Become The Star',
+          subtitle: 'Let The Spot Light Capture You',
+        },
+        {
+          backgroundColor: theme.colors.dark,
+          image: (
+            <Image
+              style={{ width: windowWidth, height: windowHeight, marginBottom: 100 }}
+              source={require('../../assets/guide/210117/guide_step13_compressed.jpg')}
+            />
+          ),
+          title: 'Become The Star',
+          subtitle: 'Let The Spot Light Capture You',
+        },
+        {
+          backgroundColor: theme.colors.dark,
+          image: (
+            <Image
+              style={{ width: windowWidth, height: windowHeight, marginBottom: 100 }}
+              source={require('../../assets/guide/210117/guide_step14_compressed.jpg')}
+            />
+          ),
+          title: 'Become The Star',
+          subtitle: 'Let The Spot Light Capture You',
+        },
+        {
+          backgroundColor: theme.colors.dark,
+          image: (
+            <Image
+              style={{ width: windowWidth, height: windowHeight, marginBottom: 100 }}
+              source={require('../../assets/guide/210117/guide_step15_compressed.jpg')}
+            />
+          ),
+          title: 'Become The Star',
+          subtitle: 'Let The Spot Light Capture You',
+        },
+        {
+          backgroundColor: theme.colors.dark,
+          image: (
+            <Image
+              style={{ width: windowWidth, height: windowHeight, marginBottom: 100 }}
+              source={require('../../assets/guide/210117/guide_step16_compressed.jpg')}
+            />
+          ),
           title: 'Become The Star',
           subtitle: 'Let The Spot Light Capture You',
         },

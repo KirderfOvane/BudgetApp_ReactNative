@@ -16,7 +16,13 @@
     },
     "assetBundlePatterns": ["**/*"],
     "ios": {
+      "bundleIdentifier": "com.fredrikhjelmaeus.budgetapp",
+      "buildNumber": "1.0.0",
       "supportsTablet": true
+    },
+    "android": {
+      "package": "com.fredrikhjelmaeus.budgetapp",
+      "versionCode": 1
     }
   }
 }

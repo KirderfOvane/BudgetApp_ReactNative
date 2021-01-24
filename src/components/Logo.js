@@ -1,7 +1,6 @@
 import React from 'react';
 import { withNavigation } from 'react-navigation';
-import { View, Text, StyleSheet, TouchableOpacity, Image } from 'react-native';
-import { MaterialIcons } from '@expo/vector-icons';
+import { TouchableOpacity } from 'react-native';
 import PresetContext from '../context/preset/presetContext';
 import LogoSvg from '../../assets/LogoSvg';
 
@@ -32,8 +31,7 @@ const Logo = ({ paddingSides, clickable, clickpath, navigation }) => {
     clickable && clickpath && navigation.navigate(clickpath);
   };
   return (
-    <TouchableOpacity onPress={onClick} style={[styles.logo, { paddingHorizontal: paddingSides }]}>
-      {/*  <MaterialIcons name='insert-chart' size={66} color='white' /> */}
+    <TouchableOpacity onPress={onClick} style={{ paddingHorizontal: paddingSides }}>
       <LogoSvg />
     </TouchableOpacity>
   );
@@ -44,11 +42,4 @@ Logo.defaultProps = {
   clickpath: 'Landing',
 };
 
-const styles = StyleSheet.create({
-  logo: {
-    color: 'white',
-    /*     borderWidth: 2,
-    borderColor: 'blue', */
-  },
-});
 export default withNavigation(Logo);
